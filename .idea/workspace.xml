@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="Vue Single File Component" />
+        <option value="Less File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1x2gNJUmh541iwJ4I6lxnM9DOD0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/ColorPicker/Solid" />
+    <property name="list.type.of.created.stylesheet" value="Less" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="watcher.settings" />
+    <property name="ts.external.directory.path" value="H:\Ax-project\board\node_modules\typescript\lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\Ax-project\board\src\components\ColorPicker\Solid" />
+      <recent name="H:\Ax-project\board\src\components\ColorPicker\mixin" />
+      <recent name="H:\Ax-project\board\src\assets\fonts\estedad" />
+      <recent name="H:\Ax-project\board\src\assets\fonts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\Ax-project\board\src\components\ColorPicker\Solid" />
+      <recent name="H:\Ax-project\board\src\assets" />
+      <recent name="H:\Ax-project\board" />
+      <recent name="H:\Ax-project\board\public" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="" />
+      <created>1629558555766</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1629558555766</updated>
+      <workItem from="1629558557114" duration="3524000" />
+      <workItem from="1629611878160" duration="724000" />
+      <workItem from="1629635888099" duration="3884000" />
+      <workItem from="1629890999666" duration="19075000" />
+      <workItem from="1629918796807" duration="3403000" />
+      <workItem from="1629922335208" duration="4037000" />
+      <workItem from="1630003618220" duration="7572000" />
+      <workItem from="1630574630738" duration="5992000" />
+      <workItem from="1630619026659" duration="20778000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/main.js" />
+        <option value="$PROJECT_DIR$/src/main.js.map" />
+      </list>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="568" y="198" key="#File_Watchers" timestamp="1630010027821">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="568" y="198" key="#File_Watchers/0.0.1366.728@0.0.1366.728" timestamp="1630010027821" />
+    <state x="353" y="143" key="EditFileWatcherDialog" timestamp="1630008961263">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="353" y="143" key="EditFileWatcherDialog/0.0.1366.728@0.0.1366.728" timestamp="1630008961263" />
+    <state x="526" y="193" key="FileChooserDialogImpl" timestamp="1630620384934">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="526" y="193" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1630620384934" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1629903496788" />
+    <state width="1367" height="282" key="GridCell.Tab.0.bottom" timestamp="1629737891866">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1367" height="282" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1629737891866" />
+    <state width="1367" height="282" key="GridCell.Tab.0.center" timestamp="1629737891865">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1367" height="282" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1629737891865" />
+    <state width="1367" height="282" key="GridCell.Tab.0.left" timestamp="1629737891864">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1367" height="282" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1629737891864" />
+    <state width="1367" height="282" key="GridCell.Tab.0.right" timestamp="1629737891865">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1367" height="282" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1629737891865" />
+    <state x="339" y="19" key="SettingsEditor" timestamp="1630009653575">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="19" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1630009653575" />
+    <state x="476" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1629636896751" />
+    <state x="681" y="261" width="540" height="524" key="StructurePopup" timestamp="1629902834995">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="681" y="261" width="540" height="524" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1629902834995" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1630686375018">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1630686375018" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1629924211682">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1629924211682" />
+  </component>
+</project>

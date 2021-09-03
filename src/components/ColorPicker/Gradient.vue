@@ -1,0 +1,13 @@
+<template>
+
+</template>
+
+<script>
+export default {
+name: "Gradient"
+}
+</script>
+
+<style scoped>
+
+</style>
