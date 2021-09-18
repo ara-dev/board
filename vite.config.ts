@@ -1,3 +1,4 @@
+/*
 import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import ViteComponents, {AntDesignVueResolver} from 'vite-plugin-components';
@@ -35,5 +36,51 @@ export default defineConfig({
             },
             javascriptEnabled: true
         }
+    },
+})
+*/
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+//import path from 'path'
+import ViteComponents, { AntDesignVueResolver,VueUseComponentsResolver } from 'vite-plugin-components'
+
+// @ts-ignore
+export default defineConfig({
+    resolve: {
+        extensions: ['*', '.js', '.vue', '.json', '.ts'],
+        alias: {
+            '/^~/': '',
+            '@': '/src',
+            //'~': path.resolve(__dirname, '/node_modules'),
+        },
+    },
+    server: {
+        fs: {
+            allow: ['..'],
+        },
+    },
+    plugins: [
+        ViteComponents({
+            customComponentResolvers: [
+                AntDesignVueResolver({
+                    importStyle: 'less',
+                }),
+                VueUseComponentsResolver(),
+            ],
+        }),
+        vue(),
+    ],
+    css: {
+        preprocessorOptions: {
+            less: {
+                modifyVars: {
+                    'primary-color': '#4338CA',
+                    'link-color': ' #4338CA',
+                    //'card-padding-base': '8px',
+                    //'border-radius-base': '4px',
+                },
+                javascriptEnabled: true,
+            },
+        },
     },
 })
