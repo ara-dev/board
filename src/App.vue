@@ -27,6 +27,7 @@
               <svg class="mr-1" style="width:22px;height:22px" viewBox="0 0 24 24">
                 <path class="icon-color" d="M2,2H11V6H9V4H4V9H6V11H2V2M22,13V22H13V18H15V20H20V15H18V13H22M8,8H16V16H8V8Z" />
               </svg>
+             <!-- <home theme="filled"/>-->
               <span class="text-xs">رویی</span>
             </div>
             <div class="flex-1">
@@ -499,69 +500,35 @@ export  default {
 
 }
 */
+//import core from "./utils/core/core";
 
 import { ref,watchEffect,onMounted,reactive } from 'vue'
 import { useFullscreen } from "@vueuse/core"
+import ToolBar from "./components/ToolBar/ToolBar.vue";
+
+//core.test();
+
+/*import {Home} from '@icon-park/vue-next';*/
+/*components : {
+  Home,
+}*/
+
 /*import Solid from "./components/ColorPicker/Solid/Solid.vue";*/
 /*import Stage from "./components/Stage.vue";*/
-import ToolBar from "./components/ToolBar/ToolBar.vue";
+
 /*import  { activeTab }  from  "./components/ToolBar/ToolBar.vue"*/
 /*import  from "./components/ToolBar/ToolBar.vue";*/
 //full screen page
 const fullScreen = ref<HTMLElement | null>(null);
 const { isFullscreen, enter, exit, toggle } = useFullscreen(fullScreen);
 
-enum Color {Red, Green, Blue = 4}
-let c: Color = Color.Green
+/*enum Color {Red, Green, Blue = 4}
+let c: Color = 40*/
 
-console.log(c,"this is c");
-
-
-/*const mainbard = ref(null);*/
-/*const { width, height } = useElementSize(mainbard);*/
-/*const test = useElementSize(mainbard);*/
-/*watchEffect(()=>{
-  //console.log(width);
- // console.log(height);
-})*/
-//let test = { a:12 }
-//let  a = reactive([]);
-//test= { a:3000,b :400};
-//test.a = 100 ;
-//test.a=200;
-//const  b = a ;
-/*test.a= 20 ;
-console.log(a);
-console.log(test);*/
+//console.log(c,"this is c");
 
 
-//a= { a:200}
-//a.a=20;
-//test = { a:13 };
-//b.a=100;
-//console.log("a",a,"b",b);
-//debugger;
-//
-/*
-const test = reactive({
-  one : 1 , two : 2 , three : 3
-});
 
-const a = ref({one : 1 , two : 2 , three : 3})
-
- console.log(a.value);
-*/
-
-//activeTab=5;
-/*export default {
-  components: {ToolBar}
-}*/
-//const activeTab= ref('1');
-
-//console.log(isFullscreen,enter,exit,toggle)
-
-//const toggle= ref(true);
-//const { isFullscreen, enter, exit, toggle } = useFullscreen();
 
 </script>
 
