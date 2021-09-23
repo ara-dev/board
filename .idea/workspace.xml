@@ -2,16 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/ui.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/env/config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/env/store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/env/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/icon/icon.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/icon/icon.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/variables.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/variables.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Test.vue" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Enums.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/toolbar/toolbar.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/core/core.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/store/store.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/ui.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/env/config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/env/store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,9 +37,10 @@
       <list>
         <option value="CSS File" />
         <option value="Less File" />
-        <option value="Vue Single File Component" />
         <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="Vue Single File Component" />
+        <option value="tsconfig.json" />
       </list>
     </option>
   </component>
@@ -68,16 +80,17 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="H:\AKS-project\board\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\AKS-project\board\src\env" />
+      <recent name="H:\AKS-project\board\src" />
       <recent name="H:\Ax-project\board\src\components\ColorPicker\Solid" />
       <recent name="H:\Ax-project\board\src\components\ColorPicker\mixin" />
       <recent name="H:\Ax-project\board\src\assets\fonts\estedad" />
-      <recent name="H:\Ax-project\board\src\assets\fonts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="H:\AKS-project\board\src\core\toolbar" />
@@ -137,7 +150,9 @@
       <workItem from="1631348443251" duration="4020000" />
       <workItem from="1631937707703" duration="450000" />
       <workItem from="1631938575704" duration="667000" />
-      <workItem from="1631939575018" duration="44746000" />
+      <workItem from="1631939575018" duration="61402000" />
+      <workItem from="1632230634513" duration="7504000" />
+      <workItem from="1632294445023" duration="27757000" />
     </task>
     <servers />
   </component>
@@ -147,6 +162,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/main.js" />
         <option value="$PROJECT_DIR$/src/main.js.map" />
+        <option value="$PROJECT_DIR$/src/main.d.ts" />
       </list>
     </option>
   </component>
@@ -155,6 +171,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="568" y="198" key="#File_Watchers/0.0.1366.728@0.0.1366.728" timestamp="1630010027821" />
+    <state x="586" y="198" key="#Inspections" timestamp="1632239667350">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1632239667350" />
     <state x="690" y="299" key="#com.intellij.ide.scriptingContext.ui.PerFileMappingsDialogWrapper" timestamp="1630928424092">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -163,11 +183,11 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="353" y="143" key="EditFileWatcherDialog/0.0.1366.728@0.0.1366.728" timestamp="1630008961263" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1632141816916">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="526" y="193" key="FileChooserDialogImpl" timestamp="1632337321168">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="526" y="193" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1631993045482" />
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1632141816916" />
+    <state x="526" y="193" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1632337321168" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1632322028159" />
     <state width="1367" height="282" key="GridCell.Tab.0.bottom" timestamp="1629737891866">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -184,15 +204,20 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1367" height="282" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1629737891865" />
-    <state x="476" y="165" key="SettingsEditor" timestamp="1631941135680">
+    <state x="540" y="255" key="IDE.errors.dialog" timestamp="1632313662928">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="540" y="255" key="IDE.errors.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632313662928" />
+    <state x="476" y="165" key="SettingsEditor" timestamp="1632206177672">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="339" y="19" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1630009653575" />
-    <state x="476" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1631941135680" />
-    <state x="681" y="261" width="570" height="524" key="StructurePopup" timestamp="1630919856998">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="476" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1632206177672" />
+    <state x="485" y="183" width="406" height="367" key="StructurePopup" timestamp="1632339507951">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="681" y="261" width="570" height="524" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1630919856998" />
+    <state x="485" y="183" width="406" height="367" key="StructurePopup/0.0.1366.728@0.0.1366.728" timestamp="1632339507951" />
+    <state x="681" y="261" width="570" height="524" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1632322599426" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1630912929955">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -201,11 +226,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="670" y="260" width="579" height="520" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630913015816" />
-    <state x="476" y="231" key="run.anything.popup" timestamp="1632139061218">
+    <state x="476" y="231" key="run.anything.popup" timestamp="1632296565586">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1630686375018" />
-    <state x="476" y="231" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632139061218" />
+    <state x="476" y="231" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632296565586" />
     <state x="486" y="70" width="945" height="969" key="search.everywhere.popup" timestamp="1632139072139">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

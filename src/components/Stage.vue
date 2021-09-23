@@ -1,12 +1,23 @@
 <template>
   <div class="relative" ref="mainboard">
-    <!-- width : {{ width }}
-     height : {{ height }}-->
-    <div id="container" ref="container"></div>
-    <!--  {{  test }}
-      {{  height }}-->
+
+    <!--<a-button id="test" style="z-index: 1000">
+      <svg viewBox="0 0 24 24" width="24" height="24" class="mx-auto my-0">
+        <path class="icon-color"
+              d="M19,11.5C19,11.5 17,13.67 17,15A2,2 0 0,0 19,17A2,2 0 0,0 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z"/>
+      </svg>
+    </a-button>-->
+   <!-- <div id="large-container">-->
+      <div id="container" ref="container"></div>
+    <!--</div>-->
+
     <!--<div style="position: absolute; top: 5px; right: 351.5px;"><span aria-haspopup="true" class="bp3-popover2-target"><button type="button" class="bp3-button bp3-minimal" tabindex="0"><span icon="duplicate" aria-hidden="true" class="bp3-icon bp3-icon-duplicate"><svg data-icon="duplicate" width="16" height="16" viewBox="0 0 16 16"><path d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z" fill-rule="evenodd"></path></svg></span></button></span><span aria-haspopup="true" class="bp3-popover2-target"><button type="button" class="bp3-button bp3-minimal" tabindex="0"><span icon="insert" aria-hidden="true" class="bp3-icon bp3-icon-insert"><svg data-icon="insert" width="16" height="16" viewBox="0 0 16 16"><path d="M5 9h2v2c0 .6.4 1 1 1s1-.4 1-1V9h2c.6 0 1-.4 1-1s-.4-1-1-1H9V5c0-.6-.4-1-1-1s-1 .4-1 1v2H5c-.6 0-1 .4-1 1s.4 1 1 1zm10-9H1C.4 0 0 .4 0 1v14c0 .6.4 1 1 1h14c.6 0 1-.4 1-1V1c0-.6-.4-1-1-1zm-1 14H2V2h12v12z" fill-rule="evenodd"></path></svg></span></button></span></div>-->
-    <!-- <a-button @click="temp()">dsfsdfsdfsdfsdfsdf</a-button>-->
+   <!-- <a-button>
+      <svg viewBox="0 0 24 24" width="24" height="24" class="mx-auto my-0">
+        <path class="icon-color"
+              d="M19,11.5C19,11.5 17,13.67 17,15A2,2 0 0,0 19,17A2,2 0 0,0 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z"/>
+      </svg>
+    </a-button>-->
   </div>
 
 </template>
@@ -17,8 +28,11 @@ import {ref, onMounted, watchEffect, watch} from "vue";
 import {useElementSize} from '@vueuse/core'
 
 const container = ref(null);
+const test = ref(null)
 const mainboard = ref(null);
 const {width, height} = useElementSize(mainboard);
+const docWidth = ref(900);
+const docHeight = ref(300);
 let stage = null;
 let layer = null;
 
@@ -52,10 +66,12 @@ function draw() {
   //const width =1040//window.innerWidth;
   //const height =750//window.innerHeight;
   //console.log( width.value,height.value,"erdfgdfgdfgdfgdfg");
+
   stage = new Konva.Stage({
     container: container.value,
     width: width.value,
     height: height.value,
+    //offsetX :width.value / 2
     //x: 20,
     //y: 20,
     //width: 20,
@@ -70,58 +86,44 @@ function draw() {
   });
 
 
+
+
+
+
+
   //stage.container().style.backgroundColor = 'green';
 
-
   layer = new Konva.Layer({
-    //x: 350,
-    //y: 350,
-    // clearBeforeDraw : true ,
-     width:350,
-     height:500,
-    // draggable: true,
-   /* clipX: 0,
-    clipY: 0,
-    clipWidth: stage.width(),
-    clipHeight: stage.height(),*/
-    // listening: true,
+  /*  scaleX : 0.5 ,
+    scaleY : 0.5,*/
+
   });
 
   stage.add(layer);
 
 
   var group = new Konva.Group({
-    x:0,
-    y:0,
-    width:350,
-    height:500,
-     clipX: 0,
+    x: (width.value / 2) - (docWidth.value / 2),
+    y: (height.value / 2) - (docHeight.value / 2),
+    width: docWidth.value,
+    height: docHeight.value,
+    clipX: 0,
     clipY: 0,
-    clipWidth: 350,
-    clipHeight: 500,
+    clipWidth: docWidth.value,
+    clipHeight: docHeight.value,
+    /*draggable:true,*/
+    scaleX : 1 ,
+    scaleY : 1,
   });
 
-  group.zIndex(100);
-
   layer.add(group);
-
-  /* var con= new  Konva.Container({
-
-   })*/
-
-  /* layer.clip({
-     x: 20,
-     y: 20,
-     width: 20,
-     height: 20
-   });*/
 
   var background = new Konva.Rect({
     x: 0,
     y: 0,
-    width: 350,
-    height: 500,
-    fill: 'green',
+    width: docWidth.value,
+    height: docHeight.value,
+    fill: '#999',
     //fillLinearGradientStartPoint: { x: 0, y: 0 },
     //fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
     // gradient into transparent color, so we can see CSS styles
@@ -137,10 +139,8 @@ function draw() {
     // because we don't need any events on the background
     listening: false,
   });
-  background.zIndex(100);
+  //background.zIndex(100);
   group.add(background);
-
-
 
   /*var rect1 = new Konva.Rect({
     x: 20,
@@ -159,7 +159,7 @@ function draw() {
     y: 60,
     width: 100,
     height: 90,
-    fill: 'red',
+    fill: 'yellow',
     name: 'rect',
     draggable: true,
   });
@@ -189,15 +189,172 @@ function draw() {
 
   var tr = new Konva.Transformer({
     nodes: [],
-    keepRatio: true,
-    enabledAnchors: [
+    keepRatio: false,
+    /*enabledAnchors: [
       'top-left',
       'top-right',
       'bottom-left',
       'bottom-right',
-    ],
+
+    ],*/
     draggable: true,
+
   });
+
+  //scroll
+
+  /*var scrollLayers = new Konva.Layer();
+  stage.add(scrollLayers);
+  const PADDING = 5;
+  var verticalBar = new Konva.Rect({
+    width: 10,
+    height: 100,
+    fill: 'grey',
+    opacity: 0.8,
+    x: stage.width() - PADDING - 10,
+    y: PADDING,
+    draggable: true,
+    dragBoundFunc: function (pos) {
+      pos.x = stage.width() - PADDING - 10;
+      pos.y = Math.max(
+          Math.min(pos.y, stage.height() - this.height() - PADDING),
+          PADDING
+      );
+      return pos;
+    },
+  });
+  scrollLayers.add(verticalBar);
+
+  verticalBar.on('dragmove', function () {
+    // delta in %
+    const availableHeight =
+        stage.height() - PADDING * 2 - verticalBar.height();
+    var delta = (verticalBar.y() - PADDING) / availableHeight;
+
+    layer.y(-(HEIGHT - stage.height()) * delta);
+  });
+
+  var horizontalBar = new Konva.Rect({
+    width: 100,
+    height: 10,
+    fill: 'grey',
+    opacity: 0.8,
+    x: PADDING,
+    y: stage.height() - PADDING - 10,
+    draggable: true,
+    dragBoundFunc: function (pos) {
+      pos.x = Math.max(
+          Math.min(pos.x, stage.width() - this.width() - PADDING),
+          PADDING
+      );
+      pos.y = stage.height() - PADDING - 10;
+
+      return pos;
+    },
+  });
+  scrollLayers.add(horizontalBar);
+
+  horizontalBar.on('dragmove', function () {
+    // delta in %
+    const availableWidth =
+        stage.width() - PADDING * 2 - horizontalBar.width();
+    var delta = (horizontalBar.x() - PADDING) / availableWidth;
+
+    layer.x(-(WIDTH - stage.width()) * delta);
+  });
+
+  stage.on('wheel', function (e) {
+    // prevent parent scrolling
+    e.evt.preventDefault();
+    const dx = e.evt.deltaX;
+    const dy = e.evt.deltaY;
+
+    const minX = -(WIDTH - stage.width());
+    const maxX = 0;
+
+    const x = Math.max(minX, Math.min(layer.x() - dx, maxX));
+
+    const minY = -(HEIGHT - stage.height());
+    const maxY = 0;
+
+    const y = Math.max(minY, Math.min(layer.y() - dy, maxY));
+    layer.position({ x, y });
+
+    const availableHeight =
+        stage.height() - PADDING * 2 - verticalBar.height();
+    const vy =
+        (layer.y() / (-HEIGHT + stage.height())) * availableHeight + PADDING;
+    verticalBar.y(vy);
+
+    const availableWidth =
+        stage.width() - PADDING * 2 - horizontalBar.width();
+
+    const hx =
+        (layer.x() / (-WIDTH + stage.width())) * availableWidth + PADDING;
+    horizontalBar.x(hx);
+  });
+*/
+
+ /* var PADDING = 0;
+  var scrollContainer = document.getElementById('scroll-container');
+  function repositionStage() {
+    var dx = scrollContainer.scrollLeft - PADDING;
+    var dy = scrollContainer.scrollTop - PADDING;
+    stage.container().style.transform =
+        'translate(' + dx + 'px, ' + dy + 'px)';
+    stage.x(-dx);
+    stage.y(-dy);
+  }
+  scrollContainer.addEventListener('scroll', repositionStage);
+  repositionStage();
+*/
+
+
+// sample add button
+  const deleteButton = new Konva.Circle({
+    radius: 10,
+    fill: 'red'
+  });
+
+  tr.add(deleteButton);
+
+ /* function updatePos() {
+    //console.log(tr.findOne('.top-right').position());
+
+    let pos = tr.findOne('.top-right')//.position();
+    // at first lets find position of text node relative to the stage:
+    var textPosition = pos.getAbsolutePosition();
+    console.log(textPosition);
+
+    // then lets find position of stage container on the page:
+    var stageBox = stage.container().getBoundingClientRect();
+
+    // so position of textarea will be the sum of positions above:
+    var areaPosition = {
+      x: stageBox.left + textPosition.x,
+      y: stageBox.top + textPosition.y,
+    };
+
+    const btn = document.getElementById('test');
+    btn.style.position = 'absolute';
+    btn.style.top = areaPosition.y + 'px';
+    btn.style.left = areaPosition.x + 'px';
+
+
+    console.log(pos)
+
+    /!* const btn=document.getElementById('test');
+     //console.log(test.value.position);
+     btn.style.position = 'absolute';
+     btn.style.top = pos.y + 'px';
+     btn.style.left = pos.x + 'px';*!/
+    /!* test.style.width = textNode.width();*!/
+    // deleteButton.position({x:pos.x+30,y:pos.y+20});
+  }
+
+  updatePos();
+
+  rect1.on('transform', updatePos);*/
 
   layer.add(tr);
 
@@ -300,13 +457,6 @@ function draw() {
   });
 
 
-
-
-
-
-
-
-
   /* var text2 = new Konva.Text({
      x: 50,
      y: 200,
@@ -331,16 +481,41 @@ function draw() {
 
 
 onMounted(() => {
-  draw();
-})
+  /*document.getElementsByTagName('canvas').bind("contextmenu",function(e){
+    return false;
+  });*/
 
-// export default {
-// name: "Stage"
-// }
+  /*$('canvas').bind("contextmenu",function(e){
+    return false;
+  });*/
+  draw();
+
+ // document.oncontextmenu = new Function("return false");
+
+
+ // let canvas = document.getElementsByTagName('canvas')[0];
+ // canvas.oncontextmenu = function() {return false};
+
+  //canvas.oncontextmenu = new Function("return false");
+  //[0].addEventListener('contextmenu', function (e) {  return false; });
+  //console.log("dsfsdfd",canvas);
+
+
+})
 </script>
 
 <style>
-.konvajs-content {
-  /*background: #fff;*/
+/*#large-container {
+  width: 800px;
+  height: 800px;
+  overflow: hidden;
 }
+
+#scroll-container {
+  width: calc(100% - 22px);
+  height: calc(100vh - 300px);
+  overflow: auto;
+  margin: 10px;
+  border: 1px solid grey;
+}*/
 </style>

@@ -1,0 +1,77 @@
+{
+  "ui": {
+    "right_sidebar": {
+      "active": true,
+      "visibility": true,
+      "children": {
+        "image": {
+          "active": true,
+          "visibility": true
+        },
+        "text": {
+          "active": false,
+          "visibility": true
+        },
+        "shape": {
+          "active": false,
+          "visibility": true
+        },
+        "template": {
+          "active": false,
+          "visibility": true
+        },
+        "background": {
+          "active": false,
+          "visibility": true
+        }
+      }
+    },
+    "topbar": {
+      "visibility": true
+    },
+    "zoom_button": {
+      "visibility": true,
+      "children" : {
+        "zoom_in" : {
+          "active": true,
+          "visibility": true
+        },
+        "zoom_out": {
+          "active": true,
+          "visibility": true
+        }
+      }
+    },
+    "redo_undo_button": {
+      "visibility": true,
+      "children" : {
+        "undo": {
+          "active": true,
+          "visibility": true
+        },
+        "redo": {
+          "active": true,
+          "visibility": true
+        }
+      }
+    },
+    "fullscreen_fit_button":{
+      "visibility": true,
+      "children": {
+         "fullscreen": {
+           "active": true,
+           "visibility": true
+         },
+        "fit": {
+          "active": true,
+          "visibility": true
+        }
+      }
+    },
+    "preview_button": {
+      "active": false,
+      "visibility": true
+    }
+  },
+  "design_mode" : "profissional"
+}

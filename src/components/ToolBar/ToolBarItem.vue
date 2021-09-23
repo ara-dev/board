@@ -1,6 +1,5 @@
 <template>
   <div class="py-3 px-1 cursor-pointer select-none" :class="{'toolbar-item-selected' : selected}" >
-
     <slot></slot>
     <p class="text-xs text-center	mt-1.5">{{ title }}</p>
     <!--<input type="radio" v-model="test" name="test">-->

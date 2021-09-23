@@ -41,7 +41,8 @@ export default defineConfig({
 */
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-//import path from 'path'
+/*const { resolve } = require('path')*/
+//const path = require('path')
 import ViteComponents, { AntDesignVueResolver,VueUseComponentsResolver } from 'vite-plugin-components'
 
 // @ts-ignore
@@ -50,7 +51,7 @@ export default defineConfig({
         extensions: ['*', '.js', '.vue', '.json', '.ts'],
         alias: {
             '/^~/': '',
-            '@': '/src',
+           /* '@': resolve(__dirname, './src'),*/
             //'~': path.resolve(__dirname, '/node_modules'),
         },
     },
