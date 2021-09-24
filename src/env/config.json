@@ -27,7 +27,7 @@
       }
     },
     "topbar": {
-      "visibility": true
+      "visibility": false
     },
     "zoom_button": {
       "visibility": true,

@@ -16,4 +16,11 @@ const uiStore = new ui(element);
 app.provide('uiStore', uiStore);
 //use Ant
 /*app.use(Antd);*/
+
+/*import {IconPark,Home} from '@icon-park/vue-next/es/all';
+app.component('icon',{
+    IconPark
+})
+app.use(Home);*/
+
 app.mount('#app')
