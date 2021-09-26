@@ -31,8 +31,8 @@
     },
     "zoom_button": {
       "visibility": true,
-      "children" : {
-        "zoom_in" : {
+      "children": {
+        "zoom_in": {
           "active": true,
           "visibility": true
         },
@@ -44,7 +44,7 @@
     },
     "redo_undo_button": {
       "visibility": true,
-      "children" : {
+      "children": {
         "undo": {
           "active": true,
           "visibility": true
@@ -55,13 +55,13 @@
         }
       }
     },
-    "fullscreen_fit_button":{
+    "fullscreen_fit_button": {
       "visibility": true,
       "children": {
-         "fullscreen": {
-           "active": true,
-           "visibility": true
-         },
+        "fullscreen": {
+          "active": true,
+          "visibility": true
+        },
         "fit": {
           "active": true,
           "visibility": true
@@ -69,9 +69,48 @@
       }
     },
     "preview_button": {
-      "active": false,
+      "active": true,
       "visibility": true
+    },
+    "stage_top_right_menu": {
+      "visibility": true,
+      "children": {
+        "delete_button": {
+          "active": false,
+          "visibility": true
+        },
+        "copy_button": {
+          "active": false,
+          "visibility": true
+        },
+        "opacity_button": {
+          "active": true,
+          "visibility": true,
+          "children": {
+            "number_input": {
+              "active": true,
+              "visibility": true
+            }
+          }
+        },
+        "crop_button": {
+          "active": false,
+          "visibility": true
+        },
+        "lock_button": {
+          "active": false,
+          "visibility": true
+        },
+        "position_button": {
+          "active": false,
+          "visibility": true
+        },
+        "flip_rotate_button": {
+          "active": true,
+          "visibility": true
+        }
+      }
     }
   },
-  "design_mode" : "profissional"
+  "design_mode": "profissional"
 }

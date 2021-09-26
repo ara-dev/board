@@ -34,8 +34,8 @@ const docHeight = ref(768);
   height.value =docHeight.value >   height.value ? docHeight.value +120  : height.value;
 
 
-console.log(width.value,"this is width");
-console.log(height.value,"this is height");
+/*console.log(width.value,"this is width");
+console.log(height.value,"this is height");*/
 
 let stage = null;
 let layer = null;
