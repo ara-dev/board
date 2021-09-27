@@ -1,42 +1,3 @@
-<!--
-<template>
-  <div class="test">
-     <saturation :value="colors" @change="childChange"></saturation>
-
-  </div>
-</template>
-
-<script>
-import colorMixin from '../mixin/color'
-import saturation from './Saturation.vue'
-export default {
-  name: "Solid",
-  mixins: [colorMixin],
-  components:{
-    saturation,
-  },
-  methods:{
-    childChange (data) {
-      this.colorChange(data)
-    },
-  },
-  data(){
-    return {
-
-    }
-  }
-}
-</script>
-
-<style scoped>
-.test
-{
-  position: relative;
-  width: 250px;
-  height: 250px;
-}
-</style>
--->
 <template>
   <div role="application" aria-label="Sketch color picker" :class="['vc-sketch', disableAlpha ? 'vc-sketch__disable-alpha' : '']">
     <div class="vc-sketch-saturation-wrap">
@@ -99,11 +60,11 @@ export default {
 
 <script>
 import colorMixin from './mixin/color'
-import editableInput from './EditableInput.vue'
-import saturation from './Saturation.vue'
-import hue from './Hue.vue'
-import alpha from './Alpha.vue'
-import checkboard from './Checkboard.vue'
+import editableInput from './common/EditableInput.vue'
+import saturation from './common/Saturation.vue'
+import hue from './common/Hue.vue'
+import alpha from './common/Alpha.vue'
+import checkboard from './common/Checkboard.vue'
 
 const presetColors = [
   '#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321',

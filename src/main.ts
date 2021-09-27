@@ -10,8 +10,11 @@ const app = createApp(App);
 // Install
 install(app); // use default prefix 'icon', eg: icon is People, name is icon-people.
 /* Store */
-import {ui} from './core/index';
+import {ui,stage} from './core/index';
 import element from './env/config.json';
 const uiStore = new ui(element);
+const stageStore=new stage();
 app.provide('uiStore', uiStore);
+app.provide('stageStore',stageStore);
+
 app.mount('#app')

@@ -32,12 +32,20 @@
       <icon-background-color  class="toolbar-icon"/>
     </tool-bar-item>
 
+    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.resize')"
+                   :selected="uiStore.isActive('ui.right_sidebar.children.resize')" title="تغییر سایز"
+                   @click="changeMenu('ui.right_sidebar.children.resize')" >
+      <icon-scale class="toolbar-icon"/>
+    </tool-bar-item>
+
+
+
   </div>
 </template>
 
 <script lang="ts" setup>
 import {inject} from 'vue'
-import UiElementStore from "../../core/ui";
+import UiElementStore from "../../core/store/ui";
 
 let uiStore : UiElementStore  = inject('uiStore') as UiElementStore;
 
@@ -49,6 +57,7 @@ const changeMenu= (activeMenuId : string) : void =>
   uiStore.deactive(`${prefix}shape`) ;
   uiStore.deactive(`${prefix}template`) ;
   uiStore.deactive(`${prefix}background`);
+  uiStore.deactive(`${prefix}resize`);
   uiStore.active(activeMenuId);
 }
 

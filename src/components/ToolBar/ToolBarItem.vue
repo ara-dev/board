@@ -1,38 +1,39 @@
 <template>
-  <div class="py-3 px-1 cursor-pointer select-none text-center" :class="{'toolbar-item-selected' : selected}" >
+  <div class="py-3 px-1 cursor-pointer select-none text-center" :class="{'toolbar-item-selected' : selected}">
     <slot></slot>
     <p class="text-xs text-center	mt-1.5">{{ title }}</p>
   </div>
 </template>
 
-<script>
-export default {
-  name: "ToolBarItem",
-  props: {
-    selected: {
-      default: false,
-      type: Boolean
-    },
-    title:{
-      default:'',
-      type:String
-    }
-  },
+<script lang="ts" setup>
+interface toolbarItem{
+  selected? : boolean,
+  title? : string
 }
+
+withDefaults(defineProps<toolbarItem>(),{
+  selected:false,
+  title : ''
+});
+
 </script>
 
-<style scoped lang="less">
-.toolbar-item-selected{
-  background: rgba(99,102,241,0.3);
-  border-left: 2px solid #6366F1;
+<style lang="less">
+@import 'src/assets/css/var';
+
+.toolbar-item-selected {
+  background: fadeout(@primary-color,75%);
+  border-left: 2px solid @primary-color;
   margin-left: -1px;
-  svg path{
-    fill: #6366F1;
-  }
 
   p {
-    color:#6366F1;
+    color: @primary-color;
+  }
+
+  .toolbar-icon{
+    color: @primary-color;
   }
 
 }
+
 </style>

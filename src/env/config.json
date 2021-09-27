@@ -23,6 +23,10 @@
         "background": {
           "active": false,
           "visibility": true
+        },
+        "resize": {
+          "active": false,
+          "visibility": true
         }
       }
     },
@@ -76,11 +80,11 @@
       "visibility": true,
       "children": {
         "delete_button": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "copy_button": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "opacity_button": {
@@ -94,15 +98,15 @@
           }
         },
         "crop_button": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "lock_button": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "position_button": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "flip_rotate_button": {

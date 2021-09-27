@@ -2,19 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/css/var.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/shape-style-1.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/test-style-1.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/test-style-2.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Swatches.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Twitter.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Style/BackgroundStyle.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Upload/MultiUpload.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Gradient.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Alpha.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Alpha.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Checkboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Checkboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/EditableInput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/EditableInput.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Hue.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Hue.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Saturation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Saturation.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Solid.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/env/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/env/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icon/index.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
@@ -64,8 +83,9 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/kidsland/site_newtheme" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/ColorPicker/Solid" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -74,24 +94,24 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="terminal" />
     <property name="ts.external.directory.path" value="H:\AKS-project\board\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="H:\AKS-project\board\src\core\toolbar" />
-      <recent name="H:\AKS-project\board\src\core" />
-      <recent name="H:\Ax-project\board\src\components\ColorPicker\Solid" />
-      <recent name="H:\Ax-project\board\src\assets" />
-      <recent name="H:\Ax-project\board" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\AKS-project\board\src\components\ColorPicker\Solid" />
+      <recent name="H:\AKS-project\board\src\assets\img\temp" />
+      <recent name="H:\AKS-project\board\src\core\store" />
       <recent name="H:\AKS-project\board\src\env" />
       <recent name="H:\AKS-project\board\src" />
-      <recent name="H:\Ax-project\board\src\components\ColorPicker\Solid" />
-      <recent name="H:\Ax-project\board\src\components\ColorPicker\mixin" />
-      <recent name="H:\Ax-project\board\src\assets\fonts\estedad" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\AKS-project\board\src\components\ColorPicker\Solid\common" />
+      <recent name="H:\AKS-project\board\src\core\store" />
+      <recent name="H:\AKS-project\board\src\components\Option" />
+      <recent name="H:\AKS-project\board\src\core\toolbar" />
+      <recent name="H:\AKS-project\board\src\core" />
     </key>
   </component>
   <component name="RunManager">
@@ -147,7 +167,8 @@
       <workItem from="1631939575018" duration="61402000" />
       <workItem from="1632230634513" duration="7504000" />
       <workItem from="1632294445023" duration="56804000" />
-      <workItem from="1632483438980" duration="35019000" />
+      <workItem from="1632483438980" duration="52274000" />
+      <workItem from="1632683010052" duration="28318000" />
     </task>
     <servers />
   </component>
@@ -160,75 +181,19 @@
       </list>
     </option>
   </component>
-  <component name="WindowStateProjectService">
-    <state x="568" y="198" key="#File_Watchers" timestamp="1630010027821">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="568" y="198" key="#File_Watchers/0.0.1366.728@0.0.1366.728" timestamp="1630010027821" />
-    <state x="586" y="198" key="#Inspections" timestamp="1632239667350">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1632239667350" />
-    <state x="690" y="299" key="#com.intellij.ide.scriptingContext.ui.PerFileMappingsDialogWrapper" timestamp="1630928424092">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="690" y="299" key="#com.intellij.ide.scriptingContext.ui.PerFileMappingsDialogWrapper/0.0.1920.1040@0.0.1920.1040" timestamp="1630928424092" />
-    <state x="353" y="143" key="EditFileWatcherDialog" timestamp="1630008961263">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="353" y="143" key="EditFileWatcherDialog/0.0.1366.728@0.0.1366.728" timestamp="1630008961263" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1632544974618">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="526" y="193" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1632501237309" />
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1632544974618" />
-    <state width="1367" height="282" key="GridCell.Tab.0.bottom" timestamp="1629737891866">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1367" height="282" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1629737891866" />
-    <state width="1367" height="282" key="GridCell.Tab.0.center" timestamp="1629737891865">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1367" height="282" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1629737891865" />
-    <state width="1367" height="282" key="GridCell.Tab.0.left" timestamp="1629737891864">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1367" height="282" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1629737891864" />
-    <state width="1367" height="282" key="GridCell.Tab.0.right" timestamp="1629737891865">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1367" height="282" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1629737891865" />
-    <state x="540" y="255" key="IDE.errors.dialog" timestamp="1632313662928">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="540" y="255" key="IDE.errors.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632313662928" />
-    <state x="476" y="165" key="SettingsEditor" timestamp="1632206177672">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="339" y="19" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1630009653575" />
-    <state x="476" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1632206177672" />
-    <state x="681" y="261" width="570" height="524" key="StructurePopup" timestamp="1632413770732">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="485" y="183" width="406" height="367" key="StructurePopup/0.0.1366.728@0.0.1366.728" timestamp="1632339507951" />
-    <state x="681" y="261" width="570" height="524" key="StructurePopup/0.0.1920.1040@0.0.1920.1040" timestamp="1632413770732" />
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1630912929955">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630912929955" />
-    <state x="670" y="260" width="579" height="520" key="find.popup" timestamp="1630913015816">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="670" y="260" width="579" height="520" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630913015816" />
-    <state x="476" y="231" key="run.anything.popup" timestamp="1632581579342">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1630686375018" />
-    <state x="476" y="231" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632581579342" />
-    <state x="486" y="70" width="945" height="969" key="search.everywhere.popup" timestamp="1632139072139">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1629924211682" />
-    <state x="486" y="70" width="945" height="969" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632139072139" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

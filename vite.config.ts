@@ -48,10 +48,10 @@ export default defineConfig({
         preprocessorOptions: {
             less: {
                 modifyVars: {
-                    'primary-color': '#4338CA',
-                    'link-color': ' #4338CA',
-                    //'card-padding-base': '8px',
-                    //'border-radius-base': '4px',
+                    'primary-color': '#2DA771',
+                    'link-color': ' #2DA771',
+                    'card-padding-base': '8px',
+                    'border-radius-base': '4px',
                 },
                 javascriptEnabled: true,
             },

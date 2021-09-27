@@ -1,7 +1,8 @@
 /* import css */
 @import "font-face.css";
 /*@import "variables.less";*/
-@import "scroll.less";
+@import "scroll";
+@import "var";
 
 /* tailwind */
 @tailwind base;
@@ -9,11 +10,13 @@
 @tailwind utilities;
 
 /* variable */
-@base-color : #4338CA;
-@topbar-height : 60px;
-@icon-color: #6B7280;
+/*@base-color : #4338CA;*/
+/*@base-color-darken : darken(@base-color,5%);*/
+
 
 :root{
+  /*--base-color : @base-color;*/
+  /*--base-color-darken : @base-color-darken;*/
   /*--main-color: hotpink;*/
   /*--topbar-height:70px;*/
   /*--base-color: @base-color;*/

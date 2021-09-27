@@ -240,11 +240,13 @@ function draw() {
     var selected = shapes.filter((shape) =>
         Konva.Util.haveIntersection(box, shape.getClientRect())
     );
+    console.log(selected,"this is selected");
     tr.nodes(selected);
   });
 
   // clicks should select/deselect shapes
   stage.on('click tap', function (e) {
+    //alert('sdfsdf');
     // if we are selecting with rect, do nothing
     if (selectionRectangle.visible()) {
       return;
