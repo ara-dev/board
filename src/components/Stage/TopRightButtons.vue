@@ -42,9 +42,11 @@
                   <template #title>معکوس</template>
                   <a-menu-item key="flip_vertical">
                     افقی
+                    <icon-flip-horizontally />
                   </a-menu-item>
                   <a-menu-item key="flip_horizantal">
                     عمودی
+                    <icon-flip-vertically />
                   </a-menu-item>
                 </a-menu-item-group>
               </a-menu>
@@ -143,10 +145,11 @@
           <div class="grid grid-cols-6 gap-2">
             <div
                 :class="[uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input') || uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input') ? 'col-span-4' : 'col-span-6']">
-              <a-slider v-model:value="stageStore.opacity" :min="0" :max="100" :step="0.01"/>
+              <a-slider @change="stageStore.applyOpacity()" v-model:value="stageStore.opacity" :min="0" :max="100" :step="0.01"/>
             </div>
             <div v-if="uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input')">
               <a-input-number
+                  @change="stageStore.applyOpacity()"
                   :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input')"
                   style="width:105px"
                   v-model:value="stageStore.opacity"
@@ -183,7 +186,7 @@
 
     <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
       <template #title>حذف</template>
-      <a-button class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')">
+      <a-button @click="stageStore.applyDelete()"  class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')">
         <icon-delete/>
       </a-button>
     </a-tooltip>
@@ -192,13 +195,8 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
-import UiElementStore from "../../core/store/ui";
-import StageOptionStore from "../../core/store/stage";
 
-let uiStore = inject<UiElementStore>('uiStore');
-let stageStore: StageOptionStore = inject('stageStore') as StageOptionStore;
-
+import {uiStore,stageStore} from "../../core";
 
 </script>
 

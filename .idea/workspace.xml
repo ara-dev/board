@@ -2,40 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/css/var.less" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/shape-style-1.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/test-style-1.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/temp/test-style-2.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Swatches.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Twitter.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Style/BackgroundStyle.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Upload/MultiUpload.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Gradient.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Alpha.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Alpha.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Checkboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Checkboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/EditableInput.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/EditableInput.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Hue.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Hue.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Saturation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Saturation.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Solid.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/env/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/env/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +71,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components/ColorPicker/Solid" />
+    <property name="last_opened_file_path" value="D:/salareJade/profile-new" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -94,7 +80,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="H:\AKS-project\board\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -168,7 +154,13 @@
       <workItem from="1632230634513" duration="7504000" />
       <workItem from="1632294445023" duration="56804000" />
       <workItem from="1632483438980" duration="52274000" />
-      <workItem from="1632683010052" duration="28318000" />
+      <workItem from="1632683010052" duration="39152000" />
+      <workItem from="1632773147215" duration="5160000" />
+      <workItem from="1632814618726" duration="99000" />
+      <workItem from="1632814824413" duration="592000" />
+      <workItem from="1632847238722" duration="1769000" />
+      <workItem from="1632897020287" duration="9706000" />
+      <workItem from="1632910934218" duration="6413000" />
     </task>
     <servers />
   </component>
@@ -178,6 +170,12 @@
       <list>
         <option value="$PROJECT_DIR$/src/main.js.map" />
         <option value="$PROJECT_DIR$/src/main.js" />
+        <option value="$PROJECT_DIR$/src/core/store/ui.js" />
+        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
+        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
+        <option value="$PROJECT_DIR$/src/core/store/ui.js.map" />
+        <option value="$PROJECT_DIR$/src/core/index.js" />
+        <option value="$PROJECT_DIR$/src/core/index.js.map" />
       </list>
     </option>
   </component>
@@ -191,6 +189,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

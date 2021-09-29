@@ -22,10 +22,10 @@
         <!--<template #title v-if="isFullscreen"> حال عادی</template>-->
         <!--<template #title v-else>تمام صفحه</template>-->
         <template #title>تمام صفحه</template>
-        <a-button @click="toggle" :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fullscreen')">
+        <a-button  :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fullscreen')">
 
-          <icon-off-screen-two v-if="isFullscreen"/>
-          <icon-full-screen v-else/>
+<!--          <icon-off-screen-two v-if="isFullscreen"/>
+          <icon-full-screen v-else/>-->
 
         </a-button>
       </a-tooltip>
@@ -43,14 +43,10 @@
 </template>
 
 <script lang="ts" setup>
-import {inject, ref} from "vue";
-import UiElementStore from "../../core/store/ui";
-import {useFullscreen} from "@vueuse/core";
+import { uiStore} from "../../core";
 
-let uiStore = inject<UiElementStore>('uiStore');
-
-const body = ref<HTMLElement | null>(null);
-const {isFullscreen, enter, exit, toggle} = useFullscreen(body);
+/*const body = ref<HTMLElement | null>(null);
+const {isFullscreen, enter, exit, toggle} = useFullscreen(body);*/
 </script>
 
 <style scoped>

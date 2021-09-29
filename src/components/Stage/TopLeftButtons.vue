@@ -15,10 +15,8 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
-import UiElementStore from "../../core/store/ui";
+import {uiStore} from "../../core";
 
-let uiStore = inject<UiElementStore>('uiStore');
 
 </script>
 

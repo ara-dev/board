@@ -9,7 +9,7 @@
     <a-divider/>
     <p class="text-gray-500	mb-2 text-xs font-semibold">سایز فونت</p>
     <div class="text-center">
-      <a-input-number :min="0" v-model:value="stageStore.textFontSize"/>
+      <a-input-number @change="stageStore.a()" :min="0" v-model:value="stageStore.textFontSize"/>
     </div>
 
     <a-divider/>
@@ -70,13 +70,8 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from "vue";
-import StageOptionStore from "../../core/store/stage";
-import Sketch from "../ColorPicker/Solid/Sketch.vue";
-import Twitter from "../ColorPicker/Solid/Twitter.vue";
+import { stageStore } from "../../core";
 import Swatches from "../ColorPicker/Solid/Swatches.vue";
-
-let stageStore: StageOptionStore = inject('stageStore') as StageOptionStore;
 
 const colors = {
   hex: '#194d33',

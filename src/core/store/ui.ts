@@ -1,5 +1,6 @@
 import {DeepReadonly, UnwrapNestedRefs} from "@vue/reactivity";
 import {reactive, readonly} from "vue";
+import element from '../../env/config.json';
 import _ from 'lodash';
 
 interface UiElement {
@@ -11,7 +12,7 @@ interface UiElement {
 
 export default class UiElementStore {
 
-    _state !: UnwrapNestedRefs<UiElement>;
+   private _state !: UnwrapNestedRefs<UiElement>;
 
     constructor(state: {}) {
         this._state = reactive(state);
@@ -78,3 +79,7 @@ export default class UiElementStore {
         obj.visibility = false;
     }
 }
+
+
+
+export const uiStore = new UiElementStore(element);

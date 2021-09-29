@@ -114,6 +114,9 @@
           "visibility": true
         }
       }
+    },
+    "text_option": {
+      "visibility": false
     }
   },
   "design_mode": "profissional"

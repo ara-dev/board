@@ -1,3 +1,3 @@
-import ui from './store/ui';
-import stage from './store/stage'
-export { ui , stage }
+import { uiStore } from './store/ui'
+import {stageStore} from "./store/stage"
+export { stageStore ,uiStore }

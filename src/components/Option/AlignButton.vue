@@ -16,10 +16,11 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, inject} from "vue";
-import StageOptionStore from "../../core/store/stage";
+/*import { inject} from "vue";
+import StageOptionStore from "../../core/store/stage";*/
+/*let stageStore: StageOptionStore = inject('stageStore') as StageOptionStore;*/
+import {stageStore } from "../../core";
 
-let stageStore: StageOptionStore = inject('stageStore') as StageOptionStore;
 const buttonType = function (type: string): string {
   if (type == stageStore.textAlign)
     return "primary"

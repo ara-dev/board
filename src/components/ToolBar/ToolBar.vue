@@ -44,10 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-import {inject} from 'vue'
-import UiElementStore from "../../core/store/ui";
 
-let uiStore : UiElementStore  = inject('uiStore') as UiElementStore;
+import { uiStore} from "../../core";
+
 
 const changeMenu= (activeMenuId : string) : void =>
 {

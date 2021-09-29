@@ -8,8 +8,8 @@
     </a-select>
 
     <div class="grid grid-cols-2 gap-2 mt-3 mr-2">
-      <img src="src/assets/img/temp/shape-style-1.svg" class="image-style"/>
-      <img src="src/assets/img/temp/shape-style-1.svg" class="image-style"/>
+      <img src="../../assets/img/temp/shape-style-1.svg" class="image-style"/>
+      <img src="../../assets/img/temp/shape-style-1.svg" class="image-style"/>
     </div>
 
   </div>
