@@ -2,26 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/core/store/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/stage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/stage.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/env/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/env/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,10 +30,10 @@
       <list>
         <option value="CSS File" />
         <option value="Less File" />
-        <option value="TypeScript File" />
         <option value="tsconfig.json" />
         <option value="JavaScript File" />
         <option value="Vue Single File Component" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -60,6 +54,9 @@
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
+  </component>
   <component name="ProjectId" id="1x2gNJUmh541iwJ4I6lxnM9DOD0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -71,7 +68,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/salareJade/profile-new" />
+    <property name="last_opened_file_path" value="D:/dorinGold/droin_api" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -160,7 +157,11 @@
       <workItem from="1632814824413" duration="592000" />
       <workItem from="1632847238722" duration="1769000" />
       <workItem from="1632897020287" duration="9706000" />
-      <workItem from="1632910934218" duration="6413000" />
+      <workItem from="1632910934218" duration="13166000" />
+      <workItem from="1633032969569" duration="15512000" />
+      <workItem from="1633118404765" duration="608000" />
+      <workItem from="1633119224514" duration="13260000" />
+      <workItem from="1633181320567" duration="5992000" />
     </task>
     <servers />
   </component>
@@ -176,6 +177,8 @@
         <option value="$PROJECT_DIR$/src/core/store/ui.js.map" />
         <option value="$PROJECT_DIR$/src/core/index.js" />
         <option value="$PROJECT_DIR$/src/core/index.js.map" />
+        <option value="$PROJECT_DIR$/src/core/store/types.js" />
+        <option value="$PROJECT_DIR$/src/core/store/types.js.map" />
       </list>
     </option>
   </component>

@@ -45,7 +45,7 @@ export default class UiElementStore {
         let obj = this.query(id);
         obj.active = true;
     }
-    deactive(id) {
+    deActive(id) {
         let obj = this.query(id);
         obj.active = false;
     }
@@ -56,6 +56,16 @@ export default class UiElementStore {
     hide(id) {
         let obj = this.query(id);
         obj.visibility = false;
+    }
+    deActiveElementWhenNoneSelected() {
+        const prefix_top_right = 'ui.stage_top_right_menu.children.';
+        this.deActive(prefix_top_right + 'delete_button');
+        this.deActive(prefix_top_right + 'copy_button');
+        this.deActive(prefix_top_right + 'opacity_button');
+        this.deActive(prefix_top_right + 'crop_button');
+        this.deActive(prefix_top_right + 'lock_button');
+        this.deActive(prefix_top_right + 'position_button');
+        this.deActive(prefix_top_right + 'flip_rotate_button');
     }
 }
 export const uiStore = new UiElementStore(element);

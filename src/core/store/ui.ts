@@ -64,7 +64,7 @@ export default class UiElementStore {
         obj.active = true;
     }
 
-    deactive(id: string): void {
+    deActive(id: string): void {
         let obj: UiElement = this.query(id);
         obj.active = false;
     }
@@ -78,6 +78,19 @@ export default class UiElementStore {
         let obj: UiElement = this.query(id);
         obj.visibility = false;
     }
+
+    deActiveElementWhenNoneSelected(){
+        const prefix_top_right='ui.stage_top_right_menu.children.';
+        this.deActive(prefix_top_right+'delete_button')
+        this.deActive(prefix_top_right+'copy_button')
+        this.deActive(prefix_top_right+'opacity_button')
+        this.deActive(prefix_top_right+'crop_button')
+        this.deActive(prefix_top_right+'lock_button')
+        this.deActive(prefix_top_right+'position_button')
+        this.deActive(prefix_top_right+'flip_rotate_button')
+    }
+
+
 }
 
 

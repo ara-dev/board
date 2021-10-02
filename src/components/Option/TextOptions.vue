@@ -9,7 +9,7 @@
     <a-divider/>
     <p class="text-gray-500	mb-2 text-xs font-semibold">سایز فونت</p>
     <div class="text-center">
-      <a-input-number @change="stageStore.a()" :min="0" v-model:value="stageStore.textFontSize"/>
+      <a-input-number @change="stageStore.applyFontSize()" :min="0" v-model:value="stageStore.textOption.fontSize"/>
     </div>
 
     <a-divider/>

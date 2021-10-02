@@ -1,5 +1,6 @@
 <template>
-  <div class="relative overflow-auto" ref="mainboard">
+<!--  overflow-auto-->
+  <div class="relative h-screen" ref="mainboard">
     <!--<a-button id="test" style="z-index: 1000">
       <svg viewBox="0 0 24 24" width="24" height="24" class="mx-auto my-0">
         <path class="icon-color"
@@ -7,7 +8,7 @@
       </svg>
     </a-button>-->
       <div id="container-0" ref="container"></div>
-      <div id="container-1" ref="container"></div>
+<!--      <div id="container-1" ref="container"></div>-->
     <!--<div style="position: absolute; top: 5px; right: 351.5px;"><span aria-haspopup="true" class="bp3-popover2-target"><button type="button" class="bp3-button bp3-minimal" tabindex="0"><span icon="duplicate" aria-hidden="true" class="bp3-icon bp3-icon-duplicate"><svg data-icon="duplicate" width="16" height="16" viewBox="0 0 16 16"><path d="M15 0H5c-.55 0-1 .45-1 1v2h2V2h8v7h-1v2h2c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1zm-4 4H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-1 10H2V6h8v8z" fill-rule="evenodd"></path></svg></span></button></span><span aria-haspopup="true" class="bp3-popover2-target"><button type="button" class="bp3-button bp3-minimal" tabindex="0"><span icon="insert" aria-hidden="true" class="bp3-icon bp3-icon-insert"><svg data-icon="insert" width="16" height="16" viewBox="0 0 16 16"><path d="M5 9h2v2c0 .6.4 1 1 1s1-.4 1-1V9h2c.6 0 1-.4 1-1s-.4-1-1-1H9V5c0-.6-.4-1-1-1s-1 .4-1 1v2H5c-.6 0-1 .4-1 1s.4 1 1 1zm10-9H1C.4 0 0 .4 0 1v14c0 .6.4 1 1 1h14c.6 0 1-.4 1-1V1c0-.6-.4-1-1-1zm-1 14H2V2h12v12z" fill-rule="evenodd"></path></svg></span></button></span></div>-->
    <!-- <a-button>
       <svg viewBox="0 0 24 24" width="24" height="24" class="mx-auto my-0">
@@ -26,16 +27,22 @@ import {Shape } from 'konva/lib/Shape'
 import {ref, onMounted, watchEffect, watch, inject} from "vue";
 import {useElementSize} from '@vueuse/core'
 
-const container = ref(null);
+
+
+/*const container = ref(null);*/
+/*
+
+
 const test = ref(null)
+*/
 const mainboard = ref(null);
 const {width, height} = useElementSize(mainboard);
 
-const docWidth = ref(768);
-const docHeight = ref(768);
+/*const docWidth = ref(350);
+const docHeight = ref(350);*/
 
- width.value= docWidth.value >  width.value ? docWidth.value + 120 : width.value;
-  height.value =docHeight.value >   height.value ? docHeight.value +120  : height.value;
+ /*width.value= docWidth.value >  width.value ? docWidth.value + 120 : width.value;
+  height.value =docHeight.value >   height.value ? docHeight.value +120  : height.value;*/
 
 
 /*console.log(width.value,"this is width");
@@ -52,62 +59,14 @@ watch([width, height], () => {
  /* width.value= docWidth.value >  width.value ? docWidth.value : width.value;
   height.value =docHeight.value >   height.value ? docHeight.value : height.value;*/
   //draw();
+  stageStore.resizeStage(width.value,height.value);
 });
 
 
 
-function draw() {
+/*function draw() {
 
-  stage = new Konva.Stage({
-    container: container.value,
-    width: width.value,
-    height: height.value ,
-  });
-  //stage.container().style.backgroundColor = 'green';
-  layer = new Konva.Layer({});
-  stage.add(layer);
-
-
-  var group = new Konva.Group({
-    x: (width.value / 2) - (docWidth.value / 2),
-    y: (height.value / 2) - (docHeight.value / 2),
-    width: docWidth.value,
-    height: docHeight.value,
-    clipX: 0,
-    clipY: 0,
-    clipWidth: docWidth.value,
-    clipHeight: docHeight.value,
-    /*draggable:true,*/
-    /*scaleX : 0.5 ,
-    scaleY : 0.5,*/
-  });
-  layer.add(group);
-
-  var background = new Konva.Rect({
-    x: 0,
-    y: 0,
-    width: docWidth.value,
-    height: docHeight.value,
-    fill: '#fff',
-    //fillLinearGradientStartPoint: { x: 0, y: 0 },
-    //fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
-    // gradient into transparent color, so we can see CSS styles
-    /*fillLinearGradientColorStops: [
-      0,
-      'yellow',
-      0.5,
-      'blue',
-      0.6,
-      'rgba(0, 0, 0, 0)',
-    ],*/
-    // remove background from hit graph for better perf
-    // because we don't need any events on the background
-    listening: false,
-  });
-  group.add(background);
-
-
-  var rect1 = new Konva.Rect({
+  /!*var rect1 = new Konva.Rect({
     x: 60,
     y: 60,
     width: 100,
@@ -154,26 +113,26 @@ function draw() {
   var tr = new Konva.Transformer({
     nodes: [],
     keepRatio: false,
-    /*enabledAnchors: [
+    /!*enabledAnchors: [
       'top-left',
       'top-right',
       'bottom-left',
       'bottom-right',
 
-    ],*/
+    ],*!/
     draggable: true,
 
   });
   layer.add(tr);
-
+*!/
 
 // sample add button
-  const deleteButton = new Konva.Circle({
+ /!* const deleteButton = new Konva.Circle({
     radius: 10,
     fill: 'red'
   });
-  tr.add(deleteButton);
- /* function updatePos() {
+  tr.add(deleteButton);*!/
+ /!* function updatePos() {
     //console.log(tr.findOne('.top-right').position());
 
     let pos = tr.findOne('.top-right')//.position();
@@ -209,11 +168,11 @@ function draw() {
 
   updatePos();
 
-  rect1.on('transform', updatePos);*/
+  rect1.on('transform', updatePos);*!/
 
 
   // add a new feature, lets add ability to draw selection rectangle
-  var selectionRectangle = new Konva.Rect({
+  /!*var selectionRectangle = new Konva.Rect({
     fill: 'rgba(0,0,255,0.5)',
     visible: false,
   });
@@ -252,9 +211,9 @@ function draw() {
 
   stage.on('mouseup touchend', () => {
     // do nothing if we didn't start selection
-   /* if (!selectionRectangle.visible()) {
+   /!* if (!selectionRectangle.visible()) {
       return;
-    }*/
+    }*!/
     // update visibility in timeout, so we can check it in click event
     setTimeout(() => {
       selectionRectangle.visible(false);
@@ -278,9 +237,9 @@ function draw() {
   stage.on('click tap', function (e) {
     //alert('sdfsdf');
     // if we are selecting with rect, do nothing
-   /* if (selectionRectangle.visible()) {
+   /!* if (selectionRectangle.visible()) {
       return;
-    }*/
+    }*!/
 
     // if click on empty area - remove all selections
     if (e.target === stage) {
@@ -289,9 +248,9 @@ function draw() {
     }
 
     // do nothing if clicked NOT on our rectangles
-  /*  if (!e.target.hasName('rect')) {
+  /!*  if (!e.target.hasName('rect')) {
       return;
-    }*/
+    }*!/
 
     // do we pressed shift or ctrl?
     const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
@@ -320,14 +279,20 @@ function draw() {
       tr.nodes(nodes);
       stageStore.selectedElements=nodes as Shape[];
       console.log(nodes,"this is 3");
-    }
-  });
+    }*!/
+  //});
 
-}
+}*/
 
 
 onMounted(() => {
-  draw();
+  /*stage = new Konva.Stage({
+    container: container.value,
+    width: width.value,
+    height: height.value ,
+  });*/
+  stageStore.addPage('container-0',width.value,height.value);
+  //draw();
   /*document.getElementsByTagName('canvas').bind("contextmenu",function(e){
     return false;
   });*/

@@ -51,12 +51,12 @@ import { uiStore} from "../../core";
 const changeMenu= (activeMenuId : string) : void =>
 {
   const prefix = 'ui.right_sidebar.children.';
-  uiStore.deactive(`${prefix}image`) ;
-  uiStore.deactive(`${prefix}text`) ;
-  uiStore.deactive(`${prefix}shape`) ;
-  uiStore.deactive(`${prefix}template`) ;
-  uiStore.deactive(`${prefix}background`);
-  uiStore.deactive(`${prefix}resize`);
+  uiStore.deActive(`${prefix}image`) ;
+  uiStore.deActive(`${prefix}text`) ;
+  uiStore.deActive(`${prefix}shape`) ;
+  uiStore.deActive(`${prefix}template`) ;
+  uiStore.deActive(`${prefix}background`);
+  uiStore.deActive(`${prefix}resize`);
   uiStore.active(activeMenuId);
 }
 

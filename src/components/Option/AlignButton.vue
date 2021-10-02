@@ -22,13 +22,13 @@ import StageOptionStore from "../../core/store/stage";*/
 import {stageStore } from "../../core";
 
 const buttonType = function (type: string): string {
-  if (type == stageStore.textAlign)
+  if (type == stageStore.textOption.align)
     return "primary"
   return "text"
 }
 
 const changeAlign = function (type: string): void {
-  stageStore.textAlign = type;
+  stageStore.textOption.align = type;
 }
 
 
