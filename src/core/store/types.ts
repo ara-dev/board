@@ -13,3 +13,29 @@ export interface TextOption {
     ellipsis: boolean;
 }
 
+export interface Snapping{
+     guide:number ,
+   offset: number,
+   snap: string,
+}
+export interface SnappingEdges {
+    vertical : Snapping[]
+    horizontal : Snapping[]
+}
+
+export interface LineGuideStops {
+    vertical : number[],
+    horizontal : number[]
+}
+
+export interface guide {
+    lineGuide: number,
+    offset: number,
+    orientation:string,
+    snap: string,
+}
+
+
+
+
+

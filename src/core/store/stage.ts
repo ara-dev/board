@@ -3,13 +3,14 @@ import {reactive, readonly} from "vue"
 import {Stage} from 'konva/lib/Stage'
 import {Shape} from 'konva/lib/Shape'
 import {Text} from 'konva/lib/shapes/Text'
-import {TextOption} from "./types"
+import {guide, LineGuideStops, Snapping, SnappingEdges, TextOption} from "./types"
 import {uiStore} from "./ui";
 import {Layer} from "konva/lib/Layer";
 import {Group} from "konva/lib/Group";
 import {Rect} from "konva/lib/shapes/Rect";
 import {Transformer} from "konva/lib/shapes/Transformer";
 import Konva from 'konva';
+import {Vector2d} from "konva/lib/types";
 
 
 interface StageOption {
@@ -111,7 +112,7 @@ export default class StageOptionStore {
                 const selectedText: Text = selectedShape as Text;
                 this._state.textOption.fontSize = selectedText.fontSize();
                 // {this._state.textOption}= selectedText;
-                console.log("text option", this._state.textOption);
+               // console.log("text option", this._state.textOption);
                 //this.textFontSize=selectedText.fontSize();
                 //this.textAlign=selectedText.align();
                 uiStore.show('ui.text_option');
@@ -219,7 +220,7 @@ export default class StageOptionStore {
 
 
         const circle = new Konva.Circle({
-            name : 'element',
+            name: 'element',
             x: 230,
             y: 100,
             radius: 60,
@@ -232,7 +233,7 @@ export default class StageOptionStore {
         group.add(circle);
 
         const triangle = new Konva.RegularPolygon({
-            name : 'element',
+            name: 'element',
             x: 80,
             y: 120,
             sides: 3,
@@ -246,7 +247,7 @@ export default class StageOptionStore {
         group.add(triangle);
 
         const text = new Konva.Text({
-            name : 'element',
+            name: 'element',
             x: 10,
             y: 10,
             fontFamily: 'Calibri',
@@ -259,6 +260,7 @@ export default class StageOptionStore {
 
         //end test
 
+        //start select transform
         const selectionRectangle = new Rect({
             fill: 'rgba(0, 161, 255,0.3)',//rgba(0,0,255,0.5)
             visible: false,
@@ -266,10 +268,7 @@ export default class StageOptionStore {
 
         layer.add(selectionRectangle);
 
-        let x1: number;
-        let y1: number;
-        let x2: number;
-        let y2: number;
+        let x1: number, y1: number, x2: number, y2: number;
 
         //test
 
@@ -309,10 +308,15 @@ export default class StageOptionStore {
                 return;
             }
 
-            x1 = stage.getPointerPosition().x;
-            y1 = stage.getPointerPosition().y;
-            x2 = stage.getPointerPosition().x;
-            y2 = stage.getPointerPosition().y;
+            let pointerPosition: Vector2d = {x: 0, y: 0};
+            if (stage.getPointerPosition() != null) {
+                pointerPosition = stage.getPointerPosition() as Vector2d;
+            }
+
+            x1 = pointerPosition.x;
+            y1 = pointerPosition.y;
+            x2 = pointerPosition.x;
+            y2 = pointerPosition.y;
 
             selectionRectangle.visible(true);
             selectionRectangle.width(0);
@@ -326,8 +330,14 @@ export default class StageOptionStore {
                 return;
             }
 
-            x2 = stage.getPointerPosition().x;
-            y2 = stage.getPointerPosition().y;
+
+             let pointerPosition : Vector2d = { x:0, y :0 };
+            if(stage.getPointerPosition()!=null){
+                pointerPosition = stage.getPointerPosition() as Vector2d;
+            }
+
+            x2 = pointerPosition.x;
+            y2 = pointerPosition.y;
 
             selectionRectangle.setAttrs({
                 x: Math.min(x1, x2),
@@ -347,19 +357,18 @@ export default class StageOptionStore {
                 selectionRectangle.visible(false);
             });
 
-            var shapes = stage.find('.element');
-            var box = selectionRectangle.getClientRect();
-            var selected = shapes.filter((shape) =>
+            const shapes = stage.find('.element');
+            const box = selectionRectangle.getClientRect();
+            const selected = shapes.filter((shape) =>
                 Konva.Util.haveIntersection(box, shape.getClientRect())
             );
             transformer.nodes(selected);
         });
 
-       // stage.on()
 
         // clicks should select/deselect shapes
         stage.on('click tap mousedown touchstart', function (e) {
-            console.log("stage mousedown");
+            // console.log("stage mousedown");
 
             // if we are selecting with rect, do nothing
             if (selectionRectangle.visible()) {
@@ -399,27 +408,30 @@ export default class StageOptionStore {
             }
         });
 
-        //start snap
-        group.on('dragmove',  (e) => {
-            // clear all previous lines on the screen
-            group.find('.guid-line').forEach((l) => l.destroy());
+        //end select transform
 
+        //start snapping
+        group.on('dragmove', (e) => {
+            // clear all previous lines on the screen
+            layer.find('.guid-line').forEach((l) => l.destroy());
+
+            //debugger;
             // find possible snapping lines
-            var lineGuideStops = this.getLineGuideStops(stage,e.target);
+            const lineGuideStops : LineGuideStops= this.getLineGuideStops(stage, e.target as Shape);
             // find snapping points of current object
-            var itemBounds = this.getObjectSnappingEdges(e.target);
+            const itemBounds : SnappingEdges = this.getObjectSnappingEdges(e.target as Shape);
 
             // now find where can we snap current object
-            var guides = this.getGuides(lineGuideStops, itemBounds);
+            const guides : guide[] = this.getGuides(lineGuideStops, itemBounds);
 
             // do nothing of no snapping
             if (!guides.length) {
                 return;
             }
 
-            this.drawGuides(guides);
+            this.drawGuides(layer, guides);
 
-            var absPos = e.target.absolutePosition();
+            const absPos = e.target.absolutePosition();
             // now force object position
             guides.forEach((lg) => {
                 switch (lg.snap) {
@@ -467,32 +479,34 @@ export default class StageOptionStore {
             e.target.absolutePosition(absPos);
         });
 
-        group.on('dragend', function (e) {
+        group.on('dragend', (e) => {
             // clear all previous lines on the screen
-            group.find('.guid-line').forEach((l) => l.destroy());
+            layer.find('.guid-line').forEach((l) => l.destroy());
         });
 
-        //end snap
+        //end snapping
 
 
     }
 
-    //start snap
+    //start snapping
+
     // were can we snap our objects?
-     getLineGuideStops(stage : Stage,skipShape) {
+    private getLineGuideStops(stage: Stage, skipShape : Shape) : LineGuideStops  {
+
         // we can snap to stage borders and the center of the stage
-        var vertical = [0, stage.width() / 2, stage.width()];
-        var horizontal = [0, stage.height() / 2, stage.height()];
+        const vertical: Array<number> = [0, stage.width() / 2, stage.width()];
+        const horizontal: Array<number> = [0, stage.height() / 2, stage.height()];
 
         // and we snap over edges and center of each object on the canvas
         stage.find('.element').forEach((guideItem) => {
             if (guideItem === skipShape) {
                 return;
             }
-            var box = guideItem.getClientRect();
+            const box = guideItem.getClientRect();
             // and we can snap to all edges of shapes
-            vertical.push([box.x, box.x + box.width, box.x + box.width / 2]);
-            horizontal.push([box.y, box.y + box.height, box.y + box.height / 2]);
+            vertical.push(...[box.x, box.x + box.width, box.x + box.width / 2]);
+            horizontal.push(...[box.y, box.y + box.height, box.y + box.height / 2]);
         });
         return {
             vertical: vertical.flat(),
@@ -503,9 +517,9 @@ export default class StageOptionStore {
     // what points of the object will trigger to snapping?
     // it can be just center of the object
     // but we will enable all edges and center
-    getObjectSnappingEdges(node) {
-        var box = node.getClientRect();
-        var absPos = node.absolutePosition();
+    private getObjectSnappingEdges(node : Shape) : SnappingEdges{
+        const box = node.getClientRect();
+        const absPos = node.absolutePosition();
 
         return {
             vertical: [
@@ -545,13 +559,15 @@ export default class StageOptionStore {
         };
     }
 
-    getGuides(lineGuideStops, itemBounds) {
-        var resultV = [];
-        var resultH = [];
+    private getGuides(lineGuideStops : LineGuideStops, itemBounds : SnappingEdges ) : guide[]{
 
-        lineGuideStops.vertical.forEach((lineGuide) => {
-            itemBounds.vertical.forEach((itemBound) => {
-                var diff = Math.abs(lineGuide - itemBound.guide);
+        const GUIDELINE_OFFSET = 5;
+        const resultV : Array<{lineGuide:number,diff:number,snap:string,offset:number}> = [];
+        const resultH : Array<{lineGuide:number,diff:number,snap:string,offset:number}> = [];
+
+        lineGuideStops.vertical.forEach((lineGuide : number) => {
+            itemBounds.vertical.forEach((itemBound : Snapping) => {
+                const diff = Math.abs(lineGuide - itemBound.guide);
                 // if the distance between guild line and object snap point is close we can consider this for snapping
                 if (diff < GUIDELINE_OFFSET) {
                     resultV.push({
@@ -566,7 +582,7 @@ export default class StageOptionStore {
 
         lineGuideStops.horizontal.forEach((lineGuide) => {
             itemBounds.horizontal.forEach((itemBound) => {
-                var diff = Math.abs(lineGuide - itemBound.guide);
+                const diff = Math.abs(lineGuide - itemBound.guide);
                 if (diff < GUIDELINE_OFFSET) {
                     resultH.push({
                         lineGuide: lineGuide,
@@ -578,11 +594,11 @@ export default class StageOptionStore {
             });
         });
 
-        var guides = [];
+        const guides : guide[] = [];
 
         // find closest snap
-        var minV = resultV.sort((a, b) => a.diff - b.diff)[0];
-        var minH = resultH.sort((a, b) => a.diff - b.diff)[0];
+        const minV = resultV.sort((a, b) => a.diff - b.diff)[0];
+        const minH = resultH.sort((a, b) => a.diff - b.diff)[0];
         if (minV) {
             guides.push({
                 lineGuide: minV.lineGuide,
@@ -602,10 +618,10 @@ export default class StageOptionStore {
         return guides;
     }
 
-    drawGuides(guides) {
-        guides.forEach((lg) => {
+    private drawGuides(layer : Layer, guides : guide[]) {
+        guides.forEach((lg: guide) => {
             if (lg.orientation === 'H') {
-                var line = new Konva.Line({
+                const line = new Konva.Line({
                     points: [-6000, 0, 6000, 0],
                     stroke: 'rgb(0, 161, 255)',
                     strokeWidth: 1,
@@ -618,7 +634,7 @@ export default class StageOptionStore {
                     y: lg.lineGuide,
                 });
             } else if (lg.orientation === 'V') {
-                var line = new Konva.Line({
+                const line = new Konva.Line({
                     points: [0, -6000, 0, 6000],
                     stroke: 'rgb(0, 161, 255)',
                     strokeWidth: 1,
@@ -634,7 +650,7 @@ export default class StageOptionStore {
         });
     }
 
-    //end snap
+    //end snapping
 
     /*private Highlighter(element : Shape){
 
@@ -650,8 +666,6 @@ export default class StageOptionStore {
         const group: Group = stage.findOne('.main_group');
         group.x((stage.width() / 2) - (state.docWidth / 2));
         group.y((stage.height() / 2) - (state.docHeight / 2));
-        //console.log("this is group",group);
-
     }
 
     get textOption(): TextOption {
@@ -670,13 +684,17 @@ export default class StageOptionStore {
         });
     }
 
-    applyFontSize() {
+    applyRotateDegrees(degrees: number): void {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
-            item.fontSize(this._state.textOption.fontSize);
+            item.rotation(degrees);
         });
     }
 
-
+    applyFontSize() {
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            (item as Text).fontSize(this._state.textOption.fontSize);
+        });
+    }
 }
 
 export const stageStore = new StageOptionStore();
