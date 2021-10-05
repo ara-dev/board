@@ -2,19 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/BackgroundContextMenu.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Stage/Stage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/stage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/stage.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/types.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/types.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,24 +30,32 @@
         <option value="Less File" />
         <option value="tsconfig.json" />
         <option value="JavaScript File" />
-        <option value="Vue Single File Component" />
         <option value="TypeScript File" />
+        <option value="Vue Single File Component" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/tailwind.config.js" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/core/store/stage.ts" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/core/store/types.ts" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/App.vue" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main.ts" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tsconfig.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/package.json" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/components/Stage.vue" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/vite.config.ts" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tailwind.config.js" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/Stage/Stage.vue" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/core/store/stage.ts" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main.ts" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/App.vue" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JsBowerSettings">
     <node-interpreter value="project" />
@@ -72,7 +79,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="D:/dorinGold/droin_api" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -96,11 +103,11 @@
       <recent name="H:\AKS-project\board\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\AKS-project\board\src\components\Stage" />
       <recent name="H:\AKS-project\board\src\components\ColorPicker\Solid\common" />
       <recent name="H:\AKS-project\board\src\core\store" />
       <recent name="H:\AKS-project\board\src\components\Option" />
       <recent name="H:\AKS-project\board\src\core\toolbar" />
-      <recent name="H:\AKS-project\board\src\core" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.stage.ts">
@@ -189,7 +196,9 @@
       <workItem from="1633290047996" duration="10879000" />
       <workItem from="1633339167865" duration="206000" />
       <workItem from="1633339637726" duration="1192000" />
-      <workItem from="1633342080736" duration="7574000" />
+      <workItem from="1633342080736" duration="14251000" />
+      <workItem from="1633369146704" duration="37998000" />
+      <workItem from="1633461073528" duration="5740000" />
     </task>
     <servers />
   </component>

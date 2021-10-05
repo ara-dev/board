@@ -65,6 +65,7 @@ export default class UiElementStore {
     }
 
     deActive(id: string): void {
+        //console.log(id);
         let obj: UiElement = this.query(id);
         obj.active = false;
     }
@@ -88,6 +89,16 @@ export default class UiElementStore {
         this.deActive(prefix_top_right+'lock_button')
         this.deActive(prefix_top_right+'position_button')
         this.deActive(prefix_top_right+'flip_rotate_button')
+    }
+
+    ActiveElementWhenSelected(){
+        const prefix_top_right='ui.stage_top_right_menu.children.';
+        this.active(prefix_top_right+'delete_button')
+        this.active(prefix_top_right+'copy_button')
+        this.active(prefix_top_right+'opacity_button')
+        this.active(prefix_top_right+'lock_button')
+        this.active(prefix_top_right+'position_button')
+        this.active(prefix_top_right+'flip_rotate_button')
     }
 
 

@@ -1,5 +1,7 @@
 <template>
   <div class="h-screen" style="background:#fff">
+    <shape-context-menu />
+    <background-context-menu />
     <!-- start toolbar -->
     <div class="w-full p-3 topbar" v-if="uiStore.isVisible('ui.topbar')">
       <a-button>ذخیره و ادامه</a-button>
@@ -33,8 +35,13 @@
           </div>
 
           <div class="stages overflow-auto" >
+
+            <stage />
+
+
+
 <!--            style="height:100vh"-->
-            <stage  />
+
 <!--            <stage style="height:100vh" />-->
 <!--            <div id="test"></div>-->
           </div>
@@ -83,19 +90,66 @@ import BackgroundStyle from "./components/Style/BackgroundStyle.vue";
 import ShapeStyle from "./components/Style/ShapeStyle.vue";
 IconProvider({...DEFAULT_ICON_CONFIGS, "size": 24, "theme": "outline", "strokeWidth": 2, "strokeLinejoin": "bevel"});
 import {uiStore , stageStore} from "./core";
-import Stage from "./components/Stage.vue";
 import ToolBar from "./components/ToolBar/ToolBar.vue";
+import ShapeContextMenu from "./components/Stage/ShapeContextMenu.vue";
+import BackgroundContextMenu from "./components/Stage/BackgroundContextMenu.vue";
+import Stage from "./components/Stage/Stage.vue";
 
 
 onMounted(() => {
   //stageStore.AddPage();
 });
 
+/*
+window.onbeforeunload = confirmExit;
+function confirmExit() {
+  return "You have attempted to leave this page. Are you sure?";
+}
+*/
+/*var message = "You have not filled out the form.";
+window.onbeforeunload = function(event) {
+  var e = e || window.event;
+  if (e) {
+    e.returnValue = message;
+  }
+  return message;
+};*/
+/*function closedWin() {
+  confirm("close ?");
+  return false; /!* which will not allow to close the window *!/
+}
+if(window.addEventListener) {
+  window.addEventListener("close", closedWin, false);
+}
+
+window.onclose = closedWin;*/
+
+/*window.onbeforeunload = function() {
+  if (data_needs_saving()) {
+    return "Do you really want to leave our brilliant application?";
+  } else {
+    return;
+  }
+};*/
+
+/*window.addEventListener('beforeunload', function (e) {
+  // Cancel the event
+  e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+  // Chrome requires returnValue to be set
+  e.returnValue = '';
+});*/
+
+/*
+window.addEventListener('beforeunload', function (e) {
+  // the absence of a returnValue property on the event will guarantee the browser unload happens
+  delete e['returnValue'];
+});
+*/
 
 </script>
 
 <style lang="less">
-
+@import 'src/assets/css/var.less';
 .main-footer {
   background: #fff;
 }
@@ -103,6 +157,7 @@ onMounted(() => {
 .main-board {
   background: #E5E5E5;
 }
+
 
 
 </style>

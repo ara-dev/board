@@ -13,7 +13,7 @@
               <a-menu :selectable="false">
                 <a-menu-item-group key="position_group">
                   <template #title>چرخش</template>
-                  <a-menu-item key="rotate_90">
+                  <a-menu-item key="rotate_90" @click="stageStore.applyRotateDegrees(90)">
                     چرخش
                     <span> &#176; 90</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
@@ -40,11 +40,11 @@
               <a-menu :selectable="false">
                 <a-menu-item-group key="align_group">
                   <template #title>معکوس</template>
-                  <a-menu-item key="flip_vertical">
+                  <a-menu-item key="flip_horizontal" @click="stageStore.applyFlipVertical()">
                     افقی
                     <icon-flip-horizontally />
                   </a-menu-item>
-                  <a-menu-item key="flip_horizantal">
+                  <a-menu-item key="flip_vertical" @click="stageStore.applyFlipHorizontal()">
                     عمودی
                     <icon-flip-vertically />
                   </a-menu-item>
@@ -124,7 +124,7 @@
       <template #title>
         {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
       </template>
-      <a-button class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')">
+      <a-button class="mr-2" @click="stageStore.applyToggleLockUnlock()" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')">
         <icon-lock v-if="stageStore.layerLock"/>
         <icon-unlock v-else />
 
@@ -179,7 +179,7 @@
 
     <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
       <template #title>کپی</template>
-      <a-button class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')">
+      <a-button class="mr-2" @click="stageStore.applyDuplicate()" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')">
         <icon-copy/>
       </a-button>
     </a-tooltip>
@@ -195,7 +195,6 @@
 </template>
 
 <script lang="ts" setup>
-
 import {uiStore,stageStore} from "../../core";
 
 </script>

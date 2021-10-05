@@ -25,14 +25,17 @@ interface StageOption {
     pages: Stage[],
     docWidth: number,
     docHeight: number,
+    copyElements: Shape[],
 }
 
 export default class StageOptionStore {
 
     private _state !: UnwrapNestedRefs<StageOption>;
+    private lastPointerPosition: Vector2d ;
 
     constructor() {
         this._init();
+        this.lastPointerPosition ={x:0,y:0};
         this._state = reactive(this._state);
         /*watch(this._state,()=>{
             console.log("this is wathc in select elements");
@@ -67,17 +70,11 @@ export default class StageOptionStore {
             pages: [],
             docWidth: 600,
             docHeight: 300,
+            copyElements: [],
         };
+        //this.lastPointerPosition = {x:0,y:0};
+        uiStore.deActiveElementWhenNoneSelected();
     }
-
-    /* get textFontSize(): number {
-         return this._state.textFontSize;
-     }
-
-     set textFontSize(size: number) {
-         this._state.textFontSize = size;
-
-     }*/
 
     get opacity(): number {
         return this._state.opacity * 100;
@@ -91,32 +88,24 @@ export default class StageOptionStore {
         return this._state.layerLock;
     }
 
-    /*get textAlign(): string {
-        return this._state.textAlign;
-    }
-
-    set textAlign(textAlign) {
-        this._state.textAlign = textAlign;
-    }*/
-
     get pages(): UnwrapNestedRefs<Stage[]> {
         return this._state.pages;
     }
 
     set selectedElements(shapes: Shape[]) {
+
+        if (shapes.length == 0) {
+            uiStore.deActiveElementWhenNoneSelected();
+            return;
+        }
+        uiStore.ActiveElementWhenSelected();
+
         if (shapes.length == 1) {
-            //console.log("this lenght is one");
             const selectedShape = shapes[0];
-            //console.log( );
-            if (selectedShape.getClassName() == 'Text') {
-                const selectedText: Text = selectedShape as Text;
-                this._state.textOption.fontSize = selectedText.fontSize();
-                // {this._state.textOption}= selectedText;
-               // console.log("text option", this._state.textOption);
-                //this.textFontSize=selectedText.fontSize();
-                //this.textAlign=selectedText.align();
-                uiStore.show('ui.text_option');
-            }
+            //set common option
+            this._state.opacity = selectedShape.opacity();
+            this._state.layerLock = !selectedShape.draggable();
+
         } else {
             uiStore.hide('ui.text_option');
         }
@@ -152,13 +141,11 @@ export default class StageOptionStore {
             clipWidth: state.docWidth,
             clipHeight: state.docHeight,
             name: 'main_group',
-            /*draggable:true,*/
-            /*scaleX : 0.5 ,
-            scaleY : 0.5,*/
         });
         layer.add(group);
 
         const background = new Rect({
+            name: 'background',
             x: 0,
             y: 0,
             width: state.docWidth,
@@ -177,32 +164,28 @@ export default class StageOptionStore {
             ],*/
             // remove background from hit graph for better perf
             // because we don't need any events on the background
-            listening: false,
+            listening: true,
         });
         group.add(background);
 
         const transformer = new Transformer({
+            name: 'transformer',
             nodes: [],
             keepRatio: false,
-            /*enabledAnchors: [
-              'top-left',
-              'top-right',
-              'bottom-left',
-              'bottom-right',
-            ],*/
-            draggable: true,
         });
         layer.add(transformer);
 
         //start test
         const rect1 = new Konva.Rect({
-            x: 60,
-            y: 60,
+            x: 0,
+            y: 0,
             width: 100,
             height: 90,
             fill: 'red',
             name: 'element',
             draggable: true,
+            //offsetX :   - 50 ,
+            //offsetY : -80 ,
         });
         group.add(rect1);
 
@@ -270,38 +253,6 @@ export default class StageOptionStore {
 
         let x1: number, y1: number, x2: number, y2: number;
 
-        //test
-
-        /*group.on('mouseenter',(e)=>{
-            //console.log("group mouseenter",e.target);
-            //console.log(this,"sdfsdfsdfsdf");
-            //console.log(e.x);
-            const shape : Shape = e.target;
-            const highlighter=new Rect({
-                name: "highlighter",
-                x: shape.x(),
-                y: shape.y(),
-                rotation: shape.rotation(),
-                width: shape.width(),
-                height: shape.height(),
-                listening: false,
-                stroke: "rgb(0, 161, 255)",
-                strokeWidth: 2,
-                strokeScaleEnabled: false
-            });
-            group.add(highlighter);
-
-        });
-
-        group.on('mouseout',(e)=>{
-            const highlighter =  group.find('.highlighter') ;
-            highlighter.forEach((item)=>{
-                item.destroy();
-            })
-        });*/
-
-        //end test
-
         stage.on('mousedown touchstart', (e) => {
             // do nothing if we mousedown on any shape
             if (e.target !== stage) {
@@ -330,9 +281,8 @@ export default class StageOptionStore {
                 return;
             }
 
-
-             let pointerPosition : Vector2d = { x:0, y :0 };
-            if(stage.getPointerPosition()!=null){
+            let pointerPosition: Vector2d = {x: 0, y: 0};
+            if (stage.getPointerPosition() != null) {
                 pointerPosition = stage.getPointerPosition() as Vector2d;
             }
 
@@ -357,18 +307,19 @@ export default class StageOptionStore {
                 selectionRectangle.visible(false);
             });
 
-            const shapes = stage.find('.element');
+            const shapes: Shape[] = stage.find('.element');
             const box = selectionRectangle.getClientRect();
-            const selected = shapes.filter((shape) =>
-                Konva.Util.haveIntersection(box, shape.getClientRect())
+            const selected: Shape[] = shapes.filter((shape) =>
+                Konva.Util.haveIntersection(box, shape.getClientRect()) && shape.draggable() // no select element that tragable is false(locked)
             );
+            this.changeResizeRotateEnableTransformer(true, transformer);
             transformer.nodes(selected);
+            this.selectedElements = selected;
         });
 
 
-        // clicks should select/deselect shapes
-        stage.on('click tap mousedown touchstart', function (e) {
-            // console.log("stage mousedown");
+        // clicks should select/deselect shapes or //click tap
+        stage.on('mousedown touchstart', (e) => {
 
             // if we are selecting with rect, do nothing
             if (selectionRectangle.visible()) {
@@ -376,8 +327,9 @@ export default class StageOptionStore {
             }
 
             // if click on empty area - remove all selections
-            if (e.target === stage) {
+            if (e.target === stage || e.target.name() == 'background') {
                 transformer.nodes([]);
+                this.selectedElements = [];
                 return;
             }
 
@@ -394,17 +346,35 @@ export default class StageOptionStore {
                 // if no key pressed and the node is not selected
                 // select just one
                 transformer.nodes([e.target]);
+                //deselect shape that draggable is false (locked)
+                this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer);
+                this.selectedElements = [e.target as Shape]
             } else if (metaPressed && isSelected) {
                 // if we pressed keys and node was selected
                 // we need to remove it from selection:
-                const nodes = transformer.nodes().slice(); // use slice to have new copy of array
+                this.changeResizeRotateEnableTransformer(true, transformer);
+                let nodes = transformer.nodes().slice(); // use slice to have new copy of array
                 // remove node from array
                 nodes.splice(nodes.indexOf(e.target), 1);
+                nodes = nodes.filter((item) => {
+                    return item.draggable();
+                })
                 transformer.nodes(nodes);
+                this.selectedElements = nodes as Shape[];
             } else if (metaPressed && !isSelected) {
+                this.changeResizeRotateEnableTransformer(true, transformer);
                 // add the node into selection
-                const nodes = transformer.nodes().concat([e.target]);
+                //filter shape that is draggable is false (locked)
+                let nodes = transformer.nodes().slice();
+                nodes = nodes.filter((item) => {
+                    return item.draggable();
+                });
+                //add shape to nodes if draggable is true
+                if (e.target.draggable()) {
+                    nodes.push(e.target);
+                }
                 transformer.nodes(nodes);
+                this.selectedElements = nodes as Shape[];
             }
         });
 
@@ -415,14 +385,13 @@ export default class StageOptionStore {
             // clear all previous lines on the screen
             layer.find('.guid-line').forEach((l) => l.destroy());
 
-            //debugger;
             // find possible snapping lines
-            const lineGuideStops : LineGuideStops= this.getLineGuideStops(stage, e.target as Shape);
+            const lineGuideStops: LineGuideStops = this.getLineGuideStops(stage, e.target as Shape);
             // find snapping points of current object
-            const itemBounds : SnappingEdges = this.getObjectSnappingEdges(e.target as Shape);
+            const itemBounds: SnappingEdges = this.getObjectSnappingEdges(e.target as Shape);
 
             // now find where can we snap current object
-            const guides : guide[] = this.getGuides(lineGuideStops, itemBounds);
+            const guides: guide[] = this.getGuides(lineGuideStops, itemBounds);
 
             // do nothing of no snapping
             if (!guides.length) {
@@ -486,13 +455,83 @@ export default class StageOptionStore {
 
         //end snapping
 
+        //start context-menu
+
+        const backgroundContextMenu: HTMLElement | null = document.getElementById('background-context-menu');
+        const shapeContextMenu: HTMLElement | null = document.getElementById('shape-context-menu');
+        stage.on('contextmenu',  (e) =>{
+
+           /* let pos: Vector2d = {x: 0, y: 0};
+            const stage: Stage = this.currentStage();
+            if (stage.getPointerPosition() != null) {
+                pos = stage.getPointerPosition() as Vector2d;
+            }*/
+
+            this.lastPointerPosition = group.getRelativePointerPosition();
+            /*var shape = new Konva.Circle({
+                x: pos.x,
+                y: pos.y,
+                fill: 'red',
+                radius: 20,
+            });*/
+
+            //group.add(shape);
+
+
+            //this.lastPointerPosition=pointerPosition;
+
+            if (backgroundContextMenu != null) {
+                backgroundContextMenu.style.display = 'none';
+            }
+
+            if (shapeContextMenu != null) {
+                shapeContextMenu.style.display = 'none';
+            }
+
+            // prevent default behavior
+            e.evt.preventDefault();
+
+            if (e.target === stage) {
+                // if we are on empty place of the stage we will do nothing
+                return;
+            }
+
+            if (e.target.name() == 'background') {
+                if (backgroundContextMenu != null) {
+                    backgroundContextMenu.style.display = 'initial';
+                    backgroundContextMenu.style.top = e.evt.clientY + 5 + 'px';
+                    backgroundContextMenu.style.left = e.evt.clientX + 5 + 'px';
+                }
+            }
+
+            if (e.target.name() == 'element') {
+                if (shapeContextMenu != null) {
+                    shapeContextMenu.style.display = 'initial';
+                    shapeContextMenu.style.top = e.evt.clientY + 5 + 'px';
+                    shapeContextMenu.style.left = e.evt.clientX + 5 + 'px';
+                }
+            }
+        });
+
+        window.addEventListener('click', () => {
+            // hide menu
+            if (backgroundContextMenu != null) {
+                backgroundContextMenu.style.display = 'none';
+            }
+
+            if (shapeContextMenu != null) {
+                shapeContextMenu.style.display = 'none';
+            }
+        });
+
+        //end context-menu
 
     }
 
     //start snapping
 
     // were can we snap our objects?
-    private getLineGuideStops(stage: Stage, skipShape : Shape) : LineGuideStops  {
+    private getLineGuideStops(stage: Stage, skipShape: Shape): LineGuideStops {
 
         // we can snap to stage borders and the center of the stage
         const vertical: Array<number> = [0, stage.width() / 2, stage.width()];
@@ -517,7 +556,7 @@ export default class StageOptionStore {
     // what points of the object will trigger to snapping?
     // it can be just center of the object
     // but we will enable all edges and center
-    private getObjectSnappingEdges(node : Shape) : SnappingEdges{
+    private getObjectSnappingEdges(node: Shape): SnappingEdges {
         const box = node.getClientRect();
         const absPos = node.absolutePosition();
 
@@ -559,14 +598,14 @@ export default class StageOptionStore {
         };
     }
 
-    private getGuides(lineGuideStops : LineGuideStops, itemBounds : SnappingEdges ) : guide[]{
+    private getGuides(lineGuideStops: LineGuideStops, itemBounds: SnappingEdges): guide[] {
 
         const GUIDELINE_OFFSET = 5;
-        const resultV : Array<{lineGuide:number,diff:number,snap:string,offset:number}> = [];
-        const resultH : Array<{lineGuide:number,diff:number,snap:string,offset:number}> = [];
+        const resultV: Array<{ lineGuide: number, diff: number, snap: string, offset: number }> = [];
+        const resultH: Array<{ lineGuide: number, diff: number, snap: string, offset: number }> = [];
 
-        lineGuideStops.vertical.forEach((lineGuide : number) => {
-            itemBounds.vertical.forEach((itemBound : Snapping) => {
+        lineGuideStops.vertical.forEach((lineGuide: number) => {
+            itemBounds.vertical.forEach((itemBound: Snapping) => {
                 const diff = Math.abs(lineGuide - itemBound.guide);
                 // if the distance between guild line and object snap point is close we can consider this for snapping
                 if (diff < GUIDELINE_OFFSET) {
@@ -594,7 +633,7 @@ export default class StageOptionStore {
             });
         });
 
-        const guides : guide[] = [];
+        const guides: guide[] = [];
 
         // find closest snap
         const minV = resultV.sort((a, b) => a.diff - b.diff)[0];
@@ -618,7 +657,7 @@ export default class StageOptionStore {
         return guides;
     }
 
-    private drawGuides(layer : Layer, guides : guide[]) {
+    private drawGuides(layer: Layer, guides: guide[]) {
         guides.forEach((lg: guide) => {
             if (lg.orientation === 'H') {
                 const line = new Konva.Line({
@@ -652,10 +691,6 @@ export default class StageOptionStore {
 
     //end snapping
 
-    /*private Highlighter(element : Shape){
-
-    }*/
-
     resizeStage(newWidth: number, newHeight: number): void {
         const state = this._state;
         const w = state.docWidth > newWidth ? state.docWidth : newWidth;
@@ -663,7 +698,7 @@ export default class StageOptionStore {
         const stage: UnwrapNestedRefs<Stage> = state.pages[state.currentPage - 1];
         stage.width(w);
         stage.height(h);
-        const group: Group = stage.findOne('.main_group');
+        const group: Group = this.getGroup();
         group.x((stage.width() / 2) - (state.docWidth / 2));
         group.y((stage.height() / 2) - (state.docHeight / 2));
     }
@@ -682,11 +717,19 @@ export default class StageOptionStore {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             item.destroy();
         });
+        const shapes: Shape[] = this.getAllShapes();
+        if (shapes.length != 0) {
+            const lastShape: Shape = shapes[shapes.length - 1];
+            this.setShapesToTransformer([lastShape]);
+        } else {
+            this.setShapesToTransformer([]);
+        }
     }
 
     applyRotateDegrees(degrees: number): void {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
-            item.rotation(degrees);
+            // item.rotation(item.rotation()+degrees);
+            //item.rotate(degrees);
         });
     }
 
@@ -694,6 +737,115 @@ export default class StageOptionStore {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             (item as Text).fontSize(this._state.textOption.fontSize);
         });
+    }
+
+    applyDuplicate() {
+        const group: Group = this.getGroup();
+        const tempShape: Shape[] = [];
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            const copy = item.clone({
+                x: item.x() + 10,
+                y: item.y() + 10
+            });
+            group.add(copy);
+            tempShape.push(copy);
+        });
+        this.setShapesToTransformer(tempShape);
+    }
+
+    applyToggleLockUnlock() {
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            item.draggable(!item.draggable());
+        });
+        this._state.layerLock = !this._state.layerLock;
+        this.changeResizeRotateEnableTransformer(!this._state.layerLock);
+    }
+
+    applyFlipVertical() {
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            item.scaleY(-item.scaleY());
+        });
+    }
+
+    applyFlipHorizontal(): void {
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            item.scaleX(-item.scaleX());
+        });
+    }
+
+    applyCopy(): void {
+        this._state.copyElements = this._state.selectedElements.slice();
+    }
+
+    applyPaste(): void {
+        const shapes: Shape[] = this._state.copyElements.map((item) => {
+            return item.clone({
+                x: this.lastPointerPosition.x,
+                y: this.lastPointerPosition.y,
+            });
+        })
+        this.addShapeToGroup(shapes);
+        this.setShapesToTransformer(shapes);
+        //this._state.copyElements=[];
+    }
+
+    enablePaste(): boolean {
+        if (this._state.copyElements.length > 0)
+            return true;
+        return false;
+    }
+
+    private currentStage(): Stage {
+        return <Stage>this._state.pages[this._state.currentPage - 1];
+    }
+
+    private setShapesToTransformer(shapes: Shape[]): void {
+        const transformer: Transformer = this.getTransFormer();
+        transformer.nodes(shapes);
+        this.selectedElements = shapes;
+    }
+
+    private getAllShapes(): Shape[] {
+        const stage: Stage = this.currentStage();
+        const shapes: Shape[] = stage.find('.element');
+        return shapes;
+    }
+
+    private getGroup(): Group {
+        const stage: Stage = this.currentStage();
+        const group: Group = stage.findOne('.main_group');
+        return group;
+    }
+
+    private changeResizeRotateEnableTransformer(isEnable: boolean = true, transformer?: Transformer): void {
+        if (transformer) {
+            transformer.resizeEnabled(isEnable);
+            transformer.rotateEnabled(isEnable);
+        } else {
+            const tr: Transformer = this.getTransFormer();
+            tr.resizeEnabled(isEnable);
+            tr.rotateEnabled(isEnable);
+        }
+    }
+
+    private getTransFormer(): Transformer {
+        const stage: Stage = this.currentStage();
+        return stage.findOne('.transformer');
+    }
+
+    private addShapeToGroup(shapes: Shape[]): void {
+        const group: Group = this.getGroup();
+        group.add(...shapes);
+    }
+
+    applyDeleteAll() : void{
+        this.getAllShapes().forEach((item:Shape)=>{
+            item.destroy();
+        })
+    }
+
+    applySelectAll(){
+        this.setShapesToTransformer(this.getAllShapes());
     }
 }
 
