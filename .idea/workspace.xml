@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/BackgroundContextMenu.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/Stage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/ui.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +69,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/dorinGold/droin_api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../temp/Polotno-studio-vue" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -198,7 +188,10 @@
       <workItem from="1633339637726" duration="1192000" />
       <workItem from="1633342080736" duration="14251000" />
       <workItem from="1633369146704" duration="37998000" />
-      <workItem from="1633461073528" duration="5740000" />
+      <workItem from="1633461073528" duration="5798000" />
+      <workItem from="1633502291949" duration="6817000" />
+      <workItem from="1633593232599" duration="8316000" />
+      <workItem from="1633618089284" duration="4844000" />
     </task>
     <servers />
   </component>

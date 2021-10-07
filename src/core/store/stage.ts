@@ -37,9 +37,6 @@ export default class StageOptionStore {
         this._init();
         this.lastPointerPosition ={x:0,y:0};
         this._state = reactive(this._state);
-        /*watch(this._state,()=>{
-            console.log("this is wathc in select elements");
-        });*/
     }
 
 
@@ -120,7 +117,11 @@ export default class StageOptionStore {
             container: container,
             width: w,
             height: h,
+
+            //width: window.innerWidth,
+            //height: window.innerHeight
         });
+        //stage.zIndex(5000);
         this._state.pages.push(stage);
         this._state.currentPage++;
         this.initStage(stage);
@@ -253,9 +254,52 @@ export default class StageOptionStore {
 
         let x1: number, y1: number, x2: number, y2: number;
 
+        const mouseMove=(e:MouseEvent | TouchEvent)=>{
+            stage.setPointersPositions(e);
+            // do nothing if we didn't start selection
+            if (!selectionRectangle.visible()) {
+                return;
+            }
+
+            let pointerPosition: Vector2d = {x: 0, y: 0};
+            if (stage.getPointerPosition() != null) {
+                pointerPosition = stage.getPointerPosition() as Vector2d;
+            }
+            x2 = pointerPosition.x;
+            y2 = pointerPosition.y;
+
+            selectionRectangle.setAttrs({
+                x: Math.min(x1, x2),
+                y: Math.min(y1, y2),
+                width: Math.abs(x2 - x1),
+                height: Math.abs(y2 - y1),
+            });
+        }
+
+        const mouseUp=(e:MouseEvent | TouchEvent)=>{
+            // do nothing if we didn't start selection
+            if (!selectionRectangle.visible()) {
+                return;
+            }
+            // update visibility in timeout, so we can check it in click event
+            setTimeout(() => {
+                selectionRectangle.visible(false);
+            });
+
+            const shapes: Shape[] = stage.find('.element');
+            const box = selectionRectangle.getClientRect();
+            const selected: Shape[] = shapes.filter((shape) =>
+                Konva.Util.haveIntersection(box, shape.getClientRect()) && shape.draggable() // no select element that tragable is false(locked)
+            );
+            this.changeResizeRotateEnableTransformer(true, transformer);
+            transformer.nodes(selected);
+            this.selectedElements = selected;
+        }
+
         stage.on('mousedown touchstart', (e) => {
+
             // do nothing if we mousedown on any shape
-            if (e.target !== stage) {
+            if (e.target !== stage && e.target.name()!=="background") {
                 return;
             }
 
@@ -274,8 +318,17 @@ export default class StageOptionStore {
             selectionRectangle.height(0);
         });
 
-        stage.on('mousemove touchmove', () => {
+        window.addEventListener('mousemove',(e)=>{
+            mouseMove(e);
+        });
 
+        window.addEventListener('touchmove',(e)=>{
+           mouseMove(e);
+        });
+
+       /* stage.on('mousemove touchmove', (e) => {
+
+            e.evt.cancelBubble=false;
             // do nothing if we didn't start selection
             if (!selectionRectangle.visible()) {
                 return;
@@ -295,9 +348,18 @@ export default class StageOptionStore {
                 width: Math.abs(x2 - x1),
                 height: Math.abs(y2 - y1),
             });
+        });*/
+
+        window.addEventListener('mouseup',(e)=>{
+            mouseUp(e);
         });
 
-        stage.on('mouseup touchend', () => {
+        window.addEventListener('touchend',(e)=>{
+            mouseUp(e);
+        });
+
+       /* stage.on('mouseup touchend', () => {
+            console.log("stage mouseup");
             // do nothing if we didn't start selection
             if (!selectionRectangle.visible()) {
                 return;
@@ -315,7 +377,7 @@ export default class StageOptionStore {
             this.changeResizeRotateEnableTransformer(true, transformer);
             transformer.nodes(selected);
             this.selectedElements = selected;
-        });
+        });*/
 
 
         // clicks should select/deselect shapes or //click tap
@@ -733,13 +795,13 @@ export default class StageOptionStore {
         });
     }
 
-    applyFontSize() {
+    applyFontSize() : void{
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             (item as Text).fontSize(this._state.textOption.fontSize);
         });
     }
 
-    applyDuplicate() {
+    applyDuplicate() :void {
         const group: Group = this.getGroup();
         const tempShape: Shape[] = [];
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
@@ -753,7 +815,7 @@ export default class StageOptionStore {
         this.setShapesToTransformer(tempShape);
     }
 
-    applyToggleLockUnlock() {
+    applyToggleLockUnlock() :void {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             item.draggable(!item.draggable());
         });
@@ -761,7 +823,7 @@ export default class StageOptionStore {
         this.changeResizeRotateEnableTransformer(!this._state.layerLock);
     }
 
-    applyFlipVertical() {
+    applyFlipVertical() :void {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             item.scaleY(-item.scaleY());
         });
@@ -844,8 +906,11 @@ export default class StageOptionStore {
         })
     }
 
-    applySelectAll(){
-        this.setShapesToTransformer(this.getAllShapes());
+    applySelectAll() : void{
+        const shapes : Shape[]=this.getAllShapes().filter((item)=>{
+            return item.draggable();
+        })
+        this.setShapesToTransformer(shapes);
     }
 }
 
