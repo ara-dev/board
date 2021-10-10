@@ -100,8 +100,6 @@ export default class UiElementStore {
         this.active(prefix_top_right+'position_button')
         this.active(prefix_top_right+'flip_rotate_button')
     }
-
-
 }
 
 

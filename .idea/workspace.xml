@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +73,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../temp/Polotno-studio-vue" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../temp/polotno-site/examples/polotno-and-vue" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -191,7 +195,10 @@
       <workItem from="1633461073528" duration="5798000" />
       <workItem from="1633502291949" duration="6817000" />
       <workItem from="1633593232599" duration="8316000" />
-      <workItem from="1633618089284" duration="4844000" />
+      <workItem from="1633618089284" duration="21519000" />
+      <workItem from="1633759550346" duration="58000" />
+      <workItem from="1633759626533" duration="7905000" />
+      <workItem from="1633855034511" duration="3686000" />
     </task>
     <servers />
   </component>

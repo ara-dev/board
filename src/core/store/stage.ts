@@ -90,7 +90,6 @@ export default class StageOptionStore {
     }
 
     set selectedElements(shapes: Shape[]) {
-
         if (shapes.length == 0) {
             uiStore.deActiveElementWhenNoneSelected();
             return;
@@ -103,8 +102,16 @@ export default class StageOptionStore {
             this._state.opacity = selectedShape.opacity();
             this._state.layerLock = !selectedShape.draggable();
 
+            if(selectedShape.getClassName()=='Text'){
+                this.setTextOptions(selectedShape as Text)
+                uiStore.show('ui.text_option');
+            }else{
+                uiStore.hide('ui.text_option');
+            }
+
+
         } else {
-            uiStore.hide('ui.text_option');
+            //uiStore.hide('ui.text_option');
         }
         this._state.selectedElements = shapes;
     }
@@ -173,6 +180,9 @@ export default class StageOptionStore {
             name: 'transformer',
             nodes: [],
             keepRatio: false,
+            //enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
+            //padding : 15,
+           // flipEnabled : false,
         });
         layer.add(transformer);
 
@@ -191,7 +201,6 @@ export default class StageOptionStore {
         group.add(rect1);
 
         const rect2 = new Konva.Rect({
-
             x: 250,
             y: 100,
             width: 150,
@@ -199,7 +208,10 @@ export default class StageOptionStore {
             fill: 'green',
             name: 'element',
             draggable: true,
+            offsetX : 150/2 ,
+            offsetY : 90 / 2
         });
+
         group.add(rect2);
 
 
@@ -226,6 +238,8 @@ export default class StageOptionStore {
             stroke: 'black',
             strokeWidth: 4,
             draggable: true,
+            offsetX : 80 /2 ,
+            offsetY : 120 / 2
         });
 
         group.add(triangle);
@@ -241,6 +255,18 @@ export default class StageOptionStore {
             draggable: true,
         });
         group.add(text);
+
+        const text2 = new Konva.Text({
+            name: 'element',
+            x: 10,
+            y: 10,
+            fontFamily: 'Calibri',
+            fontSize: 24,
+            text: 'نمونه متن فارسی',
+            fill: 'black',
+            draggable: true,
+        });
+        group.add(text2);
 
         //end test
 
@@ -357,28 +383,6 @@ export default class StageOptionStore {
         window.addEventListener('touchend',(e)=>{
             mouseUp(e);
         });
-
-       /* stage.on('mouseup touchend', () => {
-            console.log("stage mouseup");
-            // do nothing if we didn't start selection
-            if (!selectionRectangle.visible()) {
-                return;
-            }
-            // update visibility in timeout, so we can check it in click event
-            setTimeout(() => {
-                selectionRectangle.visible(false);
-            });
-
-            const shapes: Shape[] = stage.find('.element');
-            const box = selectionRectangle.getClientRect();
-            const selected: Shape[] = shapes.filter((shape) =>
-                Konva.Util.haveIntersection(box, shape.getClientRect()) && shape.draggable() // no select element that tragable is false(locked)
-            );
-            this.changeResizeRotateEnableTransformer(true, transformer);
-            transformer.nodes(selected);
-            this.selectedElements = selected;
-        });*/
-
 
         // clicks should select/deselect shapes or //click tap
         stage.on('mousedown touchstart', (e) => {
@@ -801,6 +805,12 @@ export default class StageOptionStore {
         });
     }
 
+    applyTextAlign() : void{
+        this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+            (item as Text).align(this._state.textOption.align);
+        });
+    }
+
     applyDuplicate() :void {
         const group: Group = this.getGroup();
         const tempShape: Shape[] = [];
@@ -836,12 +846,15 @@ export default class StageOptionStore {
     }
 
     applyCopy(): void {
-        this._state.copyElements = this._state.selectedElements.slice();
+        //this._state.copyElements = this._state.selectedElements.slice();
+        this._state.copyElements = this._state.selectedElements.map((item)=>{
+            return item.clone();
+        })
     }
 
     applyPaste(): void {
         const shapes: Shape[] = this._state.copyElements.map((item) => {
-            return item.clone({
+            return item.setAttrs({
                 x: this.lastPointerPosition.x,
                 y: this.lastPointerPosition.y,
             });
@@ -911,6 +924,99 @@ export default class StageOptionStore {
             return item.draggable();
         })
         this.setShapesToTransformer(shapes);
+    }
+
+    applyTest() : void {
+        const tr=this.getTransFormer();
+        //const group=this.getGroup();
+        const background=this.getBackground().getClientRect().x;
+        //let temp=[];
+        const temp : number[] = this._state.selectedElements.map((item)=>{
+            return item.getClientRect().x;
+        });
+        console.log("this is temp",temp);
+        console.log("this is min",Math.min(...temp));
+        const distance=Math.min(...temp) - background;
+        //const temp= tr.getClientRect({ skipStroke:true,skipTransform:true }).x - background.getClientRect().x ;
+        //console.log("this is temp",temp);
+        //console.log("this is group",group.getClientRect());
+        //console.log("this is relative",tr.getClientRect({relativeTo: background }));
+        //console.log("this is transformer",tr.getClientRect({ skipStroke:true,skipTransform:true}));
+       // console.log("this is background",background.getClientRect());
+        this._state.selectedElements.forEach((item)=>{
+            //console.log("this is item x",item.x());
+            //console.log("this is item",item.getClassName(),item.getClientRect());
+            item.setAttrs({
+                x : item.x() - distance
+            })
+        })
+        //const temp=
+        //const background=this.getBackground();
+        //const temp= background.getClientRect();
+        //console.log("temp",temp);
+       // background.x(0);
+        //background.y(0);
+        //background.mo
+        //temp.
+        /*this._state.selectedElements.forEach((item)=>{
+
+            //item.move({x:6,y:5});
+            //item.position({x:item.getClientRect().width/2,y:item.y()});
+
+            console.log("this is client rect",item.getClientRect());
+        })*/
+
+        //const temp : Transformer=this.getTransFormer();
+
+        //temp
+        //alert('test');
+        //let t=this._state.docWidth;
+        //const temp= this.getBackground().getClientRect();
+        //console.log("this is temp",temp);
+        /*this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+           //console.log("item ",item.getClientRect());
+            const w=item.getClientRect();
+           item.setAttrs({
+               x:temp.x - w.x
+           })*/
+
+            // item.scaleX(-item.scaleX());
+           // t=item.getClientRect().x; //Math.min(t,item.getClientRect().x);
+           // console.log("this rect",item.getClientRect());
+            /*item.setAttrs({
+                x:item.x() - t
+            })*/
+        //}
+
+        /*let t = e.width;
+        e.selectedElements.forEach((e => {
+            t = Math.min(t, math_1.getClientRect(e).x)
+        })), e.selectedElements.forEach((e => {
+            e.set({x: e.x - t})
+        }))*/
+
+    }
+
+
+    private getBackground(): Rect{
+        const stage : Stage = this.currentStage();
+        return stage.findOne('.background');
+    }
+
+    private setTextOptions(text: Text) : void {
+        const textOption = this._state.textOption;
+        textOption.fontFamily=text.fontFamily();
+        textOption.fontSize=text.fontSize();
+        textOption.fontStyle=text.fontStyle();
+        textOption.fontVariant=text.fontVariant();
+        textOption.textDecoration=text.textDecoration();
+        textOption.align=text.align();
+        textOption.verticalAlign=text.verticalAlign();
+        textOption.padding=text.padding();
+        textOption.lineHeight=text.lineHeight();
+        textOption.letterSpacing=text.letterSpacing();
+        textOption.wrap=text.wrap();
+        textOption.ellipsis=text.ellipsis();
     }
 }
 

@@ -35,17 +35,8 @@
           </div>
 
           <div class="stages overflow-auto" >
-
             <stage />
-
-
-
-<!--            style="height:100vh"-->
-
-<!--            <stage style="height:100vh" />-->
-<!--            <div id="test"></div>-->
           </div>
-
       </div>
       <div class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen" style="width: 18%">
         <transition :css="false">
@@ -94,7 +85,6 @@ import ToolBar from "./components/ToolBar/ToolBar.vue";
 import ShapeContextMenu from "./components/Stage/ShapeContextMenu.vue";
 import BackgroundContextMenu from "./components/Stage/BackgroundContextMenu.vue";
 import Stage from "./components/Stage/Stage.vue";
-
 
 onMounted(() => {
   //stageStore.AddPage();
@@ -157,7 +147,4 @@ window.addEventListener('beforeunload', function (e) {
 .main-board {
   background: #E5E5E5;
 }
-
-
-
 </style>

@@ -29,6 +29,7 @@ const buttonType = function (type: string): string {
 
 const changeAlign = function (type: string): void {
   stageStore.textOption.align = type;
+  stageStore.applyTextAlign();
 }
 
 

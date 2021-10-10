@@ -24,8 +24,8 @@
         <template #title>تمام صفحه</template>
         <a-button  :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fullscreen')">
 
-<!--          <icon-off-screen-two v-if="isFullscreen"/>
-          <icon-full-screen v-else/>-->
+          <icon-off-screen-two v-if="false"/>
+          <icon-full-screen v-else/>
 
         </a-button>
       </a-tooltip>
@@ -35,15 +35,15 @@
       </a-button>
     </a-button-group>
     <a-button-group v-if="uiStore.isVisible('ui.preview_button')">
-      <a-button :disabled="!uiStore.isActive('ui.preview_button')">
+      <a-button :disabled="!uiStore.isActive('ui.preview_button')" @click="stageStore.applyTest()">
         <icon-playback-progress/>
       </a-button>
-    </a-button-group>
+    </a-button-group >
   </div>
 </template>
 
 <script lang="ts" setup>
-import { uiStore} from "../../core";
+import { uiStore,stageStore} from "../../core";
 
 /*const body = ref<HTMLElement | null>(null);
 const {isFullscreen, enter, exit, toggle} = useFullscreen(body);*/
