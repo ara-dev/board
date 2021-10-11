@@ -69,19 +69,21 @@
               <a-menu :selectable="false">
                 <a-menu-item-group key="position_group">
                   <template #title>لایه بندی</template>
-                  <a-menu-item key="position_to_forward">بیار رو
+                  <a-menu-item key="position_to_forward" @click="stageStore.applyZIndexTop()">
+                    بیار رو
                     <icon-bring-forward/>
                   </a-menu-item>
-                  <a-menu-item key="position_up">
+                  <a-menu-item key="position_up" @click="stageStore.applyZIndexUp()">
                     رویی
                     <icon-bring-to-front/>
                   </a-menu-item>
-                  <a-menu-item key="position_down">
+                  <a-menu-item key="position_down" @click="stageStore.applyZIndexDown()">
                     زیرین
                     <icon-sent-to-back/>
                     <!--<icon-send-to-back />-->
                   </a-menu-item>
-                  <a-menu-item key="position_to_bottom">برو زیر
+                  <a-menu-item key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
+                    برو زیر
                     <icon-send-backward/>
                   </a-menu-item>
                 </a-menu-item-group>
@@ -91,13 +93,13 @@
               <a-menu :selectable="false">
                 <a-menu-item-group key="align_group">
                   <template #title>موقعیت قرارگیری</template>
-                  <a-menu-item key="align_left">تراز چپ
+                  <a-menu-item key="align_left" @click="stageStore.applyAlignLeft()">تراز چپ
                     <icon-align-left/>
                   </a-menu-item>
                   <a-menu-item key="align_center">تراز وسط
                     <icon-vertically-centered/>
                   </a-menu-item>
-                  <a-menu-item key="align_right">تراز راست
+                  <a-menu-item key="align_right" @click="stageStore.applyAlignRight()">تراز راست
                     <icon-align-right/>
                   </a-menu-item>
                   <a-menu-item key="align_top">

@@ -20,12 +20,16 @@
     <a-divider/>
     <p class="text-gray-500	mb-2 text-xs font-semibold">رنگ</p>
 
-    <a-popover  placement="right"  arrow-point-at-center>
+<!--    <sketch :value="colors" />-->
+
+    <a-popover style="padding: 5px !important;"  placement="right"  arrow-point-at-center >
       <template #content>
+
+        <sketch :value="colors" style="padding: 5px !important;" />
 
 <!--        <sketch :value="colors"/>-->
 <!--        <twitter :value="colors" />-->
-        <swatches :value="colors" />
+<!--        <swatches :value="colors" />-->
 
 <!--        <div style="width:300px;">
           <div class="grid grid-cols-6 gap-2">
@@ -72,6 +76,7 @@
 <script lang="ts" setup>
 import { stageStore } from "../../core";
 import Swatches from "../ColorPicker/Solid/Swatches.vue";
+import Sketch from "../ColorPicker/Solid/Sketch.vue";
 
 const colors = {
   hex: '#194d33',

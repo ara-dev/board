@@ -3,11 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/ui.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/ui.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +197,7 @@
       <workItem from="1633618089284" duration="21519000" />
       <workItem from="1633759550346" duration="58000" />
       <workItem from="1633759626533" duration="7905000" />
-      <workItem from="1633855034511" duration="3686000" />
+      <workItem from="1633855034511" duration="12012000" />
     </task>
     <servers />
   </component>

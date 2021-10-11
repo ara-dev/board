@@ -159,6 +159,7 @@ export default class StageOptionStore {
             width: state.docWidth,
             height: state.docHeight,
             fill: '#fff',
+            preventDefault : false,
             //fillLinearGradientStartPoint: { x: 0, y: 0 },
             //fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
             // gradient into transparent color, so we can see CSS styles
@@ -174,7 +175,9 @@ export default class StageOptionStore {
             // because we don't need any events on the background
             listening: true,
         });
+
         group.add(background);
+        //background.zIndex(-1);
 
         const transformer = new Transformer({
             name: 'transformer',
@@ -198,6 +201,7 @@ export default class StageOptionStore {
             //offsetX :   - 50 ,
             //offsetY : -80 ,
         });
+        //background.add
         group.add(rect1);
 
         const rect2 = new Konva.Rect({
@@ -796,6 +800,7 @@ export default class StageOptionStore {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             // item.rotation(item.rotation()+degrees);
             //item.rotate(degrees);
+
         });
     }
 
@@ -927,7 +932,7 @@ export default class StageOptionStore {
     }
 
     applyTest() : void {
-        const tr=this.getTransFormer();
+      /*  const tr=this.getTransFormer();
         //const group=this.getGroup();
         const background=this.getBackground().getClientRect().x;
         //let temp=[];
@@ -950,53 +955,66 @@ export default class StageOptionStore {
                 x : item.x() - distance
             })
         })
-        //const temp=
-        //const background=this.getBackground();
-        //const temp= background.getClientRect();
-        //console.log("temp",temp);
-       // background.x(0);
-        //background.y(0);
-        //background.mo
-        //temp.
-        /*this._state.selectedElements.forEach((item)=>{
-
-            //item.move({x:6,y:5});
-            //item.position({x:item.getClientRect().width/2,y:item.y()});
-
-            console.log("this is client rect",item.getClientRect());
-        })*/
-
-        //const temp : Transformer=this.getTransFormer();
-
-        //temp
-        //alert('test');
-        //let t=this._state.docWidth;
-        //const temp= this.getBackground().getClientRect();
-        //console.log("this is temp",temp);
-        /*this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
-           //console.log("item ",item.getClientRect());
-            const w=item.getClientRect();
-           item.setAttrs({
-               x:temp.x - w.x
-           })*/
-
-            // item.scaleX(-item.scaleX());
-           // t=item.getClientRect().x; //Math.min(t,item.getClientRect().x);
-           // console.log("this rect",item.getClientRect());
-            /*item.setAttrs({
-                x:item.x() - t
-            })*/
-        //}
-
-        /*let t = e.width;
-        e.selectedElements.forEach((e => {
-            t = Math.min(t, math_1.getClientRect(e).x)
-        })), e.selectedElements.forEach((e => {
-            e.set({x: e.x - t})
-        }))*/
+        /*/
 
     }
 
+    applyAlignLeft(){
+        const backgroundDistance=this.getBackground().getClientRect().x;
+        const distanceX : number[] = this._state.selectedElements.map((item)=>{
+            return item.getClientRect().x;
+        });
+        const distance=Math.min(...distanceX) - backgroundDistance;
+        this._state.selectedElements.forEach((item)=>{
+            item.setAttrs({
+                x : item.x() - distance
+            })
+        })
+    }
+
+
+    applyAlignRight(){
+        const backgroundDistance=this.getBackground().getClientRect().x;
+        const distanceX : number[] = this._state.selectedElements.map((item)=>{
+            const rect=item.getClientRect();
+            return rect.x+ rect.width;
+        });
+        const distanceFromStart=Math.max(...distanceX) - backgroundDistance;
+        const distance = this._state.docWidth - distanceFromStart ;
+        this._state.selectedElements.forEach((item)=>{
+            item.setAttrs({
+                x : item.x() + distance
+            })
+        })
+    }
+
+    applyZIndexTop(){
+        this._state.selectedElements.forEach((item)=>{
+            item.moveToTop();
+        })
+    }
+
+    applyZIndexBottom(){
+        const background=this.getBackground();
+        this._state.selectedElements.forEach((item)=>{
+            item.moveToBottom();
+        });
+        background.moveToBottom();
+    }
+
+    applyZIndexUp(){
+        this._state.selectedElements.forEach((item)=>{
+            item.moveUp();
+        })
+    }
+
+    applyZIndexDown(){
+        const background=this.getBackground();
+        this._state.selectedElements.forEach((item)=>{
+          item.moveDown();
+        })
+        background.moveToBottom();
+    }
 
     private getBackground(): Rect{
         const stage : Stage = this.currentStage();

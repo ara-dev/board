@@ -155,7 +155,7 @@ export default {
   box-sizing: initial;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .15), 0 8px 16px rgba(0, 0, 0, .15);
+  /*box-shadow: 0 0 0 1px rgba(0, 0, 0, .15), 0 8px 16px rgba(0, 0, 0, .15);*/
 }
 
 .vc-sketch-saturation-wrap {
