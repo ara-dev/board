@@ -27,7 +27,6 @@ export default {
       return this.modelValue
     },
     bgColor () {
-     // console.log("sdfgdfgdfg",this.colors);
       return `hsl(${this.colors.hsv.h}, 100%, 50%)`
     },
     pointerTop () {
@@ -116,9 +115,9 @@ export default {
   position: absolute;
 }
 .vc-saturation-circle {
-  cursor: head;
-  width: 10px;
-  height:10px;
+  /*cursor: head;*/
+  width: 15px;
+  height: 15px;
   box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);
   border-radius: 50%;
   transform: translate(-2px, -2px);

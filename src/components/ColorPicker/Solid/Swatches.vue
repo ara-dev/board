@@ -50,11 +50,6 @@ var defaultColors = (() => {
   return colors
 })()
 
-/*const defaultColors = [
-  '#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3',
-  '#EB144C', '#F78DA7', '#9900EF'
-]*/
-
 export default {
   name: 'Swatches',
   mixins: [colorMixin],
@@ -92,7 +87,7 @@ export default {
   height: 240px;
   overflow-y: scroll;
   background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);
+  /*box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);*/
  }
 .vc-swatches-box {
   padding: 16px 0 6px 16px;

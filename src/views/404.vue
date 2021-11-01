@@ -1,11 +1,11 @@
 <template>
-  <router-view/>
+    <h1>this is 4040 page </h1>
 </template>
 
 <script lang="ts" setup>
 
 </script>
 
-<style>
+<style scoped>
 
 </style>

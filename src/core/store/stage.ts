@@ -3,7 +3,7 @@ import {reactive, readonly} from "vue"
 import {Stage} from 'konva/lib/Stage'
 import {Shape} from 'konva/lib/Shape'
 import {Text} from 'konva/lib/shapes/Text'
-import {guide, LineGuideStops, Snapping, SnappingEdges, TextOption} from "./types"
+import {Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption} from "./types"
 import {uiStore} from "./ui";
 import {Layer} from "konva/lib/Layer";
 import {Group} from "konva/lib/Group";
@@ -11,6 +11,8 @@ import {Rect} from "konva/lib/shapes/Rect";
 import {Transformer} from "konva/lib/shapes/Transformer";
 import Konva from 'konva';
 import {Vector2d} from "konva/lib/types";
+// @ts-ignore
+import { _colorChange } from "../../components/ColorPicker/Solid/mixin/color.js"
 
 
 interface StageOption {
@@ -26,6 +28,7 @@ interface StageOption {
     docWidth: number,
     docHeight: number,
     copyElements: Shape[],
+    currentColor : Color,
 }
 
 export default class StageOptionStore {
@@ -38,7 +41,6 @@ export default class StageOptionStore {
         this.lastPointerPosition ={x:0,y:0};
         this._state = reactive(this._state);
     }
-
 
     get state(): DeepReadonly<StageOption> {
         return readonly(this._state);
@@ -68,16 +70,50 @@ export default class StageOptionStore {
             docWidth: 600,
             docHeight: 300,
             copyElements: [],
+            currentColor:{
+                "hsl": {
+                    "h": 0,
+                    "s": 0.45761970701843896,
+                    "l": 0.32011092999999996,
+                    "a": 1
+                },
+                "hex": "#772C2C",
+                "hex8": "#772C2CFF",
+                "rgba": {
+                    "r": 119,
+                    "g": 44,
+                    "b": 44,
+                    "a": 1
+                },
+                "hsv": {
+                    "h": 0,
+                    "s": 0.6279,
+                    "v": 0.46659999999999996,
+                    "a": 1
+                },
+                "oldHue": 0,
+                "source": "hsva",
+                "a": 1
+            }
         };
         //this.lastPointerPosition = {x:0,y:0};
         uiStore.deActiveElementWhenNoneSelected();
+    }
+
+    get currentColor(): Color {
+        return this._state.currentColor;
+    }
+
+    set currentColor(color : Color) {
+        this._state.currentColor = color;
+        this.applyColor();
     }
 
     get opacity(): number {
         return this._state.opacity * 100;
     }
 
-    set opacity(opacity) {
+    set opacity(opacity : number) {
         this._state.opacity = opacity / 100;
     }
 
@@ -101,6 +137,7 @@ export default class StageOptionStore {
             //set common option
             this._state.opacity = selectedShape.opacity();
             this._state.layerLock = !selectedShape.draggable();
+            this._state.currentColor = _colorChange(selectedShape.fill());
 
             if(selectedShape.getClassName()=='Text'){
                 this.setTextOptions(selectedShape as Text)
@@ -124,7 +161,6 @@ export default class StageOptionStore {
             container: container,
             width: w,
             height: h,
-
             //width: window.innerWidth,
             //height: window.innerHeight
         });
@@ -255,8 +291,9 @@ export default class StageOptionStore {
             fontFamily: 'Calibri',
             fontSize: 24,
             text: 'this is text',
-            fill: 'black',
+           // fill: 'black',
             draggable: true,
+            fill:'blue'
         });
         group.add(text);
 
@@ -800,7 +837,6 @@ export default class StageOptionStore {
         this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
             // item.rotation(item.rotation()+degrees);
             //item.rotate(degrees);
-
         });
     }
 
@@ -959,7 +995,7 @@ export default class StageOptionStore {
 
     }
 
-    applyAlignLeft(){
+    applyAlignLeft() : void{
         const backgroundDistance=this.getBackground().getClientRect().x;
         const distanceX : number[] = this._state.selectedElements.map((item)=>{
             return item.getClientRect().x;
@@ -973,7 +1009,7 @@ export default class StageOptionStore {
     }
 
 
-    applyAlignRight(){
+    applyAlignRight() : void {
         const backgroundDistance=this.getBackground().getClientRect().x;
         const distanceX : number[] = this._state.selectedElements.map((item)=>{
             const rect=item.getClientRect();
@@ -988,13 +1024,13 @@ export default class StageOptionStore {
         })
     }
 
-    applyZIndexTop(){
+    applyZIndexTop() : void {
         this._state.selectedElements.forEach((item)=>{
             item.moveToTop();
         })
     }
 
-    applyZIndexBottom(){
+    applyZIndexBottom() : void {
         const background=this.getBackground();
         this._state.selectedElements.forEach((item)=>{
             item.moveToBottom();
@@ -1002,18 +1038,24 @@ export default class StageOptionStore {
         background.moveToBottom();
     }
 
-    applyZIndexUp(){
+    applyZIndexUp() : void {
         this._state.selectedElements.forEach((item)=>{
             item.moveUp();
         })
     }
 
-    applyZIndexDown(){
+    applyZIndexDown() : void {
         const background=this.getBackground();
         this._state.selectedElements.forEach((item)=>{
           item.moveDown();
         })
         background.moveToBottom();
+    }
+
+    applyColor() : void{
+        this._state.selectedElements.forEach((item)=>{
+            item.fill(this.currentColor.hex8);
+        })
     }
 
     private getBackground(): Rect{

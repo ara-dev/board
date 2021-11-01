@@ -1,11 +1,11 @@
 <template>
-  <router-view/>
+    <p>this is test</p>
 </template>
 
 <script lang="ts" setup>
 
 </script>
 
-<style>
+<style scoped>
 
 </style>

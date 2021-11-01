@@ -2,11 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/Option/CurrentColor.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/404.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/Board.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/Profile.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Sketch.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.vue.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.vue.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Swatches.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Swatches.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Twitter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/Twitter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Hue.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Hue.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Saturation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/common/Saturation.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ColorPicker/Solid/mixin/color.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ColorPicker/Solid/mixin/color.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +41,8 @@
         <option value="CSS File" />
         <option value="Less File" />
         <option value="tsconfig.json" />
-        <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
         <option value="Vue Single File Component" />
       </list>
     </option>
@@ -48,7 +67,7 @@
     <setting file="file://$PROJECT_DIR$/src/components/Stage/Stage.vue" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/core/store/stage.ts" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main.ts" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/App.vue" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/views/Board.vue" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JsBowerSettings">
     <node-interpreter value="project" />
@@ -68,11 +87,12 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../temp/polotno-site/examples/polotno-and-vue" />
+    <property name="last_opened_file_path" value="D:/dorinGold/admin" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -85,6 +105,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="H:\AKS-project\board\node_modules\typescript\lib" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/src/components/ColorPicker/Solid/Twitter.vue" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -96,11 +117,11 @@
       <recent name="H:\AKS-project\board\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\AKS-project\board\src\views" />
       <recent name="H:\AKS-project\board\src\components\Stage" />
       <recent name="H:\AKS-project\board\src\components\ColorPicker\Solid\common" />
       <recent name="H:\AKS-project\board\src\core\store" />
       <recent name="H:\AKS-project\board\src\components\Option" />
-      <recent name="H:\AKS-project\board\src\core\toolbar" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.stage.ts">
@@ -110,6 +131,7 @@
     <configuration name="stage.ts" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
       <module name="board" />
       <option name="interpreterRef" value="project" />
+      <option name="enabledTsNodeEsmLoader" value="false" />
       <option name="interpreterOptions" value="" />
       <option name="workingDirectory" value="$PROJECT_DIR$/src/core/store" />
       <option name="tsconfigFile" value="" />
@@ -197,7 +219,13 @@
       <workItem from="1633618089284" duration="21519000" />
       <workItem from="1633759550346" duration="58000" />
       <workItem from="1633759626533" duration="7905000" />
-      <workItem from="1633855034511" duration="12012000" />
+      <workItem from="1633855034511" duration="37445000" />
+      <workItem from="1634137354111" duration="713000" />
+      <workItem from="1634323920665" duration="1338000" />
+      <workItem from="1634366715285" duration="444000" />
+      <workItem from="1634656582373" duration="2607000" />
+      <workItem from="1635603808641" duration="3000" />
+      <workItem from="1635688661505" duration="9467000" />
     </task>
     <servers />
   </component>
@@ -205,28 +233,8 @@
     <option name="version" value="3" />
     <option name="exactExcludedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main.js.map" />
-        <option value="$PROJECT_DIR$/src/main.js" />
-        <option value="$PROJECT_DIR$/src/core/store/ui.js" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/ui.js.map" />
         <option value="$PROJECT_DIR$/src/core/index.js" />
         <option value="$PROJECT_DIR$/src/core/index.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js" />
-        <option value="$PROJECT_DIR$/src/core/store/types.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js" />
-        <option value="$PROJECT_DIR$/src/core/store/stage.js.map" />
       </list>
     </option>
   </component>
@@ -241,6 +249,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand>

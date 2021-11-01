@@ -35,6 +35,38 @@ export interface guide {
     snap: string,
 }
 
+export interface HSL{
+    a:number,
+    h:number,
+    l:number,
+    s:number,
+}
+
+export interface  HSV{
+    a:number,
+    h:number,
+    s:number,
+    v:number,
+}
+
+export interface RGBA{
+    a:number,
+    r:number,
+    g:number,
+    b:number
+}
+
+export interface Color{
+    a: number,
+    hex:string,
+    hex8:string,
+    hsl : HSL,
+    hsv : HSV,
+    oldHue : number ,
+    rgba : RGBA,
+    source : string
+}
+
 
 
 

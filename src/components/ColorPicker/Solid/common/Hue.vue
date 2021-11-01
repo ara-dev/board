@@ -39,7 +39,6 @@ export default {
       if (h !== 0 && h - this.oldHue > 0) this.pullDirection = 'right'
       if (h !== 0 && h - this.oldHue < 0) this.pullDirection = 'left'
       this.oldHue = h
-
       return this.modelValue
     },
     directionClass () {
@@ -171,7 +170,7 @@ export default {
 .vc-hue-picker {
   cursor: pointer;
   margin-top: 1px;
-  width:6px;
+  width:4px;
   border-radius: 1px;
   height: 8px;
   box-shadow: 0 0 2px rgba(0, 0, 0, .6);

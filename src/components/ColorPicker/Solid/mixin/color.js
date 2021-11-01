@@ -1,7 +1,6 @@
 import tinycolor from 'tinycolor2'
 
-function _colorChange (data, oldHue) {
-  //console.log(data,"this is data");
+export function _colorChange (data, oldHue) {
   var alpha = data && data.a
   var color
 
@@ -28,7 +27,6 @@ function _colorChange (data, oldHue) {
   var hsv = color.toHsv()
 
   if (hsl.s === 0) {
-    console.log(hsv.h,hsl.h,data.h,data.hsl.h);
     hsv.h = hsl.h = data.h || (data.hsl && data.hsl.h) || oldHue || 0
   }
 
@@ -60,7 +58,14 @@ function _colorChange (data, oldHue) {
 }
 
 export default {
-  props: ['value'],
+  props: {
+    value: {
+      type: String,
+      default: false,
+      required : true
+    },
+  },
+  emits: ['change'],
   data () {
     return {
       val: _colorChange(this.value)
@@ -72,8 +77,9 @@ export default {
         return this.val
       },
       set (newVal) {
-        this.val = newVal
-        this.$emit('input', newVal)
+        this.val = newVal;
+        this.$emit('change',newVal)
+        //this.$emit('input', newVal)
       }
     }
   },

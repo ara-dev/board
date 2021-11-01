@@ -122,7 +122,7 @@ export default {
 .vc-twitter {
   background: #fff;
   border: 0 solid rgba(0,0,0,0.25);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  /*box-shadow: 0 1px 4px rgba(0,0,0,0.25);*/
   border-radius: 4px;
   position: relative;
 }

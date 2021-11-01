@@ -20,63 +20,80 @@
     <a-divider/>
     <p class="text-gray-500	mb-2 text-xs font-semibold">رنگ</p>
 
-<!--    <sketch :value="colors" />-->
+    <!--    <swatches :value="stageStore.currentColor.hex" @change="(val)=> stageStore.currentColor=val" />
+        <twitter :value="stageStore.currentColor.hex" @change="(val)=> stageStore.currentColor=val" />-->
+    <!--    @change="test()"-->
+    <!--    v-model:value="stageStore.currentColor"-->
 
-    <a-popover style="padding: 5px !important;"  placement="right"  arrow-point-at-center >
-      <template #content>
-
-        <sketch :value="colors" style="padding: 5px !important;" />
-
-<!--        <sketch :value="colors"/>-->
-<!--        <twitter :value="colors" />-->
-<!--        <swatches :value="colors" />-->
-
-<!--        <div style="width:300px;">
-          <div class="grid grid-cols-6 gap-2">
-            <div
-                :class="[uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input') || uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input') ? 'col-span-4' : 'col-span-6']">
-              <a-slider v-model:value="stageStore.opacity" :min="0" :max="100" :step="0.01"/>
-            </div>
-            <div v-if="uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input')">
-              <a-input-number
-                  :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input')"
-                  style="width:105px"
-                  v-model:value="stageStore.opacity"
-                  :min="0"
-                  :max="100"
-                  :step="0.01"
-                  :formatter="value => `${value}%`"
-                  :parser="value => value.replace('%', '')"
-              />
-            </div>
-          </div>
-
-        </div>-->
-      </template>
-      <a-button class="mr-2">
-        <!--<icon-sun/>-->
-        <icon-brightness/>
-      </a-button>
-    </a-popover>
-
-
+<!--    <div class="mx-auto">-->
+      <a-popover arrow-point-at-center >
+        <template #content>
+          <sketch :value="stageStore.currentColor.hex" @change="(val)=> stageStore.currentColor=val" />
+        </template>
 <!--
-    <a-button class="mr-2">
-      &lt;!&ndash;<icon-sun/>&ndash;&gt;
-      <icon-brightness/>
-    </a-button>
-    <twitter :value="colors" />
+
+        <a-input-group compact>
+          <span :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`"></span>
+          <a-input style="width:30%" v-model:value="stageStore.currentColor.hex" />
+        </a-input-group>
 -->
 
+<!--        <a-input v-model:value="value5">
+          <template >
+            <setting-outlined />
+          </template >
+        </a-input>-->
+
+        <a-input v-model:value="stageStore.currentColor.hex" placeholder="Basic usage" style="width: 30%;display: inline" />
+        <div :style="`display: inline;width:30px;height:32px;background:${stageStore.currentColor.hex} `">&nbsp;</div>
+
+<!--        <current-color />-->
+
+<!--        <a-input prefix="￥" suffix="RMB" />-->
+
+<!--        <a-button class="mr-2">
+          &lt;!&ndash;<icon-sun/>&ndash;&gt;
+&lt;!&ndash;          <div ></div>&ndash;&gt;
+          <span :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`" ></span>
+         {{ stageStore.currentColor.hex }}
+&lt;!&ndash;          <icon-brightness/>&ndash;&gt;
+        </a-button>-->
+
+
+<!--        style="display:inline;"-->
+<!--        <a-input-group compact dir="ltr" >
+          <a-input style="width:30%" v-model:value="stageStore.currentColor.hex" />
+
+        </a-input-group>-->
+
+
+<!--        <a-input-search
+            dir="ltr"
+            v-model:value="value"
+            placeholder="input search text"
+            size="large"
+            @search="onSearch"
+        >
+          <template #enterButton>
+&lt;!&ndash;            <a-button>Custom</a-button>&ndash;&gt;
+            <div :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`"></div>
+          </template>
+        </a-input-search>-->
+
+
+      </a-popover>
+<!--    </div>-->
 
 
   </div>
 </template>
 
 <script lang="ts" setup>
-import { stageStore } from "../../core";
+import {stageStore} from "../../core";
 import Swatches from "../ColorPicker/Solid/Swatches.vue";
+import Twitter from "../ColorPicker/Solid/Twitter.vue";
 import Sketch from "../ColorPicker/Solid/Sketch.vue";
+import CurrentColor from "./CurrentColor.vue";
 
 const colors = {
   hex: '#194d33',
@@ -86,7 +103,6 @@ const colors = {
   rgba: {r: 25, g: 77, b: 51, a: 1},
   a: 1
 }
-
 </script>
 
 <style scoped>
