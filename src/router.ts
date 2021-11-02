@@ -7,19 +7,19 @@ const routes = [
     {
         path: '/',
         name: 'main',
-        component: () => import('./views/Board.vue'),
+        component: () => import('./views/Profile'),
         meta: {requiresAuth: true}
     },
     {
         path: '/board',
         name: 'board',
-        component: () => import('./views/Board.vue'),
+        component: () => import('./views/Board'),
         meta: {requiresAuth: true}
     },
     {
         path: '/profile',
         name: 'profile',
-        component: () => import('./views/Profile.vue'),
+        component: () => import('./views/Profile'),
         meta: {requiresAuth: true}
     },
     {

@@ -42,14 +42,13 @@ export default defineConfig({
             ],
         }),
         vue(),
-
     ],
     css: {
         preprocessorOptions: {
             less: {
                 modifyVars: {
                     'primary-color': '#2DA771',
-                    'link-color': ' #2DA771',
+                    'link-color': '#2DA771',
                     'card-padding-base': '8px',
                     'border-radius-base': '4px',
                 },

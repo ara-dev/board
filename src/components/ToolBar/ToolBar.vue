@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col">
-
     <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.image')"
                    :selected="uiStore.isActive('ui.right_sidebar.children.image')" title="تصاویر"
                    @click="changeMenu('ui.right_sidebar.children.image')" >
@@ -44,9 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-
 import { uiStore} from "../../core";
-
 
 const changeMenu= (activeMenuId : string) : void =>
 {
