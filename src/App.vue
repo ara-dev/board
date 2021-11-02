@@ -1,8 +1,8 @@
 <template>
-  <div class="flex h-screen relative w-full">
-    <router-view v-slot="{Component}">
-      <transition name="fade">
-        <component :is="Component" class="flex-1" />
+  <div class="h-screen relative w-full">
+    <router-view v-slot="{Component}" id="main-container">
+      <transition name="scale">
+        <component :is="Component"  />
       </transition>
     </router-view>
     <ASide/>
@@ -13,4 +13,24 @@
 import ASide from "./components/ASide.vue";
 
 </script>
+<style>
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s cubic-bezier(0.7, 0, 0.15, 0.97);
+}
 
+.scale-enter-to{
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: translateX(50px) ;
+}
+
+#main-container{
+  padding-right: 5vw;
+}
+</style>
