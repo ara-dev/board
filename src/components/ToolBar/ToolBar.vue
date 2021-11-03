@@ -1,64 +1,69 @@
 <template>
-  <div class="flex flex-col">
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.image')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.image')" title="تصاویر"
-                   @click="changeMenu('ui.right_sidebar.children.image')" >
-      <icon-pic class="toolbar-icon" />
-    </tool-bar-item>
-
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.text')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.text')" title="متن"
-                   @click="changeMenu('ui.right_sidebar.children.text')" >
-      <icon-text-recognition class="toolbar-icon" />
-    </tool-bar-item>
-
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.shape')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.shape')" title="استیکر"
-                   @click="changeMenu('ui.right_sidebar.children.shape')" >
-      <icon-stickers class="toolbar-icon" />
-    </tool-bar-item>
-
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.template')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.template')"
-                   title="چارچوب ها"
-                   @click="changeMenu('ui.right_sidebar.children.template')" >
-      <icon-page-template class="toolbar-icon" />
-    </tool-bar-item>
-
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.background')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.background')" title="پس زمینه"
-                   @click="changeMenu('ui.right_sidebar.children.background')" >
-      <icon-background-color  class="toolbar-icon"/>
-    </tool-bar-item>
-
-    <tool-bar-item v-if="uiStore.isVisible('ui.right_sidebar.children.resize')"
-                   :selected="uiStore.isActive('ui.right_sidebar.children.resize')" title="تغییر سایز"
-                   @click="changeMenu('ui.right_sidebar.children.resize')" >
-      <icon-scale class="toolbar-icon"/>
-    </tool-bar-item>
-
-
-
+  <div class="flex flex-col" :class="{ 'hide-menu': !visible }">
+    <ToolBarItem
+      v-for="(item, index) in getVisibleTools"
+      :key="index"
+      :selected="uiStore.isActive(item.id)"
+      :title="item.title"
+      :class="[`${prefixCls}-child-${index}`, `${prefixCls}-menu-btn`]"
+      @click="changeMenu(item.id)"
+    >
+      <Icon :icon="item.icon" size="20" />
+    </ToolBarItem>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { uiStore} from "../../core";
+  import { uiStore } from '../../core'
+  import ToolBarItem from './ToolBarItem.vue'
+  import Tools from './toolbar.ts'
+  import Icon from '../Icon/Icon.vue'
+  import { computed } from 'vue'
+  import { useDesign } from '../../utils/useDesign'
 
-const changeMenu= (activeMenuId : string) : void =>
-{
-  const prefix = 'ui.right_sidebar.children.';
-  uiStore.deActive(`${prefix}image`) ;
-  uiStore.deActive(`${prefix}text`) ;
-  uiStore.deActive(`${prefix}shape`) ;
-  uiStore.deActive(`${prefix}template`) ;
-  uiStore.deActive(`${prefix}background`);
-  uiStore.deActive(`${prefix}resize`);
-  uiStore.active(activeMenuId);
-}
+  const changeMenu = (activeMenuId: string): void => {
+    const prefix = 'ui.right_sidebar.children.'
+    uiStore.deActive(`${prefix}image`)
+    uiStore.deActive(`${prefix}text`)
+    uiStore.deActive(`${prefix}shape`)
+    uiStore.deActive(`${prefix}template`)
+    uiStore.deActive(`${prefix}background`)
+    uiStore.deActive(`${prefix}resize`)
+    uiStore.active(activeMenuId)
+  }
 
+  const { prefixCls } = useDesign('toolbar')
+
+  withDefaults(
+    defineProps<{
+      visible?: boolean
+    }>(),
+    { visible: false },
+  )
+
+  const getVisibleTools = computed(() => {
+    return Tools.filter((item) => uiStore.isVisible(item.id))
+  })
 </script>
 
-<style>
+<style lang="less">
+  @pre: ~'@{namespace}-toolbar';
 
+  .@{pre}-menu-btn {
+    transition: all 0.2s ease;
+    position: relative;
+    right: 0;
+  }
+
+  @children:0, 1, 2, 3, 4, 5, 6, 7, 8, 9;
+
+  each(@children, {
+    .@{pre}-child-@{value}{
+      transition-delay: 50ms * @value;
+    }
+  });
+
+  .hide-menu .@{pre}-menu-btn {
+    right: -5vw;
+  }
 </style>

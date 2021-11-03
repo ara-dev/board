@@ -1,8 +1,8 @@
 /* import css */
 @import "font-face.css";
 /*@import "variables.less";*/
-@import "scroll";
-@import "var";
+@import (reference) "scroll";
+@import (reference) "var";
 
 /* tailwind */
 @tailwind base;
@@ -72,9 +72,6 @@ body{
   border: 1px solid #ddd;
 }
 
-.profile-right-toolbar,.board-right-toolbar{
-  width: 5%;
-}
 
 .board-left-sidebar,.board-right-sidebar{
   width: 20%;
