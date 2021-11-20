@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen relative w-full">
-    <router-view v-slot="{ Component }" id="main-container">
-      <transition name="scale">
+    <router-view id="main-container" v-slot="{ Component, route }">
+      <transition :name="route.meta.transitionName || 'scale'">
         <component :is="Component" />
       </transition>
     </router-view>
@@ -12,7 +12,7 @@
 <script lang="ts" setup>
   import ASide from './components/ASide.vue'
 </script>
-<style>
+<style lang="less">
   .scale-enter-active,
   .scale-leave-active {
     transition: all 0.5s cubic-bezier(0.7, 0, 0.15, 0.97);
@@ -30,6 +30,6 @@
   }
 
   #main-container {
-    padding-right: 5vw;
+    padding-right: @cp-side-width;
   }
 </style>

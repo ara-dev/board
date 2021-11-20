@@ -1,8 +1,8 @@
 /* import css */
 @import "font-face.css";
 /*@import "variables.less";*/
-@import (reference) "scroll";
-@import (reference) "var";
+@import (less) "./scroll.less";
+@import (reference) "./var.less";
 
 /* tailwind */
 @tailwind base;
@@ -23,8 +23,15 @@
 
 /* custome style */
 body{
-  font-family:'estedad' !important;
+  font-family:'kalame' !important;
 }
+
+.@{namespace}-button{
+  border-color:@primary-color;
+  color:@primary-color;
+}
+
+
 
 /*.topbar{
   height: @topbar-height;
@@ -58,33 +65,14 @@ body{
     height: 100vh;*!
 }*/
 
-.i-icon  svg {
+/*.i-icon  svg {
   margin: 0 auto;
   display: inline-block;
-}
-
-.shape-context-menu,.background-context-menu{
-  position: absolute;
-  width:230px;
-  border-radius:@border-radius-base;
-  z-index:100;
-  display: none;
-  border: 1px solid #ddd;
-}
+}*/
 
 
-.board-left-sidebar,.board-right-sidebar{
-  width: 20%;
-}
 
-.board-main{
-  width: 60%;
-  background: #E5E5E5;
-}
 
-.profile-right-toolbar{
-  background-color: white;
-}
 
 
 

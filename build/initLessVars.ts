@@ -1,4 +1,5 @@
 import { generate } from '@ant-design/colors'
+// @ts-ignore
 import { getThemeVariables } from 'ant-design-vue/dist/theme'
 import { resolve } from 'path'
 import * as themeConfig from '../themeConfig'

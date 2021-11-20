@@ -1,17 +1,17 @@
 <template>
   <SvgIcon
-    :size="size"
-    :name="getSvgIcon"
     v-if="isSvgIcon"
     :class="[$attrs.class, 'anticon']"
+    :name="getSvgIcon"
+    :size="size"
     :spin="props.spin"
   />
   <span
     v-else
     ref="elRef"
     :class="[$attrs.class, 'iconify anticon', spin && 'app-iconify-spin']"
-    :style="getWrapStyle"
     :data-icon="props.icon"
+    :style="getWrapStyle"
   ></span>
 </template>
 <script lang="ts" setup>
@@ -48,7 +48,12 @@
     if (!icon) return
 
     const svg = Iconify.renderSVG(icon, {})
-
+    //el.remove
+    /*let child = el.lastElementChild
+    while (child) {
+      el.removeChild(child)
+      child = el.lastElementChild
+    }*/
     if (svg) {
       el.textContent = ''
       el.appendChild(svg)

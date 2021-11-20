@@ -1,13 +1,138 @@
 <template>
   <div>
-    <a-dropdown placement="bottomCenter" v-if="uiStore.isVisible('ui.stage_top_right_menu.children.flip_rotate_button')"
-                :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')">
+    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
+      <template #title>حذف</template>
+      <a-button
+        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')"
+        class="mr-2"
+        @click="stageStore.applyDelete()"
+      >
+        <Icon icon="ion:trash-outline" size="23" />
+      </a-button>
+    </a-tooltip>
+
+    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
+      <template #title>کپی</template>
+      <a-button
+        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')"
+        class="mr-2"
+        @click="stageStore.applyDuplicate()"
+      >
+        <Icon icon="ion:copy-outline" size="23" />
+      </a-button>
+    </a-tooltip>
+
+    <a-button
+      v-if="
+        uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
+        !uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
+      "
+      :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')"
+      class="mr-2"
+    >
+      <Icon icon="ion:contrast-outline" size="23" />
+    </a-button>
+
+    <a-popover
+      v-if="
+        uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
+        uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
+      "
+    >
+      <template #content>
+        <div style="width: 300px">
+          <div class="grid grid-cols-6 gap-2">
+            <div
+              v-if="
+                uiStore.isVisible(
+                  'ui.stage_top_right_menu.children.opacity_button.children.number_input',
+                )
+              "
+              class="col-span-2"
+            >
+              <a-input-number
+                v-model:value="stageStore.opacity"
+                :disabled="
+                  !uiStore.isActive(
+                    'ui.stage_top_right_menu.children.opacity_button.children.number_input',
+                  )
+                "
+                :formatter="(value) => `${value}%`"
+                :max="100"
+                :min="0"
+                :parser="(value) => value.replace('%', '')"
+                :step="0.01"
+                style="width: 100%"
+                @change="stageStore.applyOpacity()"
+              />
+            </div>
+            <div
+              :class="[
+                uiStore.isActive(
+                  'ui.stage_top_right_menu.children.opacity_button.children.number_input',
+                ) ||
+                uiStore.isVisible(
+                  'ui.stage_top_right_menu.children.opacity_button.children.number_input',
+                )
+                  ? 'col-span-4'
+                  : 'col-span-6',
+              ]"
+            >
+              <a-slider
+                v-model:value="stageStore.opacity"
+                :max="100"
+                :min="0"
+                :step="0.01"
+                @change="stageStore.applyOpacity()"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
       <a-button class="mr-2">
-        چرخش
-        <icon-rotate/>
+        <Icon icon="ion:contrast-outline" size="23" />
+      </a-button>
+    </a-popover>
+
+    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
+      <template #title>برش</template>
+      <a-button
+        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')"
+        class="mr-2"
+      >
+        <Icon icon="ion:crop-outline" size="23"
+      /></a-button>
+    </a-tooltip>
+
+    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
+      <template #title>
+        {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
+      </template>
+      <a-button
+        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')"
+        class="mr-2"
+        @click="stageStore.applyToggleLockUnlock()"
+      >
+        <div v-if="stageStore.layerLock">
+          <Icon icon="ion:lock-closed-outline" size="23" />
+        </div>
+        <div v-else>
+          <Icon icon="ion:lock-open-outline" size="23" />
+        </div>
+      </a-button>
+    </a-tooltip>
+
+    <a-dropdown
+      v-if="uiStore.isVisible('ui.stage_top_right_menu.children.flip_rotate_button')"
+      :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')"
+      placement="bottomCenter"
+    >
+      <a-button class="mr-2">
+        <Icon icon="carbon:rotate" size="23" />
+        <span class="align-top mr-1">چرخش</span>
       </a-button>
       <template #overlay>
-        <div style="background: white;border: 1px solid #eee">
+        <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
             <div>
               <a-menu :selectable="false">
@@ -19,9 +144,8 @@
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
                   </a-menu-item>
                   <a-menu-item key="rotate_minus_90">
-                    -
-                    چرخش
-                    <span>   &#176; 90</span>
+                    - چرخش
+                    <span> &#176; 90</span>
                   </a-menu-item>
                   <a-menu-item key="rotate_180">
                     چرخش
@@ -29,9 +153,8 @@
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
                   </a-menu-item>
                   <a-menu-item key="rotate_minus_180">
-                    -
-                    چرخش
-                    <span>   &#176; 180</span>
+                    - چرخش
+                    <span> &#176; 180</span>
                   </a-menu-item>
                 </a-menu-item-group>
               </a-menu>
@@ -41,12 +164,12 @@
                 <a-menu-item-group key="align_group">
                   <template #title>معکوس</template>
                   <a-menu-item key="flip_horizontal" @click="stageStore.applyFlipVertical()">
+                    <Icon icon="fluent:flip-horizontal-20-regular" size="23" />
                     افقی
-                    <icon-flip-horizontally />
                   </a-menu-item>
                   <a-menu-item key="flip_vertical" @click="stageStore.applyFlipHorizontal()">
+                    <Icon icon="fluent:flip-vertical-20-regular" size="23" />
                     عمودی
-                    <icon-flip-vertically />
                   </a-menu-item>
                 </a-menu-item-group>
               </a-menu>
@@ -56,35 +179,37 @@
       </template>
     </a-dropdown>
 
-    <a-dropdown placement="bottomCenter" v-if="uiStore.isVisible('ui.stage_top_right_menu.children.position_button')"
-                :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')">
+    <a-dropdown
+      v-if="uiStore.isVisible('ui.stage_top_right_menu.children.position_button')"
+      :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')"
+      placement="bottomCenter"
+    >
       <a-button class="mr-2">
-        موقعیت
-        <icon-layers/>
+        <Icon icon="ion:layers-outline" size="23" />
+        <span class="align-top mr-1">موقعیت</span>
       </a-button>
       <template #overlay>
-        <div style="background: white;border: 1px solid #eee">
-          <div class="grid grid-cols-2 ">
+        <div style="background: white; border: 1px solid #eee">
+          <div class="grid grid-cols-2">
             <div>
               <a-menu :selectable="false">
                 <a-menu-item-group key="position_group">
                   <template #title>لایه بندی</template>
                   <a-menu-item key="position_to_forward" @click="stageStore.applyZIndexTop()">
+                    <Icon icon="fluent:position-forward-20-filled" size="23" />
                     بیار رو
-                    <icon-bring-forward/>
                   </a-menu-item>
                   <a-menu-item key="position_up" @click="stageStore.applyZIndexUp()">
+                    <Icon icon="fluent:position-to-front-20-filled" size="23" />
                     رویی
-                    <icon-bring-to-front/>
                   </a-menu-item>
                   <a-menu-item key="position_down" @click="stageStore.applyZIndexDown()">
+                    <Icon icon="fluent:position-to-back-20-filled" size="23" />
                     زیرین
-                    <icon-sent-to-back/>
-                    <!--<icon-send-to-back />-->
                   </a-menu-item>
                   <a-menu-item key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
+                    <Icon icon="fluent:position-backward-20-filled" size="23" />
                     برو زیر
-                    <icon-send-backward/>
                   </a-menu-item>
                 </a-menu-item-group>
               </a-menu>
@@ -93,26 +218,29 @@
               <a-menu :selectable="false">
                 <a-menu-item-group key="align_group">
                   <template #title>موقعیت قرارگیری</template>
-                  <a-menu-item key="align_left" @click="stageStore.applyAlignLeft()">تراز چپ
-                    <icon-align-left/>
+                  <a-menu-item key="align_left" @click="stageStore.applyAlignLeft()">
+                    <Icon icon="fluent:align-left-20-regular" size="23" />
+                    تراز چپ
                   </a-menu-item>
-                  <a-menu-item key="align_center">تراز وسط
-                    <icon-vertically-centered/>
+                  <a-menu-item key="align_center">
+                    <Icon icon="fluent:align-center-horizontal-20-regular" size="23" />
+                    تراز وسط
                   </a-menu-item>
-                  <a-menu-item key="align_right" @click="stageStore.applyAlignRight()">تراز راست
-                    <icon-align-right/>
+                  <a-menu-item key="align_right" @click="stageStore.applyAlignRight()">
+                    <Icon icon="fluent:align-right-16-regular" size="23" />
+                    تراز راست
                   </a-menu-item>
                   <a-menu-item key="align_top">
+                    <Icon icon="fluent:align-top-20-regular" size="23" />
                     تراز بالا
-                    <icon-align-top-two/>
                   </a-menu-item>
                   <a-menu-item key="align_middel">
+                    <Icon icon="fluent:align-center-vertical-32-regular" size="23" />
                     تراز میانی
-                    <icon-align-vertical-center-two/>
                   </a-menu-item>
                   <a-menu-item key="align_bottom">
+                    <Icon icon="fluent:align-bottom-20-regular" size="23" />
                     تراز پایین
-                    <icon-align-bottom-two/>
                   </a-menu-item>
                 </a-menu-item-group>
               </a-menu>
@@ -121,86 +249,12 @@
         </div>
       </template>
     </a-dropdown>
-
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
-      <template #title>
-        {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
-      </template>
-      <a-button class="mr-2" @click="stageStore.applyToggleLockUnlock()" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')">
-        <icon-lock v-if="stageStore.layerLock"/>
-        <icon-unlock v-else />
-
-      </a-button>
-    </a-tooltip>
-
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
-      <template #title>برش</template>
-      <a-button class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')">
-        <icon-cutting/>
-      </a-button>
-    </a-tooltip>
-
-    <a-popover
-        v-if="uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') && uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')">
-      <template #content>
-        <div style="width:300px;">
-          <div class="grid grid-cols-6 gap-2">
-            <div
-                :class="[uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input') || uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input') ? 'col-span-4' : 'col-span-6']">
-              <a-slider @change="stageStore.applyOpacity()" v-model:value="stageStore.opacity" :min="0" :max="100" :step="0.01"/>
-            </div>
-            <div v-if="uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button.children.number_input')">
-              <a-input-number
-                  @change="stageStore.applyOpacity()"
-                  :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button.children.number_input')"
-                  style="width:105px"
-                  v-model:value="stageStore.opacity"
-                  :min="0"
-                  :max="100"
-                  :step="0.01"
-                  :formatter="value => `${value}%`"
-                  :parser="value => value.replace('%', '')"
-              />
-            </div>
-          </div>
-
-        </div>
-      </template>
-      <a-button class="mr-2">
-        <!--<icon-sun/>-->
-        <icon-brightness/>
-      </a-button>
-    </a-popover>
-
-    <a-button class="mr-2"
-              v-if="uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') && !uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')"
-              :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')">
-      <!--<icon-sun/>-->
-      <icon-brightness/>
-    </a-button>
-
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
-      <template #title>کپی</template>
-      <a-button class="mr-2" @click="stageStore.applyDuplicate()" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')">
-        <icon-copy/>
-      </a-button>
-    </a-tooltip>
-
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
-      <template #title>حذف</template>
-      <a-button @click="stageStore.applyDelete()"  class="mr-2" :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')">
-        <icon-delete/>
-      </a-button>
-    </a-tooltip>
-
   </div>
 </template>
 
 <script lang="ts" setup>
-import {uiStore,stageStore} from "../../core";
-
+  import { uiStore, stageStore } from '../../core'
+  import Icon from '../Icon/Icon.vue'
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

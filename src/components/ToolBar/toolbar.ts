@@ -8,7 +8,7 @@ const tools: Toolbar[] = [
   {
     title: 'تصاویر',
     id: 'ui.right_sidebar.children.image',
-    icon: 'ion:add-outline',
+    icon: 'ion:images-outline',
   },
   {
     title: 'متن',

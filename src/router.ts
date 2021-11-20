@@ -7,21 +7,28 @@ const routes = [
   {
     path: '/',
     name: 'main',
+    redirect: '/profile/transactions',
     component: () => import('./views/Profile'),
-    meta: { requiresAuth: true },
+    meta: { transition: 'scale' },
   },
   {
     path: '/board',
     name: 'board',
     component: () => import('./views/Board'),
-    meta: { requiresAuth: true },
+    meta: { transition: 'scale' },
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('./views/Test'),
+    meta: { transition: 'scale' },
   },
   {
     path: '/profile',
     name: 'profile',
     redirect: '/profile/dashboard',
     component: () => import('./views/Profile'),
-    meta: { requiresAuth: true },
+    meta: {},
     children: [
       {
         path: 'dashboard',
@@ -51,13 +58,17 @@ const routes = [
         path: 'files',
         component: () => import('./views/Profile/pages/files'),
       },
+      {
+        path: 'bookmark',
+        component: () => import('./views/Profile/pages/bookmark'),
+      },
     ],
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('./views/404.vue'),
-    meta: { requiresAuth: true },
+    meta: {},
   },
   /*{
         path: '/cats',

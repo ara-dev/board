@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col" :class="{ 'hide-menu': !visible }">
+  <div :class="{ 'hide-menu': !visible }" class="flex flex-col">
     <ToolBarItem
       v-for="(item, index) in getVisibleTools"
       :key="index"
+      :class="[`${prefixCls}-child-${index}`, `${prefixCls}-menu-btn`]"
       :selected="uiStore.isActive(item.id)"
       :title="item.title"
-      :class="[`${prefixCls}-child-${index}`, `${prefixCls}-menu-btn`]"
       @click="changeMenu(item.id)"
     >
       <Icon :icon="item.icon" size="20" />

@@ -1,11 +1,11 @@
 <template>
   <div class="relative flex flex-col">
-    <div class="pt-5 pb-10">
+    <div class="pt-5 pb-3">
       <div class="flex justify-between items-center">
         <div>
           <div class="flex items-center">
             <div>
-              <img src="../../assets/img/profile-img.png" class="rounded-lg inline-block" />
+              <img class="rounded-lg inline-block" src="../../assets/img/profile-img.png" />
             </div>
             <div class="pr-5">
               <span>علی قسامی</span>
@@ -15,26 +15,27 @@
           </div>
         </div>
         <div>
-          <a-button>125 امتیاز</a-button>
+          <a-button :class="[`${prefixVar}-button`]">125 امتیاز</a-button>
         </div>
       </div>
     </div>
     <ADivider />
-    <AMenu
-      v-model:selectedKeys="currentMenu"
-      style="border: none"
-      class="flex-1"
-      :class="[`${prefixCls}-menu`]"
-      @select="selectMenu"
-    >
-      <AMenuItem v-for="item in Menus" :key="item.path">
-        <div class="flex items-center">
-          <Icon size="25" :icon="item.icon" class="ml-4" />
-          <span>{{ item.title }}</span>
-        </div>
-      </AMenuItem>
-    </AMenu>
-
+    <div>
+      <AMenu
+        v-model:selectedKeys="currentMenu"
+        :class="[`${prefixCls}-menu`]"
+        class="flex-1"
+        style="border: none"
+        @select="selectMenu"
+      >
+        <AMenuItem v-for="item in Menus" :key="item.path">
+          <div class="flex items-center">
+            <Icon :icon="item.icon" class="ml-4" size="25" />
+            <span>{{ item.title }}</span>
+          </div>
+        </AMenuItem>
+      </AMenu>
+    </div>
     <AButton
       :id="`${prefixCls}-design-adv`"
       class="
@@ -58,20 +59,27 @@
 </template>
 <script lang="ts" setup>
   import Menus from './profiles-menus'
-  import Icon from '../../components/Icon/Icon.vue'
+  import Icon from '../Icon/Icon.vue'
   import { useDesign } from '../../utils/useDesign'
-  import { ref, toRaw, unref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
 
   const { prefixCls } = useDesign('profile')
-
+  const { prefixVar } = useDesign('')
   const currentMenu = ref<string[]>([])
 
   const router = useRouter()
+
+  const route = useRoute()
+
+  onMounted(() => {
+    currentMenu.value = [route.path]
+  })
+
   function selectMenu(menu) {
-    console.log('menu ===>', menu.key)
-    router.push(`/${menu.key}`)
-    console.log('currentMenu ===>', toRaw(unref(currentMenu)))
+    //console.log('menu ===>', menu.key)
+    router.push(`${menu.key}`)
+    //console.log('currentMenu ===>', toRaw(unref(currentMenu)))
   }
 </script>
 <style lang="less">
@@ -88,8 +96,16 @@
 
     .ant-menu:not(.ant-menu-horizontal),
     .ant-menu-item-selected {
-      color: @primary-color;
-      background-color: lighten(@primary-color, 55%) !important;
+      color: #fff;
+      background-color: @primary-color !important;
+    }
+
+    .ant-menu-item-selected:hover {
+      color: #fff;
+    }
+
+    .ant-menu-item:not(.ant-menu-item-selected):hover {
+      background-color: lighten(@primary-color, 50%) !important;
     }
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div
-    class="py-3 px-1 cursor-pointer select-none text-center"
     :class="{ 'toolbar-item-selected': selected }"
+    class="py-3 px-1 cursor-pointer select-none text-center"
   >
     <slot></slot>
     <p class="text-xs text-center mt-1.5">{{ title }}</p>
@@ -21,8 +21,6 @@
 </script>
 
 <style lang="less">
-  @import 'src/assets/css/var';
-
   .toolbar-item-selected {
     background: fadeout(@primary-color, 75%);
     border-left: 2px solid @primary-color;

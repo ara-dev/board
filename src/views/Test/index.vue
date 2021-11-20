@@ -1,5 +1,5 @@
 <template>
-  <img class="inline-block" src="../assets/img/controlp-logo.svg" />
+  <div class="w-full"> asdasdasdasdasdasd </div>
 </template>
 
 <script lang="ts" setup></script>

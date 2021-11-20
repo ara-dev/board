@@ -1,9 +1,12 @@
 <template>
-  <div class="profile-right-toolbar text-center" :class="{ 'active-profile': isProfile }">
-    <div id="back-aside">
-      <AButton type="text" id="close-btn-profile" @click="toggleMenu">
-        <icon-close size="20" fill="#fff" />
+  <div :class="{ 'active-profile': isProfile }" class="profile-right-toolbar text-center">
+    <div id="close-btn">
+      <AButton id="close-btn-profile" type="text" @click="toggleMenu">
+        <Icon color="#ffffff" icon="ion:close-outline" size="20" />
       </AButton>
+    </div>
+
+    <div id="back-aside">
       <Logo @click="toggleMenu" />
     </div>
     <div class="relative h-full" style="z-index: 0">
@@ -16,6 +19,7 @@
   import { computed } from 'vue'
   import ToolBar from './ToolBar/ToolBar.vue'
   import Logo from './Logo.vue'
+  import Icon from './Icon/Icon.vue'
 
   const router = useRouter()
 
@@ -45,10 +49,10 @@
     position: absolute;
     top: @cp-side-width * -1;
     width: @cp-side-width * 0.6;
-    right: @cp-side-width * 0.2;
+    right: @cp-side-width * 0.1;
     height: @cp-side-width * 0.6;
     opacity: 0;
-    transition: all 0.5s 0.2s ease;
+    transition: all 0.3s 0.3s ease;
   }
 
   .active-profile {
@@ -56,6 +60,17 @@
       top: @cp-side-width * 0.2;
       opacity: 1;
     }
+
+    #close-btn {
+      z-index: 2;
+    }
+  }
+  #close-btn {
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 0;
+    height: @cp-side-width;
+    width: @cp-side-width;
   }
 
   #back-aside {
@@ -64,7 +79,7 @@
     bottom: 0;
     height: @cp-side-width;
     width: @cp-side-width;
-    background-color: #ebebeb;
+    background-color: @cp-price-background;
     z-index: 1;
   }
 

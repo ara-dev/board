@@ -1,25 +1,26 @@
 <template>
   <div>
-    <a-button-group class="mr-3" v-if="uiStore.isVisible('ui.redo_undo_button')">
-      <a-button :disabled="!uiStore.isActive('ui.redo_undo_button.children.undo')"
-                v-if="uiStore.isVisible('ui.redo_undo_button.children.undo')">
-        <icon-redo/>
+    <a-button-group v-if="uiStore.isVisible('ui.redo_undo_button')" class="mr-3" dir="ltr">
+      <a-button
+        v-if="uiStore.isVisible('ui.redo_undo_button.children.undo')"
+        :disabled="!uiStore.isActive('ui.redo_undo_button.children.undo')"
+      >
+        <Icon icon="ion:arrow-redo-outline" size="20" />
       </a-button>
 
-      <a-button :disabled="!uiStore.isActive('ui.redo_undo_button.children.redo')"
-                v-if="uiStore.isVisible('ui.redo_undo_button.children.redo')">
-        <icon-undo/>
+      <a-button
+        v-if="uiStore.isVisible('ui.redo_undo_button.children.redo')"
+        :disabled="!uiStore.isActive('ui.redo_undo_button.children.redo')"
+      >
+        <Icon icon="ion:arrow-undo-outline" size="20" />
       </a-button>
     </a-button-group>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {uiStore} from "../../core";
-
-
+  import { uiStore } from '../../core'
+  import Icon from '../Icon/Icon.vue'
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

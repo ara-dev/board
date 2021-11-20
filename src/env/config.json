@@ -30,9 +30,6 @@
         }
       }
     },
-    "topbar": {
-      "visibility": false
-    },
     "zoom_button": {
       "visibility": true,
       "children": {

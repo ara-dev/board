@@ -1,4 +1,3 @@
-import { install } from '@icon-park/vue-next/es/all'
 import { MotionPlugin } from '@vueuse/motion'
 import { createApp } from 'vue'
 // @ts-ignore
@@ -12,11 +11,11 @@ import router from './router'
 const app = createApp(App)
 
 app.use(router)
-
 app.use(MotionPlugin)
 
 // Install - icon park
-install(app) // use default prefix 'icon', eg: icon is People, name is icon-people.
+//install(app) // use default prefix 'icon', eg: icon is People, name is icon-people.
+
 /* Store */
 /*import {stage} from './core/index';*/
 /*import element from './env/config.json';

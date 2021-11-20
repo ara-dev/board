@@ -1,143 +1,132 @@
 <template>
   <div class="h-screen">
-    <shape-context-menu/>
-    <background-context-menu/>
-    <!-- start toolbar -->
-    <!--    <div class="w-full p-3 topbar" v-if="uiStore.isVisible('ui.topbar')">
-          <a-button>ذخیره و ادامه</a-button>
-        </div>-->
-    <!-- end top-bar -->
+    <shape-context-menu />
+    <background-context-menu />
     <!-- start main -->
-    <div class="flex h-screen">
-      <div class="h-screen border-r border-gray-300 px-2 pt-2 pb-5 max-h-screen overflow-auto board-left-sidebar"
-           dir="rtl">
+    <!--class="flex h-screen"-->
+    <div :class="`${prefixCls}-main`">
+      <div
+        class="h-screen border-l border-r border-gray-300 max-h-screen overflow-auto"
+        style="display: grid; grid-template-rows: auto 4vw; height: 100%"
+      >
+        <div class="px-2 pt-2 overflow-auto">
+          <transition :css="false">
+            <ImageStyle
+              v-if="uiStore.isActive('ui.right_sidebar.children.image')"
+              v-motion="'cube'"
+              :enter="{ x: 0, opacity: 1 }"
+              :initial="{ x: 400, opacity: 0 }"
+              :leave="{ x: -400, opacity: 0 }"
+            />
+          </transition>
+
+          <transition :css="false">
+            <ShapeStyle
+              v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
+              v-motion="'cube'"
+              :enter="{ x: 0, opacity: 1 }"
+              :initial="{ x: 400, opacity: 0 }"
+              :leave="{ x: -400, opacity: 0 }"
+            />
+          </transition>
+
+          <transition :css="false">
+            <TextStyle
+              v-if="uiStore.isActive('ui.right_sidebar.children.text')"
+              v-motion="'cube'"
+              :enter="{ x: 0, opacity: 1 }"
+              :initial="{ x: 400, opacity: 0 }"
+              :leave="{ x: -400, opacity: 0 }"
+            />
+          </transition>
+
+          <transition :css="false">
+            <BackgroundStyle
+              v-if="uiStore.isActive('ui.right_sidebar.children.background')"
+              v-motion="'cube'"
+              :enter="{ x: 0, opacity: 1 }"
+              :initial="{ x: 400, opacity: 0 }"
+              :leave="{ x: -400, opacity: 0 }"
+            />
+          </transition>
+        </div>
+        <div class="price">قیمت کل : 25000</div>
+      </div>
+      <div class="h-screen relative h-screen board-main">
+        <div class="absolute z-50 p-3 w-full" style="background: #fff">
+          <div class="flex justify-between">
+            <TopRightButtons />
+            <TopLeftButtons />
+          </div>
+        </div>
+        <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
+          <BottomLeftButtons />
+        </div>
+        <pages v-if="false" />
+
+        <div class="stages overflow-auto">
+          <Stage />
+        </div>
+      </div>
+      <div class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300">
         <transition :css="false">
-          <text-options v-if="uiStore.isVisible('ui.text_option')"
-                        v-motion="'cube'"
-                        :initial="{x: -400,opacity: 0}" :enter="{x: 0,opacity: 1}"
-                        :leave="{x: 400,opacity: 0}"/>
+          <TextOptions
+            v-if="uiStore.isVisible('ui.text_option')"
+            v-motion="'cube'"
+            :enter="{ x: 0, opacity: 1 }"
+            :initial="{ x: -400, opacity: 0 }"
+            :leave="{ x: 400, opacity: 0 }"
+          />
         </transition>
       </div>
       <!--   overflow-auto   -->
-      <div class="h-screen relative h-screen board-main">
-        <div class="absolute left-3 top-3 z-50	">
-          <top-left-buttons/>
-        </div>
-        <div class="absolute bottom-board right-3 top-3 z-50"
-             v-if="uiStore.isVisible('ui.stage_top_right_menu')">
-          <top-right-buttons/>
-        </div>
-
-        <div class="absolute bottom-board left-3 bottom-3 z-50">
-          <bottom-left-buttons/>
-        </div>
-        <div class="stages overflow-auto">
-          <stage/>
-        </div>
-      </div>
-      <div class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen board-right-sidebar">
-        <transition :css="false">
-          <shape-style v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
-                       v-motion="'cube'"
-                       :initial="{x: 400,opacity: 0}" :enter="{x: 0,opacity: 1}"
-                       :leave="{x: -400,opacity: 0}"/>
-        </transition>
-
-        <transition :css="false">
-          <text-style v-if="uiStore.isActive('ui.right_sidebar.children.text')"
-                      v-motion="'cube'"
-                      :initial="{x: 400,opacity: 0}" :enter="{x: 0,opacity: 1}"
-                      :leave="{x: -400,opacity: 0}"/>
-        </transition>
-
-        <transition :css="false">
-          <background-style v-if="uiStore.isActive('ui.right_sidebar.children.background')"
-                            v-motion="'cube'"
-                            :initial="{x: 400,opacity: 0}" :enter="{x: 0,opacity: 1}"
-                            :leave="{x: -400,opacity: 0}"/>
-        </transition>
-      </div>
-      <!--      <div class="border-l border-gray-300 overflow-auto max-h-screen h-screen board-right-toolbar" >
-              <tool-bar/>
-            </div>-->
     </div>
     <!-- end main -->
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref, watch} from 'vue'
-import {DEFAULT_ICON_CONFIGS, IconProvider} from '@icon-park/vue-next'
-import TopRightButtons from "../../components/Stage/TopRightButtons.vue";
-import TopLeftButtons from "../../components/Stage/TopLeftButtons.vue";
-import BottomLeftButtons from "../../components/Stage/BottomLeftButtons.vue";
-import TextOptions from "../../components/Option/TextOptions.vue";
-import TextStyle from "../../components/Style/TextStyle.vue";
-import BackgroundStyle from "../../components/Style/BackgroundStyle.vue";
-import ShapeStyle from "../../components/Style/ShapeStyle.vue";
+  import TopRightButtons from '../../components/Stage/TopRightButtons.vue'
+  import BottomLeftButtons from '../../components/Stage/BottomLeftButtons.vue'
+  import TextOptions from '../../components/Option/TextOptions.vue'
+  import { uiStore } from '../../core'
+  import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
+  import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
+  import Stage from '../../components/Stage/Stage.vue'
+  import { useDesign } from '../../utils/useDesign'
+  import Pages from '../../components/Stage/Pages.vue'
+  import ImageStyle from '../../components/Style/ImageStyle.vue'
+  import ShapeStyle from '../../components/Style/ShapeStyle.vue'
+  import TextStyle from '../../components/Style/TextStyle.vue'
+  import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
+  import TopLeftButtons from '../../components/Stage/TopLeftButtons.vue'
 
-IconProvider({...DEFAULT_ICON_CONFIGS, "size": 24, "theme": "outline", "strokeWidth": 2, "strokeLinejoin": "bevel"});
-import {uiStore, stageStore} from "../../core";
-import ToolBar from "../../components/ToolBar/ToolBar.vue";
-import ShapeContextMenu from "../../components/Stage/ShapeContextMenu.vue";
-import BackgroundContextMenu from "../../components/Stage/BackgroundContextMenu.vue";
-import Stage from "../../components/Stage/Stage.vue";
-import Sketch from "../../components/ColorPicker/Solid/Sketch.vue";
-import Swatches from "../../components/ColorPicker/Solid/Swatches.vue";
-import Twitter from "../../components/ColorPicker/Solid/Twitter.vue";
-
-onMounted(() => {
-  //stageStore.AddPage();
-});
-
-/*
-window.onbeforeunload = confirmExit;
-function confirmExit() {
-  return "You have attempted to leave this page. Are you sure?";
-}
-*/
-/*var message = "You have not filled out the form.";
-window.onbeforeunload = function(event) {
-  var e = e || window.event;
-  if (e) {
-    e.returnValue = message;
-  }
-  return message;
-};*/
-/*function closedWin() {
-  confirm("close ?");
-  return false; /!* which will not allow to close the window *!/
-}
-if(window.addEventListener) {
-  window.addEventListener("close", closedWin, false);
-}
-
-window.onclose = closedWin;*/
-
-/*window.onbeforeunload = function() {
-  if (data_needs_saving()) {
-    return "Do you really want to leave our brilliant application?";
-  } else {
-    return;
-  }
-};*/
-
-/*window.addEventListener('beforeunload', function (e) {
-  // Cancel the event
-  e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-  // Chrome requires returnValue to be set
-  e.returnValue = '';
-});*/
-
-/*
-window.addEventListener('beforeunload', function (e) {
-  // the absence of a returnValue property on the event will guarantee the browser unload happens
-  delete e['returnValue'];
-});
-*/
-
+  const { prefixCls } = useDesign('board')
 </script>
 
 <style lang="less">
+  @pre: ~'@{namespace}-board';
 
+  .@{pre}-main {
+    display: grid;
+    grid-template-columns: 230px auto 230px;
+  }
+
+  .board-main {
+    background: #e5e5e5;
+  }
+
+  .shape-context-menu,
+  .background-context-menu {
+    position: absolute;
+    width: 230px;
+    border-radius: @border-radius-base;
+    z-index: 100;
+    display: none;
+    border: 1px solid #ddd;
+  }
+
+  .price {
+    background: @cp-price-background;
+  }
 </style>
