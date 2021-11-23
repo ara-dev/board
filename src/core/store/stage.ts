@@ -334,6 +334,12 @@ export default class StageOptionStore {
     })
   }
 
+  public toJson() {
+    const stage: Stage = this.currentStage()
+    const json = stage.toJSON()
+    console.log(json, 'this is json')
+  }
+
   private _init() {
     this._state = {
       textOption: {

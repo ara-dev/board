@@ -20,46 +20,51 @@
       </div>
     </div>
     <ADivider />
-    <div>
-      <AMenu
-        v-model:selectedKeys="currentMenu"
-        :class="[`${prefixCls}-menu`]"
-        class="flex-1"
-        style="border: none"
-        @select="selectMenu"
-      >
-        <AMenuItem v-for="item in Menus" :key="item.path">
-          <div class="flex items-center">
-            <Icon :icon="item.icon" class="ml-4" size="25" />
-            <span>{{ item.title }}</span>
-          </div>
-        </AMenuItem>
-      </AMenu>
+
+    <div class="h-full" style="display: grid; grid-template-rows: auto 15%">
+      <!--      -->
+      <div class="overflow-auto" style="height: 85%">
+        <AMenu
+          v-model:selectedKeys="currentMenu"
+          :class="[`${prefixCls}-menu`]"
+          class="flex-1"
+          style="border: none"
+          @select="selectMenu"
+        >
+          <AMenuItem v-for="item in Menus" :key="item.path">
+            <div class="flex items-center">
+              <Icon :icon="item.icon" class="ml-4" size="25" />
+              <span>{{ item.title }}</span>
+            </div>
+          </AMenuItem>
+        </AMenu>
+      </div>
+      <div>
+        <AButton
+          :id="`${prefixCls}-design-adv`"
+          class="
+            border-2
+            text-center text-gray-300
+            border-dashed
+            w-full
+            h-20
+            flex
+            items-center
+            justify-center
+          "
+        >
+          <p class="">
+            در کنترل پی طراح شوید
+            <br />
+            و برای خود درآمد زایی کنید
+          </p>
+        </AButton>
+      </div>
     </div>
-    <AButton
-      :id="`${prefixCls}-design-adv`"
-      class="
-        border-2
-        text-center text-gray-300
-        border-dashed
-        w-full
-        h-20
-        flex
-        items-center
-        justify-center
-      "
-    >
-      <p class="">
-        در کنترل پی طراح شوید
-        <br />
-        و برای خود درآمد زایی کنید
-      </p>
-    </AButton>
   </div>
 </template>
 <script lang="ts" setup>
   import Menus from './profiles-menus'
-  import Icon from '../Icon/Icon.vue'
   import { useDesign } from '../../utils/useDesign'
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'

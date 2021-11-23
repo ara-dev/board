@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-button-group class="ml-3">
-      <a-button type="primary">
+      <a-button type="primary" @click="stageStore.toJson()">
         <Icon icon="ion:book-outline" size="23" />
       </a-button>
     </a-button-group>

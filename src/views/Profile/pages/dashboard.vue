@@ -2,8 +2,8 @@
   <div class="grid grid-cols-4 h-full">
     <div class="col-span-3 px-3">
       <span class="font-bold mb-3 block text-gray-400">آخرین طرح های من</span>
-      <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 gap-4 h-full">
-        <MyDesign v-for="i in 3" :key="i" />
+      <div class="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-4">
+        <MyDesign v-for="i in 5" :key="i" />
       </div>
     </div>
 

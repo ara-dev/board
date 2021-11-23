@@ -2,63 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/fonts/kalame/Kalameh(FaNum)-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/controlp-logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/image 11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/img/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Profile/Design.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Profile/MyDesign.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Profile/SuggestionDesign.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Stage/Pages.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Style/ImageStyle.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/Profile/pages/bookmark.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/views/Test/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Order/Item.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Order/ItemDetail.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Tabs/index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Tabs/tabProps.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Transaction/Item.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Transaction/listItem.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/useTabs.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/Profile/pages/order-detail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/initLessVars.ts" beforeDir="false" afterPath="$PROJECT_DIR$/build/initLessVars.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/ant-rtl.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/css/font-face.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/font-face.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/css/main.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/main.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/css/var.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/var.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ASide.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ASide.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ControlPLogo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ControlPLogo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Icon/Icon.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Icon/Icon.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Logo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Logo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/AlignButton.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Option/CurrentColor.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/CurrentColor.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Option/TextOptions.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/BackgroundContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BackgroundContextMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Profile/ProfileMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Profile/ProfileMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Profile/profiles-menus.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Profile/profiles-menus.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/BottomLeftButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/Stage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopLeftButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/BackgroundStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/BackgroundStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/ToolBarItem.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ToolBar/toolbar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ToolBar/toolbar.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Upload/MultiUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Upload/MultiUpload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/store/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/env/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/env/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/404.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/404.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Board/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Board/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/ProfileMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Profile/ProfileMenu.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/account.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/account.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/bookmark.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/bookmark.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/files.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/files.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/important-dates.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/important-dates.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/my-address.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/my-address.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/orders.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/orders.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/transactions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/transactions.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/profiles-menus.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Profile/profiles-menus.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/windi.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/windi.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,8 +42,8 @@
         <option value="CSS File" />
         <option value="Less File" />
         <option value="tsconfig.json" />
-        <option value="TypeScript File" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
         <option value="Vue Single File Component" />
       </list>
     </option>
@@ -123,7 +91,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="code.cleanup.on.save" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../site" />
+    <property name="last_opened_file_path" value="E:/dorinGold/droin_api" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -149,11 +117,11 @@
       <recent name="H:\AKS-project\board\src\components\ColorPicker\Solid" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\AKS-project\board\src\views\Profile\pages" />
+      <recent name="D:\AKS-project\board\src\utils" />
+      <recent name="D:\AKS-project\board\src\components\Tabs" />
       <recent name="D:\AKS-project\board\src\components\Profile" />
       <recent name="H:\AKS-project\board\src\components" />
-      <recent name="H:\AKS-project\board\src\views\Board" />
-      <recent name="H:\AKS-project\board\src\views\Profile" />
-      <recent name="H:\AKS-project\board\src\views" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.stage.ts">
@@ -276,7 +244,10 @@
       <workItem from="1637219608044" duration="15810000" />
       <workItem from="1637308438766" duration="15167000" />
       <workItem from="1637353273066" duration="4717000" />
-      <workItem from="1637389344254" duration="22031000" />
+      <workItem from="1637389344254" duration="22763000" />
+      <workItem from="1637475836085" duration="24524000" />
+      <workItem from="1637561881774" duration="23812000" />
+      <workItem from="1637648370567" duration="712000" />
     </task>
     <servers />
   </component>
