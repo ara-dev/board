@@ -5,7 +5,7 @@
         <div>
           <div class="flex items-center">
             <div>
-              <img class="rounded-lg inline-block" src="../../assets/img/profile-img.png" />
+              <img class="rounded-lg inline-block" src="../../assets/img/temp/profile-img.png" />
             </div>
             <div class="pr-5">
               <span>علی قسامی</span>
@@ -15,14 +15,13 @@
           </div>
         </div>
         <div>
-          <a-button :class="[`${prefixVar}-button`]">125 امتیاز</a-button>
+          <AButton :class="[`${prefixVar}-button`]">125 امتیاز</AButton>
         </div>
       </div>
     </div>
     <ADivider />
 
     <div class="h-full" style="display: grid; grid-template-rows: auto 15%">
-      <!--      -->
       <div class="overflow-auto" style="height: 85%">
         <AMenu
           v-model:selectedKeys="currentMenu"

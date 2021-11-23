@@ -2,11 +2,11 @@
   <!--  , 'h-full'-->
   <ACard :class="[`${prefixCls}`]">
     <div :class="[`${prefixCls}-search-icon`]">
-      <a-button shape="circle" type="text" @click="showSearchBox = true">
+      <AButton shape="circle" type="text" @click="showSearchBox = true">
         <template #icon>
           <Icon icon="ion:search-outline" size="23" />
         </template>
-      </a-button>
+      </AButton>
     </div>
     <!--class="h-full"-->
     <!--    style="display: grid; grid-template-rows: auto 100px"-->
@@ -19,13 +19,13 @@
               showSearchBox ? '' : `${prefixCls}-search-box-hide`,
             ]"
           >
-            <a-input class="text-right" placeholder="جستجو" size="large">
+            <AInput class="text-right" placeholder="جستجو" size="large">
               <template #prefix>
-                <a-button shape="circle" type="text" @click="showSearchBox = false">
+                <AButton shape="circle" type="text" @click="showSearchBox = false">
                   <Icon icon="ion:close-outline" size="20" />
-                </a-button>
+                </AButton>
               </template>
-            </a-input>
+            </AInput>
           </div>
           <a-tabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
             <a-tab-pane key="4" tab="درآمد">Content of Tab Pane 1</a-tab-pane>
@@ -46,11 +46,11 @@
         </div>
       </div>
       <div>
-        <a-divider />
+        <ADivider />
         <div class="flex justify-between">
           <div> تعداد رکورد یافت شده: 100 رکورد </div>
           <div>
-            <a-pagination v-model:current="current" :total="50" show-less-items />
+            <APagination v-model:current="current" :total="50" show-less-items />
           </div>
         </div>
       </div>

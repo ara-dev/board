@@ -1,28 +1,28 @@
 <template>
   <div>
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
+    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
       <template #title>حذف</template>
-      <a-button
+      <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')"
         class="mr-2"
         @click="stageStore.applyDelete()"
       >
         <Icon icon="ion:trash-outline" size="23" />
-      </a-button>
-    </a-tooltip>
+      </AButton>
+    </ATooltip>
 
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
+    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
       <template #title>کپی</template>
-      <a-button
+      <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')"
         class="mr-2"
         @click="stageStore.applyDuplicate()"
       >
         <Icon icon="ion:copy-outline" size="23" />
-      </a-button>
-    </a-tooltip>
+      </AButton>
+    </ATooltip>
 
-    <a-button
+    <AButton
       v-if="
         uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
         !uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
@@ -31,9 +31,9 @@
       class="mr-2"
     >
       <Icon icon="ion:contrast-outline" size="23" />
-    </a-button>
+    </AButton>
 
-    <a-popover
+    <APopover
       v-if="
         uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
         uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
@@ -50,7 +50,7 @@
               "
               class="col-span-2"
             >
-              <a-input-number
+              <AInputnumber
                 v-model:value="stageStore.opacity"
                 :disabled="
                   !uiStore.isActive(
@@ -78,7 +78,7 @@
                   : 'col-span-6',
               ]"
             >
-              <a-slider
+              <ASlider
                 v-model:value="stageStore.opacity"
                 :max="100"
                 :min="0"
@@ -89,26 +89,26 @@
           </div>
         </div>
       </template>
-      <a-button class="mr-2">
+      <AButton class="mr-2">
         <Icon icon="ion:contrast-outline" size="23" />
-      </a-button>
-    </a-popover>
+      </AButton>
+    </APopover>
 
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
+    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
       <template #title>برش</template>
-      <a-button
+      <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')"
         class="mr-2"
       >
         <Icon icon="ion:crop-outline" size="23"
-      /></a-button>
-    </a-tooltip>
+      /></AButton>
+    </ATooltip>
 
-    <a-tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
+    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
       <template #title>
         {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
       </template>
-      <a-button
+      <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')"
         class="mr-2"
         @click="stageStore.applyToggleLockUnlock()"
@@ -119,23 +119,23 @@
         <div v-else>
           <Icon icon="ion:lock-open-outline" size="23" />
         </div>
-      </a-button>
-    </a-tooltip>
+      </AButton>
+    </ATooltip>
 
-    <a-dropdown
+    <ADropdown
       v-if="uiStore.isVisible('ui.stage_top_right_menu.children.flip_rotate_button')"
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')"
       placement="bottomCenter"
     >
-      <a-button class="mr-2">
+      <AButton class="mr-2">
         <Icon icon="carbon:rotate" size="23" />
         <span class="align-top mr-1">چرخش</span>
-      </a-button>
+      </AButton>
       <template #overlay>
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
             <div>
-              <a-menu :selectable="false">
+              <AMenu :selectable="false">
                 <a-menu-item-group key="position_group">
                   <template #title>چرخش</template>
                   <a-menu-item key="rotate_90" @click="stageStore.applyRotateDegrees(90)">
@@ -157,10 +157,10 @@
                     <span> &#176; 180</span>
                   </a-menu-item>
                 </a-menu-item-group>
-              </a-menu>
+              </AMenu>
             </div>
             <div>
-              <a-menu :selectable="false">
+              <AMenu :selectable="false">
                 <a-menu-item-group key="align_group">
                   <template #title>معکوس</template>
                   <a-menu-item key="flip_horizontal" @click="stageStore.applyFlipVertical()">
@@ -172,12 +172,12 @@
                     عمودی
                   </a-menu-item>
                 </a-menu-item-group>
-              </a-menu>
+              </AMenu>
             </div>
           </div>
         </div>
       </template>
-    </a-dropdown>
+    </ADropdown>
 
     <a-dropdown
       v-if="uiStore.isVisible('ui.stage_top_right_menu.children.position_button')"

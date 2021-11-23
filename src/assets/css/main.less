@@ -26,6 +26,10 @@ body{
   font-family:@base-font-family !important;
 }
 
+.@{namespace}-text-color-primary{
+  color:@primary-color
+}
+
 .@{namespace}-button{
   border-color:@primary-color;
   color:@primary-color;
@@ -34,6 +38,17 @@ body{
 .@{namespace}-button-secendry{
   border-color:@secendry-color;
   color:@secendry-color;
+
+  &:focus{
+    border-color:@secendry-color;
+    color:@secendry-color;
+  }
+
+  &:hover{
+    border-color:@secendry-color;
+    color:@secendry-color;
+  }
+
 }
 
 

@@ -22,7 +22,7 @@
           </div>
 
           <div>
-            <a-tag :color="item.tagColor">{{ item.tagTitle }}</a-tag>
+            <ATag :color="item.tagColor">{{ item.tagTitle }}</ATag>
             <span class="mr-3 text-gray-400">{{ item.transactionDetail }}</span>
           </div>
           <div class="flex">
