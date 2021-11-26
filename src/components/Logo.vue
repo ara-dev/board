@@ -1,5 +1,4 @@
 <template>
-  <!--  <div > </div>-->
   <img :id="`${prefixCls}-logo`" src="../assets/img/logo.svg" />
 </template>
 

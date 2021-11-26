@@ -8,8 +8,7 @@
         </template>
       </AButton>
     </div>
-    <!--class="h-full"-->
-    <!--    style="display: grid; grid-template-rows: auto 100px"-->
+
     <div>
       <div>
         <div style="direction: ltr; position: relative; overflow: hidden">
@@ -75,7 +74,6 @@
   .@{pre}{
 
     .ant-input{
-      //text-align: right;
       direction: rtl;
     }
 
@@ -99,21 +97,7 @@
       &-hide{
         top:-60px;
       }
-
-     /* &-show{
-        top: 0px;
-      }*/
-
     }
-    .ant-card-body
-    {
-        //height: 100%;
-    }
-
-
-    /*.ant-tabs-extra-content{
-     float: left !important;
-   }*/
   }
 
   .ant-pagination{
@@ -121,19 +105,8 @@
     .anticon-left  {
       transform: rotate(180deg);
     }
-
     .ant-pagination-next{
       margin-right:8px;
-      //vertical-align: text-top;
     }
-
-   /* .ant-pagination-item{
-      margin-left:8px;
-      margin-right:0;
-    }*/
-
-
-
-
   }
 </style>

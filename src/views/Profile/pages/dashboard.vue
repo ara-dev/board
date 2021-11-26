@@ -6,7 +6,6 @@
         <MyDesign v-for="i in 5" :key="i" />
       </div>
     </div>
-
     <div class="col-span-1 pr-3 items-stretch border-r border-gray-100">
       <span class="font-bold block mb-3 text-gray-400">طرح های پیشنهادی</span>
       <div class="overflow-auto">
@@ -23,4 +22,4 @@
   import SuggestionDesign from '../../../components/Profile/SuggestionDesign.vue'
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less"></style>

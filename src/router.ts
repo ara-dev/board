@@ -74,24 +74,6 @@ const routes = [
     component: () => import('./views/404.vue'),
     meta: {},
   },
-  /*{
-        path: '/cats',
-        name: 'Cats',
-        component: Cats,
-        children: [
-            {
-                name: "CatList",
-                path: "catlist/:count",
-                component: CatList,
-                props: true
-            },
-            {
-                path: 'cat/:url',
-                name: 'Cat',
-                component: Cat
-            },
-        ]
-    },*/
 ]
 
 // Create the router instance and pass the `routes` option
@@ -114,11 +96,3 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from, failure) => {})
 
 export default router
-
-// 5. Create and mount the root instance.
-//const app = Vue.createApp({})
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
-//app.use(router)
-
-//app.mount('#app')

@@ -1,10 +1,10 @@
 <template>
   <div class="h-screen relative w-full">
-    <router-view id="main-container" v-slot="{ Component, route }">
-      <transition :name="route.meta.transitionName || 'scale'">
+    <RouterView id="main-container" v-slot="{ Component, route }">
+      <Transition :name="route.meta.transitionName || 'scale'">
         <component :is="Component" />
-      </transition>
-    </router-view>
+      </Transition>
+    </RouterView>
     <ASide />
   </div>
 </template>

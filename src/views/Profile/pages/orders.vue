@@ -1,8 +1,8 @@
 <template>
   <div class="h-full">
     <div class="flex mb-3">
-      <Icon :icon="info.icon" size="23" />
-      <span class="mr-2 font-bold">{{ info.title }}</span>
+      <Icon :icon="pageInfo.icon" size="23" />
+      <span class="mr-2 font-bold">{{ pageInfo.title }}</span>
     </div>
     <div :class="[`${prefixCls}-alert`, `${prefixCls}-alert-success`]" class="mb-3">
       <div class="flex justify-between items-center">
@@ -40,14 +40,10 @@
 <script lang="ts" setup>
   import Tabs from '../../../components/Tabs/index.vue'
   import { useDesign } from '../../../utils/useDesign'
-  import menus, { ProfileMenus } from '../../../components/Profile/profiles-menus'
-  import { computed, ComputedRef } from 'vue'
+  import { usePageInfo } from '../../../utils/usePageInfo'
   const { prefixCls } = useDesign('orders')
   const { prefixVar } = useDesign('')
-
-  const info: ComputedRef<ProfileMenus | undefined> = computed(() => {
-    return menus.find((item: ProfileMenus) => item.id == 'orders')
-  })
+  const pageInfo = usePageInfo('orders')
 </script>
 
 <style lang="less">

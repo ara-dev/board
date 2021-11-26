@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen">
-    <shape-context-menu />
-    <background-context-menu />
+    <ShapeContextMenu />
+    <BackgroundContextMenu />
     <!-- start main -->
     <!--class="flex h-screen"-->
     <div :class="`${prefixCls}-main`">

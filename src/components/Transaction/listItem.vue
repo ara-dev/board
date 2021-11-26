@@ -1,6 +1,6 @@
 <template>
-  <a-list item-layout="horizontal">
-    <a-list-item v-for="(item, index) in data" :key="index">
+  <AList item-layout="horizontal">
+    <AListItem v-for="(item, index) in data" :key="index">
       <div class="flex text-right">
         <div>
           <div
@@ -44,8 +44,8 @@
           </div>
         </div>
       </div>
-    </a-list-item>
-  </a-list>
+    </AListItem>
+  </AList>
 </template>
 
 <script lang="ts" setup>

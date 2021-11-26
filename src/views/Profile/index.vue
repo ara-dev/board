@@ -13,11 +13,11 @@
     <div class="grid grid-cols-12 gap-4 pt-2 flex-1 items-stretch">
       <ProfileMenu class="col-span-3 px-3 border-l border-gray-100" />
       <div class="col-span-9 relative">
-        <router-view id="profile-inner-container" v-slot="{ Component }">
-          <transition name="fade">
+        <RouterView id="profile-inner-container" v-slot="{ Component }">
+          <Transition name="fade">
             <component :is="Component" />
-          </transition>
-        </router-view>
+          </Transition>
+        </RouterView>
       </div>
     </div>
   </div>

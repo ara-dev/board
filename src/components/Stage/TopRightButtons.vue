@@ -50,7 +50,7 @@
               "
               class="col-span-2"
             >
-              <AInputnumber
+              <a-input-number
                 v-model:value="stageStore.opacity"
                 :disabled="
                   !uiStore.isActive(
@@ -136,27 +136,27 @@
           <div class="grid grid-cols-2">
             <div>
               <AMenu :selectable="false">
-                <a-menu-item-group key="position_group">
+                <AMenuItemGroup key="position_group">
                   <template #title>چرخش</template>
-                  <a-menu-item key="rotate_90" @click="stageStore.applyRotateDegrees(90)">
+                  <AMenuItem key="rotate_90" @click="stageStore.applyRotateDegrees(90)">
                     چرخش
                     <span> &#176; 90</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
-                  </a-menu-item>
-                  <a-menu-item key="rotate_minus_90">
+                  </AMenuItem>
+                  <AMenuItem key="rotate_minus_90">
                     - چرخش
                     <span> &#176; 90</span>
-                  </a-menu-item>
-                  <a-menu-item key="rotate_180">
+                  </AMenuItem>
+                  <AMenuItem key="rotate_180">
                     چرخش
                     <span> &#176; 180</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
-                  </a-menu-item>
-                  <a-menu-item key="rotate_minus_180">
+                  </AMenuItem>
+                  <AMenuItem key="rotate_minus_180">
                     - چرخش
                     <span> &#176; 180</span>
-                  </a-menu-item>
-                </a-menu-item-group>
+                  </AMenuItem>
+                </AMenuItemGroup>
               </AMenu>
             </div>
             <div>
@@ -179,76 +179,76 @@
       </template>
     </ADropdown>
 
-    <a-dropdown
+    <ADropdown
       v-if="uiStore.isVisible('ui.stage_top_right_menu.children.position_button')"
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')"
       placement="bottomCenter"
     >
-      <a-button class="mr-2">
+      <AButton class="mr-2">
         <Icon icon="ion:layers-outline" size="23" />
         <span class="align-top mr-1">موقعیت</span>
-      </a-button>
+      </AButton>
       <template #overlay>
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
             <div>
-              <a-menu :selectable="false">
-                <a-menu-item-group key="position_group">
+              <AMenu :selectable="false">
+                <AMenuItemGroup key="position_group">
                   <template #title>لایه بندی</template>
-                  <a-menu-item key="position_to_forward" @click="stageStore.applyZIndexTop()">
+                  <AMenuItem key="position_to_forward" @click="stageStore.applyZIndexTop()">
                     <Icon icon="fluent:position-forward-20-filled" size="23" />
                     بیار رو
-                  </a-menu-item>
-                  <a-menu-item key="position_up" @click="stageStore.applyZIndexUp()">
+                  </AMenuItem>
+                  <AMenuItem key="position_up" @click="stageStore.applyZIndexUp()">
                     <Icon icon="fluent:position-to-front-20-filled" size="23" />
                     رویی
-                  </a-menu-item>
-                  <a-menu-item key="position_down" @click="stageStore.applyZIndexDown()">
+                  </AMenuItem>
+                  <AMenuItem key="position_down" @click="stageStore.applyZIndexDown()">
                     <Icon icon="fluent:position-to-back-20-filled" size="23" />
                     زیرین
-                  </a-menu-item>
-                  <a-menu-item key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
+                  </AMenuItem>
+                  <AMenuItem key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
                     <Icon icon="fluent:position-backward-20-filled" size="23" />
                     برو زیر
-                  </a-menu-item>
-                </a-menu-item-group>
-              </a-menu>
+                  </AMenuItem>
+                </AMenuItemGroup>
+              </AMenu>
             </div>
             <div>
-              <a-menu :selectable="false">
-                <a-menu-item-group key="align_group">
+              <AMenu :selectable="false">
+                <AMenuItemGroup key="align_group">
                   <template #title>موقعیت قرارگیری</template>
-                  <a-menu-item key="align_left" @click="stageStore.applyAlignLeft()">
+                  <AMenuItem key="align_left" @click="stageStore.applyAlignLeft()">
                     <Icon icon="fluent:align-left-20-regular" size="23" />
                     تراز چپ
-                  </a-menu-item>
-                  <a-menu-item key="align_center">
+                  </AMenuItem>
+                  <AMenuItem key="align_center">
                     <Icon icon="fluent:align-center-horizontal-20-regular" size="23" />
                     تراز وسط
-                  </a-menu-item>
-                  <a-menu-item key="align_right" @click="stageStore.applyAlignRight()">
+                  </AMenuItem>
+                  <AMenuItem key="align_right" @click="stageStore.applyAlignRight()">
                     <Icon icon="fluent:align-right-16-regular" size="23" />
                     تراز راست
-                  </a-menu-item>
-                  <a-menu-item key="align_top">
+                  </AMenuItem>
+                  <AMenuItem key="align_top">
                     <Icon icon="fluent:align-top-20-regular" size="23" />
                     تراز بالا
-                  </a-menu-item>
-                  <a-menu-item key="align_middel">
+                  </AMenuItem>
+                  <AMenuItem key="align_middel">
                     <Icon icon="fluent:align-center-vertical-32-regular" size="23" />
                     تراز میانی
-                  </a-menu-item>
-                  <a-menu-item key="align_bottom">
+                  </AMenuItem>
+                  <AMenuItem key="align_bottom">
                     <Icon icon="fluent:align-bottom-20-regular" size="23" />
                     تراز پایین
-                  </a-menu-item>
-                </a-menu-item-group>
-              </a-menu>
+                  </AMenuItem>
+                </AMenuItemGroup>
+              </AMenu>
             </div>
           </div>
         </div>
       </template>
-    </a-dropdown>
+    </ADropdown>
   </div>
 </template>
 
@@ -257,4 +257,4 @@
   import Icon from '../Icon/Icon.vue'
 </script>
 
-<style scoped></style>
+<style lang="less"></style>
