@@ -89,7 +89,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  //console.log(`Navigating to: ${to.name}`);
+  //console.log(`Navigating to: ${to.name}`)
   next()
 })
 

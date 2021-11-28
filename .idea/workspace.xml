@@ -2,32 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/jsonData.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/usePageInfo.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ghgh.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/store/export.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/store/jsonFormat.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/useGenerateUniqueID.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ControlPLogo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ControlPLogo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Logo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Logo.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/ShapeContextMenu.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/TopRightButtons.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/ShapeStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Style/TextStyle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Tabs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Tabs/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transaction/Item.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transaction/listItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Transaction/listItem.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jsonData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jsonData.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/404.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/404.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Board/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Board/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/account.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/account.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/bookmark.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/bookmark.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/files.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/files.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/important-dates.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/important-dates.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/my-address.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/my-address.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/orders.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/orders.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Profile/pages/transactions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Profile/pages/transactions.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +27,8 @@
         <option value="CSS File" />
         <option value="Less File" />
         <option value="tsconfig.json" />
-        <option value="JavaScript File" />
         <option value="Vue Single File Component" />
+        <option value="JavaScript File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -92,7 +76,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="code.cleanup.on.save" value="true" />
-    <property name="last_opened_file_path" value="E:/dorinGold/droin_api" />
+    <property name="last_opened_file_path" value="E:/bazresi" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -252,6 +236,10 @@
       <workItem from="1637671496181" duration="8985000" />
       <workItem from="1637733858985" duration="22120000" />
       <workItem from="1637825019831" duration="11624000" />
+      <workItem from="1637923014851" duration="11617000" />
+      <workItem from="1637995886637" duration="3311000" />
+      <workItem from="1638009483467" duration="10453000" />
+      <workItem from="1638082035961" duration="16653000" />
     </task>
     <servers />
   </component>

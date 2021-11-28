@@ -9,8 +9,7 @@ import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
 import { reactive, readonly } from 'vue'
-// @ts-ignore
-import { _colorChange } from '../../components/ColorPicker/Solid/mixin/color.js'
+//import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
 
@@ -82,7 +81,8 @@ export default class StageOptionStore {
       //set common option
       this._state.opacity = selectedShape.opacity()
       this._state.layerLock = !selectedShape.draggable()
-      this._state.currentColor = _colorChange(selectedShape.fill())
+      //no common sample image not color
+      //this._state.currentColor = _colorChange(selectedShape.fill())
 
       if (selectedShape.getClassName() == 'Text') {
         this.setTextOptions(selectedShape as Text)
@@ -335,8 +335,10 @@ export default class StageOptionStore {
   }
 
   public toJson() {
-    const stage: Stage = this.currentStage()
-    const json = stage.toJSON()
+    const group: group = this.getGroup()
+    console.log('wewqeqwe', group.children)
+    //exportToJson([group])
+    const json = group.toJSON()
     console.log(json, 'this is json')
   }
 
@@ -361,8 +363,8 @@ export default class StageOptionStore {
       selectedElements: [],
       currentPage: 0,
       pages: [],
-      docWidth: 600,
-      docHeight: 300,
+      docWidth: 640,
+      docHeight: 480,
       copyElements: [],
       currentColor: {
         hsl: {
@@ -462,6 +464,7 @@ export default class StageOptionStore {
 
     stageContainer.addEventListener('drop', function (e) {
       console.log('stage container drop', e)
+      // @ts-ignore
       const data = e.dataTransfer.getData('text')
       console.log('this is data', data)
       //const element = document.getElementById(data)
@@ -471,8 +474,16 @@ export default class StageOptionStore {
       Konva.Image.fromURL(data, function (image) {
         group.add(image)
         image.position(stage.getPointerPosition())
-        image.name('element')
-        image.draggable(true)
+        //image.name('element')
+        image.setAttrs({
+          //x: 200,
+          // y: 50,
+          //scaleX: 0.5,
+          // scaleY: 0.5,
+          href: data,
+        })
+        //image.h
+        //image.draggable(true)
       })
 
       e.preventDefault()
@@ -543,18 +554,23 @@ export default class StageOptionStore {
 
     group.add(triangle)
 
+    const grp = new Konva.Group({
+      draggable: true,
+    })
+
     const text = new Konva.Text({
       name: 'element',
-      x: 10,
-      y: 10,
+      x: 30,
+      y: 30,
       fontFamily: 'Calibri',
       fontSize: 24,
       text: 'this is text',
-      // fill: 'black',
-      draggable: true,
+      //fill: 'black',
+      //draggable: true,
       fill: 'blue',
     })
-    group.add(text)
+    grp.add(text)
+    //group.add(text)
 
     const text2 = new Konva.Text({
       name: 'element',
@@ -564,9 +580,73 @@ export default class StageOptionStore {
       fontSize: 24,
       text: 'نمونه متن فارسی',
       fill: 'black',
-      draggable: true,
+      fontSrc: 'henzagold.com',
+      //draggable: true,
     })
-    group.add(text2)
+    grp.add(text2)
+    //group.add(text2)
+
+    group.add(grp)
+
+    const path = new Konva.Path({
+      name: 'element',
+      draggable: true,
+      x: 0,
+      y: 0,
+      data: 'M0,0h640v480H0z',
+      fill: '#c15959',
+      /* scale: {
+        x: 2,
+        y: 2,
+      },*/
+    })
+
+    group.add(path)
+
+    const path2 = new Konva.Path({
+      name: 'element',
+      draggable: true,
+      /* x: 0,
+      y: 0,*/
+      data: 'm330.18 215.21 1.52 2.63c.22.4.61.68 1.06.76l3.05.61c.83.14 1.39.94 1.25 1.77-.05.3-.19.57-.4.79l-2.1 2.22c-.31.33-.46.77-.4 1.22l.36 3c.09.86-.55 1.63-1.41 1.72-.28.03-.56-.02-.81-.14l-2.81-1.27a1.6 1.6 0 0 0-1.32 0l-2.81 1.27c-.78.37-1.72.04-2.09-.74-.13-.26-.18-.55-.15-.84l.36-3c.06-.45-.09-.89-.4-1.22l-2.1-2.22a1.53 1.53 0 0 1 .83-2.56l3-.59c.45-.08.84-.36 1.06-.76l1.57-2.65c.45-.76 1.42-1.01 2.18-.56.23.13.42.33.56.56z'.replaceAll(
+        ' ',
+        ',',
+      ),
+      fill: '#fccd1d',
+      /* scale: {
+        x: 2,
+        y: 2,
+      },*/
+    })
+    group.add(path2)
+
+    const imageObj = new Image()
+
+    console.log(imageObj, 'dasfsfsdf')
+
+    imageObj.onload = function () {
+      const yoda = new Konva.Image({
+        x: 50,
+        y: 50,
+        image: imageObj,
+        width: 200,
+        height: 300,
+      })
+
+      // add the shape to the layer
+      group.add(yoda)
+    }
+    imageObj.src = 'https://picsum.photos/200/300'
+
+    Konva.Image.fromURL('https://picsum.photos/200/300?1', function (darthNode) {
+      darthNode.setAttrs({
+        x: 200,
+        y: 50,
+        // scaleX: 0.5,
+        // scaleY: 0.5,
+      })
+      group.add(darthNode)
+    })
 
     //end test
 

@@ -1,19 +1,20 @@
 //extra
 //group
 //clip , mask
-
-enum Type {
+export enum Type {
   text,
-  image, //*.svg *.png  *.jgp
-  path, //shape path
+  path, //*.svg *.png  *.jgp
+  image, //shape path
+  group,
+  Rect,
+  Circle,
+  RegularPolygon,
 }
 
-/*interface Shape{
-}*/
-
-interface children {
+export interface children {
   id: string
   type: Type
+  children: children[]
   x: number
   y: number
   draggable: boolean
@@ -74,7 +75,7 @@ interface children {
   //always_on_top: boolean
 }
 
-interface page {
+export interface page {
   id: string | number
   width: number
   height: number
@@ -85,13 +86,20 @@ interface page {
   childrens: children[]
 }
 
-interface model {
+export interface model {
   id: string | number
-  author: string | number
-  price_per_page: number
-  created_at: string
-  updated_at: string
-  last_modifiy: string
+  author?: string | number
+  price_per_page?: number
+  created_at?: string
+  updated_at?: string
+  last_modifiy?: string
   fonts: []
   pages: page[]
+}
+
+const a = {
+  x: 'attrs.x',
+  y: 'attrs.y',
+  other: 'a.other',
+  z_y: [(input) => {}],
 }
