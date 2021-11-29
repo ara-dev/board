@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Define some routes
 // Each route should map to a component.
 // We'll talk about nested routes later.
+
 const routes = [
   {
     path: '/',

@@ -1,3 +1,4 @@
+/*
 import Konva, { default as konva } from 'konva'
 import { model, page } from './jsonFormat'
 
@@ -48,7 +49,7 @@ class AdapteeToJSon {
 
   public group(group: konva.Group): children[] {
     //console.log('this is group')
-    /*const list: Array<konva.Group | konva.Shape> | undefined = group.children
+    /!*const list: Array<konva.Group | konva.Shape> | undefined = group.children
   if (list != undefined) {
     list.forEach((item) => {
       if (item.getType() == 'Shape') {
@@ -70,7 +71,7 @@ class AdapteeToJSon {
         _group(item as konva.Group)
       }
     })
-  }*/
+  }*!/
   }
 
   public path(path: konva.Path) {
@@ -92,3 +93,4 @@ export default function exportToJson(groups: konva.Group[]) {
 
   //console.log('this is export', list)
 }
+*/

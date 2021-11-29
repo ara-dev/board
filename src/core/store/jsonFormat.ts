@@ -1,9 +1,10 @@
+/*
 //extra
 //group
 //clip , mask
 export enum Type {
   text,
-  path, //*.svg *.png  *.jgp
+  path, //!*.svg *.png  *.jgp
   image, //shape path
   group,
   Rect,
@@ -103,3 +104,4 @@ const a = {
   other: 'a.other',
   z_y: [(input) => {}],
 }
+*/

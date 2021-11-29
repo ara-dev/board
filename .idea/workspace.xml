@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96350fb3-9413-4f01-865f-96c508edd989" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ghgh.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/store/export.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/core/store/jsonFormat.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/useGenerateUniqueID.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/core/store/import.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Stage/Stage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Stage/Stage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/export.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/export.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/store/jsonFormat.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/jsonFormat.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/store/stage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/store/stage.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jsonData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jsonData.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +60,9 @@
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
+  </component>
   <component name="ProjectId" id="1x2gNJUmh541iwJ4I6lxnM9DOD0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -76,7 +76,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="code.cleanup.on.save" value="true" />
-    <property name="last_opened_file_path" value="E:/bazresi" />
+    <property name="last_opened_file_path" value="E:/dorinGold/droin_api" />
     <property name="list.type.of.created.stylesheet" value="Less" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -239,7 +239,9 @@
       <workItem from="1637923014851" duration="11617000" />
       <workItem from="1637995886637" duration="3311000" />
       <workItem from="1638009483467" duration="10453000" />
-      <workItem from="1638082035961" duration="16653000" />
+      <workItem from="1638082035961" duration="17126000" />
+      <workItem from="1638128721652" duration="7796000" />
+      <workItem from="1638167905798" duration="26457000" />
     </task>
     <servers />
   </component>
