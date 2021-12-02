@@ -1,7 +1,25 @@
 <template>
-  <div class="w-full"> asdasdasdasdasdasd </div>
+  <div ref="mainboard" class="relative h-screen">
+    <div id="container"></div>
+  </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { stageStore } from '../../core'
+  import { ref, onMounted, watch } from 'vue'
+  import { useElementSize } from '@vueuse/core'
 
-<style scoped></style>
+  const mainboard = ref(null)
+  const { width, height } = useElementSize(mainboard)
+
+  watch([width, height], () => {
+    stageStore.resizeStage(width.value, height.value)
+  })
+
+  onMounted(() => {
+    //stageStore.addPage('container', width.value, height.value)
+    stageStore.toJson('container')
+  })
+</script>
+
+<style></style>
