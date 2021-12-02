@@ -6,6 +6,7 @@ dist-ssr
 
 
 
+
 tests/server/static
 tests/server/static/upload
 
@@ -20,6 +21,7 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
+.idea/
 .vscode
 *.suo
 *.ntvs*
