@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './a2'
+import data from './data7'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -58,12 +58,15 @@ export function Import() {
     children: [],
   }
   stage.children?.push(layer)
+  //d
+  //data.e
+  //data.elements.reverse()
   data.elements.forEach((item) => {
     temp = Object.assign(temp, generateItem(item))
   })
   layer.children?.push(temp)
   //console.log(stage, 'this is temp')
-  //console.log(JSON.stringify(stage), 'this is temp json')
+  console.log(JSON.stringify(stage), 'this is temp json')
   return JSON.stringify(stage)
 }
 
@@ -174,6 +177,7 @@ function path(path: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Path', 'path', path)
   Object.assign(commonAttr.attrs, {
     data: _.get(path, 'attributes.d', ''), //.replaceAll(' ', ','),
+    //fill: 'red',
     //stroke: '#000',
     //strokeWidth: 3,
   })
@@ -209,7 +213,7 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
     //if (id == '300_svg__d') debugger
     const clip = clip_path.find((item) => item.attrs.svgID == id)
     if (clip) {
-      /*if (shape.className == 'Group') {
+      if (shape.className == 'Group') {
         Object.assign(shape.attrs, {
           name: generateName('group_clip'),
           attr_clip: clip,
@@ -225,8 +229,8 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
           children: [shape],
         }
         return group
-      }*/
-      const group: KonvaFormat = {
+      }
+      /*const group: KonvaFormat = {
         className: 'Group',
         attrs: {
           name: generateName('group_clip'),
@@ -235,7 +239,7 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
         },
         children: [shape],
       }
-      return group
+      return group*/
     }
   }
   return shape
@@ -400,6 +404,7 @@ function group(group: SVGXMLElement): KonvaFormat {
       svgID: _.get(group, 'attributes.id', ''),
       name: generateName('group'),
       opacity: parseFloat(_.get(group, 'attributes.opacity', 1)),
+      //fill: 'red',
       //width: 400,
       //height: 400,
     },
