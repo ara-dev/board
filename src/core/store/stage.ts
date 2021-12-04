@@ -335,57 +335,45 @@ export default class StageOptionStore {
   }
 
   public toJson(container: HTMLDivElement | string) {
-    /*  const stage = this.currentStage()
-    const json = stage.toJSON()
-    console.log(json, 'this is json')
-    return*/
-    /*const json = `{
-  "attrs": {
-    "width": 834.375,
-    "height": 480
-  },
-  "className": "Stage",
-  "children": [
-    {
-      "attrs": {},
-      "className": "Layer",
-      "children": [
-        {"attrs":{"width":640,"height":480,"name":"group_bodevv4hhyhn"},"className":"Group","children":[{"attrs":{"name":"element_path_k586v2hb5oem","draggable":true,"data":"M0,0h640v480H0z","fill":"#c15959"},"className":"Path"},{"attrs":{"name":"element_path_hfpaqvyv03u5","draggable":true,"data":"m342,198-13,8-13-8v-14h26z","fill":"#212529"},"className":"Path"},{"attrs":{"name":"element_path_neuy2a89dzim","draggable":true,"data":"M337,184v17.08l-8,4.92-8-4.92V184z","fill":"#dd051d"},"className":"Path"},{"attrs":{"name":"element_path_d8x6ja8y6cqf","draggable":true,"data":"m328.81,206.21,6.49-4a21.37,21.37,0,0,0-13,0l6.51,4z","fill":"#a60416"},"className":"Path"},{"attrs":{"name":"element_circle_spkzb83lv60z","draggable":true,"x":328.81,"y":222.71,"radius":19.5,"fill":"#fccd1d"},"className":"Circle"},{"attrs":{"name":"element_circle_0h8mmha98w48","draggable":true,"x":328.81,"y":222.71,"radius":14.5,"fill":"#f9a215"},"className":"Circle"},{"attrs":{"name":"element_path_iavgxfnpzhcp","draggable":true,"data":"m330.18,215.21,1.52,2.63c.22.4.61.68,1.06.76l3.05.61c.83.14,1.39.94,1.25,1.77-.05.3-.19.57-.4.79l-2.1,2.22c-.31.33-.46.77-.4,1.22l.36,3c.09.86-.55,1.63-1.41,1.72-.28.03-.56-.02-.81-.14l-2.81-1.27a1.6,1.6,0,0,0-1.32,0l-2.81,1.27c-.78.37-1.72.04-2.09-.74-.13-.26-.18-.55-.15-.84l.36-3c.06-.45-.09-.89-.4-1.22l-2.1-2.22a1.53,1.53,0,0,1,.83-2.56l3-.59c.45-.08.84-.36,1.06-.76l1.57-2.65c.45-.76,1.42-1.01,2.18-.56.23.13.42.33.56.56z","fill":"#fccd1d"},"className":"Path"},{"attrs":{"name":"element_path_1hmcmo7xab8s","draggable":true,"data":"M227.02,62.45c-1.93,0-1.93,3,0,3s1.94-3,0-3z","fill":""},"className":"Path"},{"attrs":{"name":"element_text_79xli26erl23","x":113.55,"y":395.714,"fontFamily":"Calibri","fontSize":12,"text":"asdasdasdasdasd"},"className":"Text"},{"attrs":{"name":"element_text_uv3i49ndk9xa","x":113.55,"y":357.714,"fontFamily":"Calibri","fontSize":12,"text":"asdasdasdasdasd"},"className":"Text"},{"attrs":{"name":"element_path_oojtq77j87hc","draggable":true,"data":"M342.25,53.87c1.37,1.69-1.46,5.06-2.38,6.38-1.38,1.97-2.9,3.83-4.52,5.61-3.31,3.62-7.01,6.87-10.86,9.91-7.72,6.12-16.03,11.46-23.6,17.78-4.3,3.59-8.34,7.51-11.78,11.95-.5.65-.62,1.49,0,2.12.51.52,1.63.64,2.12,0,12.95-16.72,33.54-24.97,47.31-40.85,1.9-2.19,3.68-4.52,5.22-6.97,1.56-2.48,2.64-5.52.6-8.04-1.2-1.52-3.31.62-2.11,2.11z","fill":""},"className":"Path"},{"attrs":{"name":"element_group_fby5hj8hmvve","opacity":0.53},"className":"Group","children":[{"attrs":{"name":"element_path_m5nnhml9uxj4","draggable":true,"data":"M414.5,139.5h156v74h-156z","fill":"#ff0"},"className":"Path"},{"attrs":{"name":"element_path_na68helrmtb2","draggable":true,"data":"M570,140v73H415v-73h155m1-1H414v75h157v-75z","fill":""},"className":"Path"}]},{"attrs":{"name":"element_path_7inssk9ljfhb","draggable":true,"data":"M443.2,413h-93.4c-11.49,0-20.8-9.31-20.8-20.8v-93.4c0-11.49,9.31-20.8,20.8-20.8h93.41c11.49,0,20.8,9.31,20.8,20.8v93.41C464,403.69,454.69,413,443.2,413z","fill":"#29abe2"},"className":"Path"},{"attrs":{"name":"element_path_9p03n2a6arji","draggable":true,"data":"M607.2,419h-93.4c-11.49,0-20.8-9.31-20.8-20.8v-93.4c0-11.49,9.31-20.8,20.8-20.8h93.41c11.49,0,20.8,9.31,20.8,20.8v93.41C628,409.69,618.69,419,607.2,419z","fill":"#f15a24"},"className":"Path"}]}
-      ]
-    }
-  ]
-}`*/
     const state = this._state
-    // const w = state.docWidth > width ? state.docWidth : width
-    // const h = state.docHeight > height ? state.docHeight : height
-
     const stage = Konva.Node.create(Import(), container)
-    /*new Stage({
-      container: container,
-      width: w,
-      height: h,
-      //width: window.innerWidth,
-      //height: window.innerHeight
+    const children = stage.find((node) => {
+      return node.name().startsWith('element_group_clip') //=== 'Group'
+    })
+    console.log('this is children', children)
+    children.forEach((item) => {
+      item.clipFunc(function (ctx) {
+        //debugger
+        const shape = item.attrs.attr_clip
+        if (shape.className == 'Rect') {
+          ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
+          //debugger
+          // if (shape.attrs.svgID == '300_svg__d') debugger
+          // ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
+        } else if (shape.className == 'Line') {
+          console.log('6657567567567')
+        }
+        /*else if (shape.className == 'Path') {
+          //console.log('this is path')
+          //alert('sdasdasd')
+        }*/
+      })
+    })
+    /* const children2 = stage.find((node) => {
+      return node.name().startsWith('element_group') //=== 'Group'
     })*/
-    //stage.zIndex(5000);
+    /* children2[0].clipFunc(function (ctx) {
+      //const shape = item.attrs.attr_clip
+      ctx.rect(95.2, 31.61, 310, 437)
+    })
+    console.log('this is children', children2)*/
+    //console.log('this is export', stage.toJSON())
+    /* children.clipFunc(function (ctx) {
+      ctx.rect(0, 0, 100, 100)
+    })*/
+    //stage.find('.element_polygon') //stage.getChildren()
     this._state.pages.push(stage)
     this._state.currentPage++
-    //const stage = this.currentStage()
-    //const json = stage.toJSON()
-    //console.log(json, 'this is json')
-    // Konva.Node.create('')
-    //const group = this.getGroup()
-    //const json2 =
-    //'{"attrs":{"width":578,"height":200},"className":"Stage","children":[{"attrs":{},"className":"Layer","children":[{"attrs":{"x":100,"y":100,"sides":6,"radius":70,"fill":"red","stroke":"black","strokeWidth":4},"className":"RegularPolygon"}]}]}'
-    //console.log('load', Konva.Node.create(json2, 'test'))
-    //const stage = this.currentStage()
-    //const json = stage.toJSON()
-    //console.log(json, 'this is json')
-    // console.log('wewqeqwe', group.children)
-    //exportToJson([group])
-    // const group = this.getGroup()
-    // const json = group.toJSON()
-    // console.log(json, 'this is json')
   }
 
   private _init() {

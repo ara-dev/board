@@ -1,0 +1,378 @@
+{
+  "attrs": {
+    "width": 600,
+    "height": 480
+  },
+  "className": "Stage",
+  "children": [
+    {
+      "attrs": {},
+      "className": "Layer",
+      "children": [
+        {
+          "attrs": {
+            "svgID": "",
+            "width": 595.3,
+            "height": 841.9,
+            "name": "group_v4d0y9rxv21f"
+          },
+          "className": "Group",
+          "children": [
+            {
+              "attrs": {},
+              "className": "Group",
+              "children": []
+            },
+            {
+              "attrs": {},
+              "className": "Group",
+              "children": []
+            },
+            {
+              "attrs": {
+                "name": "element_group_clip_62frxpb2pggh",
+                "draggable": true,
+                "attr_clip": {
+                  "attrs": {
+                    "svgID": "",
+                    "name": "element_rectangle_ttytd569o5lb",
+                    "draggable": true,
+                    "width": 221,
+                    "height": 283,
+                    "x": 145.4,
+                    "y": 213.8,
+                    "opacity": 1,
+                    "fill": "#40403f"
+                  },
+                  "className": "Rect"
+                }
+              },
+              "className": "Group",
+              "children": [
+                {
+                  "attrs": {
+                    "svgID": "100_svg__b",
+                    "name": "element_use_rq50kqhbunzu",
+                    "draggable": true,
+                    "width": 0,
+                    "height": 0,
+                    "points": [
+                      361.4,
+                      518.8,
+                      250.5,
+                      452.5,
+                      133,
+                      506.2,
+                      161.9,
+                      380.2,
+                      74.4,
+                      285.1,
+                      203.1,
+                      273.6,
+                      266.6,
+                      161,
+                      317.4,
+                      279.9,
+                      444,
+                      305.5,
+                      346.6,
+                      390.5
+                    ],
+                    "closed": true,
+                    "fill": "red"
+                  },
+                  "className": "Line"
+                }
+              ]
+            },
+            {
+              "attrs": {},
+              "className": "Group",
+              "children": []
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_rectangle_c8mfp48dyou9",
+                "draggable": true,
+                "width": 139,
+                "height": 100,
+                "x": 32,
+                "y": 21,
+                "fillLinearGradientStartPointX": 32,
+                "fillLinearGradientStartPointY": 770.89,
+                "fillLinearGradientEndPointX": 171,
+                "fillLinearGradientEndPointY": 770.89,
+                "fillLinearGradientColorStops": [
+                  0,
+                  "#fff",
+                  0.411,
+                  "#fbb040",
+                  0.662,
+                  "#f9ed32",
+                  1,
+                  "#ed1c24"
+                ],
+                "stroke": "#000",
+                "strokeWidth": 1
+              },
+              "className": "Rect"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_ellipse_lnygmp14p37r",
+                "draggable": true,
+                "radiusX": 121,
+                "radiusY": 55,
+                "x": 385,
+                "y": 86,
+                "fill": "#ef4136",
+                "stroke": "#ec008c",
+                "strokeWidth": 20
+              },
+              "className": "Ellipse"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_line_gk2u16xxbavh",
+                "draggable": true,
+                "width": 0,
+                "height": 0,
+                "stroke": "#8dc63f",
+                "strokeWidth": 5,
+                "points": [
+                  61,
+                  167,
+                  489,
+                  199
+                ]
+              },
+              "className": "Line"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_path_m0qzi330r8fr",
+                "draggable": true,
+                "stroke": "#8dc63f",
+                "strokeWidth": 5,
+                "data": "M428 232c0 38.7 21.5 70 48 70"
+              },
+              "className": "Path"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_polygon_5bwvhnvxm5h4",
+                "draggable": true,
+                "width": 0,
+                "height": 0,
+                "fill": "red",
+                "stroke": "#8dc63f",
+                "strokeWidth": 5,
+                "points": [
+                  191,
+                  701,
+                  82.5,
+                  724.9,
+                  7.5,
+                  642.9,
+                  41,
+                  537,
+                  149.5,
+                  513,
+                  224.5,
+                  595
+                ],
+                "closed": true
+              },
+              "className": "Line"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_polygon_tvzgsyqsu8yx",
+                "draggable": true,
+                "width": 0,
+                "height": 0,
+                "fill": "red",
+                "stroke": "#8dc63f",
+                "strokeWidth": 5,
+                "points": [
+                  549,
+                  485.4,
+                  484.9,
+                  477,
+                  441.7,
+                  525.1,
+                  429.8,
+                  461.6,
+                  370.7,
+                  435.3,
+                  427.5,
+                  404.4,
+                  434.2,
+                  340.1,
+                  481.2,
+                  384.5,
+                  544.4,
+                  371.1,
+                  516.6,
+                  429.4
+                ],
+                "closed": true
+              },
+              "className": "Line"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_circle_u467v3mw8isk",
+                "draggable": true,
+                "x": 74.4,
+                "y": 220.7,
+                "fill": "#009444",
+                "radius": 42
+              },
+              "className": "Circle"
+            },
+            {
+              "attrs": {},
+              "className": "Group",
+              "children": []
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_rectangle_dyp1r04meck9",
+                "draggable": true,
+                "width": 182,
+                "height": 90,
+                "x": 210.7,
+                "y": 736.4,
+                "fillRadialGradientStartPointX": 91,
+                "fillRadialGradientStartPointY": 45,
+                "fillRadialGradientEndPointX": 91,
+                "fillRadialGradientEndPointY": 45,
+                "fillRadialGradientEndRadius": 71.784,
+                "fillRadialGradientColorStops": [
+                  0,
+                  "#fff",
+                  0.411,
+                  "#fbb040",
+                  0.662,
+                  "#f9ed32",
+                  1,
+                  "#ed1c24"
+                ]
+              },
+              "className": "Rect"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_path_0oyfh99cw3om",
+                "draggable": true,
+                "fill": "#ffde17",
+                "stroke": "#8dc63f",
+                "strokeWidth": 5,
+                "data": "M578.8 612.9 473.6 761.4c-3.8 5.4-11.4 6.7-16.7 2.8l-97.1-68.8c-5.4-3.8-6.7-11.3-2.9-16.7l105.3-148.5c3.8-5.4 11.4-6.7 16.7-2.8l97.1 68.8c5.4 3.8 6.7 11.3 2.8 16.7z"
+              },
+              "className": "Path"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_circle_hu1eik9a5dyv",
+                "draggable": true,
+                "x": 66,
+                "y": 468.5,
+                "fill": "#009444",
+                "radius": 42
+              },
+              "className": "Circle"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_circle_b9imijb5jgcf",
+                "draggable": true,
+                "x": 549,
+                "y": 240.6,
+                "fill": "#e5580a",
+                "radius": 42
+              },
+              "className": "Circle"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_path_gwbvbp3s8aug",
+                "draggable": true,
+                "fill": "#e5580a",
+                "data": "M66 298.9c-23.6 22.5-28.4 32.2-26 36 4.5 7.2 33.7-8.2 43 3 4.5 5.4 3.1 15.5-1 22-12.4 19.7-50.7 8.6-53 17-3 10.7 53.9 49.7 75 31 13.8-12.3 5-42.8 4-46"
+              },
+              "className": "Path"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_polyline_bripk6xg5x89",
+                "draggable": true,
+                "width": 0,
+                "height": 0,
+                "fill": "#b421ea",
+                "points": [
+                  253,
+                  532.9,
+                  309,
+                  546.9,
+                  297.6,
+                  580.9,
+                  354.7,
+                  576.9,
+                  375,
+                  525.1,
+                  412,
+                  541.9,
+                  343,
+                  645.8,
+                  264,
+                  625.9
+                ],
+                "closed": true
+              },
+              "className": "Line"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_text_skiy6piygqfm",
+                "draggable": true,
+                "fontFamily": "AdobeArabic-Regular",
+                "fontSize": 28.892,
+                "text": "این متن فارسشی است ",
+                "fill": "black"
+              },
+              "className": "Text"
+            },
+            {
+              "attrs": {
+                "svgID": "",
+                "name": "element_text_3sw3o34ksu42",
+                "draggable": true,
+                "height": 0,
+                "fontFamily": "",
+                "fontSize": 16,
+                "fill": "black"
+              },
+              "className": "Text"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

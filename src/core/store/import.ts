@@ -1,10 +1,6 @@
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './data4'
-/*enum GRADIENT{
-  Linear,
-  Radial
-}*/
+import data from './a2'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -39,13 +35,13 @@ interface RadialGradient {
 
 let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
-let clipPath: KonvaFormat[] = []
+let clip_path: KonvaFormat[] = []
 
 export function Import() {
   let temp: object = {}
   defs = converDefsToKonvaFormat(data)
-  clipPath = converClipPathToKonvaFormat(data)
-  console.log('this is clip path', clipPath)
+  clip_path = converClipPathToKonvaFormat(data)
+  console.log('this is clip path', clip_path)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
   const stage: KonvaFormat = {
@@ -95,6 +91,8 @@ function generateItem(item: SVGXMLElement): KonvaFormat {
       return polygon(item)
     case 'use':
       return use(item)
+    case 'image':
+      return image(item)
     default:
       return {
         attrs: {},
@@ -179,7 +177,7 @@ function path(path: SVGXMLElement): KonvaFormat {
     //stroke: '#000',
     //strokeWidth: 3,
   })
-  return commonAttr
+  return clipPath(path, commonAttr)
 }
 
 function circle(circle: SVGXMLElement): KonvaFormat {
@@ -189,12 +187,58 @@ function circle(circle: SVGXMLElement): KonvaFormat {
     y: parseFloat(_.get(circle, 'attributes.cy', 0)),
     radius: parseFloat(_.get(circle, 'attributes.r', 0)),
   })
-  return commonAttr
+  return clipPath(circle, commonAttr)
 }
 
 function rectangle(rectangle: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Rect', 'rectangle', rectangle)
-  return commonAttr
+  Object.assign(commonAttr, {
+    //fill: 'red',
+  })
+  return clipPath(rectangle, commonAttr)
+}
+
+function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
+  if (!element.attributes) {
+    return shape
+  }
+  const attr = element.attributes['clip-path']
+  if (attr) {
+    //debugger
+    const id = attr.substring(5, attr.length - 1)
+    //if (id == '300_svg__d') debugger
+    const clip = clip_path.find((item) => item.attrs.svgID == id)
+    if (clip) {
+      /*if (shape.className == 'Group') {
+        Object.assign(shape.attrs, {
+          name: generateName('group_clip'),
+          attr_clip: clip,
+        })
+      } else {
+        const group: KonvaFormat = {
+          className: 'Group',
+          attrs: {
+            name: generateName('group_clip'),
+            draggable: true,
+            attr_clip: clip,
+          },
+          children: [shape],
+        }
+        return group
+      }*/
+      const group: KonvaFormat = {
+        className: 'Group',
+        attrs: {
+          name: generateName('group_clip'),
+          draggable: true,
+          attr_clip: clip,
+        },
+        children: [shape],
+      }
+      return group
+    }
+  }
+  return shape
 }
 
 function commonAttributes(
@@ -207,22 +251,46 @@ function commonAttributes(
       svgID: _.get(element, 'attributes.id', ''),
       name: generateName(typeName),
       draggable: true,
-      width: parseFloat(_.get(element, 'attributes.width', 0)),
-      height: parseFloat(_.get(element, 'attributes.height', 0)),
-      x: parseFloat(_.get(element, 'attributes.x', 0)),
-      y: parseFloat(_.get(element, 'attributes.y', 0)),
+      //width: parseFloat(_.get(element, 'attributes.width', 0)),
+      //height: parseFloat(_.get(element, 'attributes.height', 0)),
+      //x: parseFloat(_.get(element, 'attributes.x', 0)),
+      //y: parseFloat(_.get(element, 'attributes.y', 0)),
       opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
     },
     className: className,
   }
 
-  /*if (element.attributes.width) {
+  if (!element.attributes) {
+    return item
+  }
+
+  //console.log('this is common', element)
+
+  if (element.attributes?.x) {
+    Object.assign(item.attrs, { x: parseFloat(element.attributes.x) })
+  }
+
+  if (element.attributes?.y) {
+    Object.assign(item.attrs, { y: parseFloat(element.attributes.y) })
+  }
+
+  if (element.attributes?.width) {
     Object.assign(item.attrs, { width: parseFloat(element.attributes.width) })
   }
 
-  if (element.attributes.height) {
+  if (element.attributes?.height) {
     Object.assign(item.attrs, { height: parseFloat(element.attributes.height) })
-  }*/
+  }
+
+  if (element.attributes['stroke-linecap']) {
+    Object.assign(item.attrs, { lineCap: element.attributes['stroke-linecap'] })
+  }
+
+  if (element.attributes['stroke-dasharray']) {
+    Object.assign(item.attrs, {
+      dash: element.attributes['stroke-dasharray'].split(',').map((point) => parseFloat(point)),
+    })
+  }
 
   if (element.attributes.fill && element.attributes.fill != 'none') {
     if (element.attributes.fill.startsWith('url')) {
@@ -259,7 +327,7 @@ function ellipse(ellipse: SVGXMLElement): KonvaFormat {
     radiusX: parseFloat(_.get(ellipse, 'attributes.rx', 0)),
     radiusY: parseFloat(_.get(ellipse, 'attributes.ry', 0)),
   })
-  return commonAttr
+  return clipPath(ellipse, commonAttr)
 }
 
 function text(text: SVGXMLElement): KonvaFormat {
@@ -267,16 +335,38 @@ function text(text: SVGXMLElement): KonvaFormat {
   Object.assign(commonAttr.attrs, {
     fontFamily: _.get(text, 'attributes.font-family', ''),
     fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
-    text: _.get(text, 'elements[0].text', ''),
+    //text: _.get(text, 'elements[0].text', ''),
+    x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
+    y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
   })
-  return commonAttr
-  /*const item: KonvaFormat = {
-    attrs: {
-      x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
-      y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
-    },
+  let temp_text = ''
+  if (text.elements && text.elements.length > 0) {
+    if (text.elements[0].type == 'text') {
+      temp_text = _.get(text, 'elements[0].text', '')
+    } else {
+      text.elements.forEach((item) => {
+        temp_text += _.get(item, 'elements[0].text', '')
+      })
+    }
   }
-  return item*/
+  Object.assign(commonAttr.attrs, { text: temp_text })
+  return clipPath(text, commonAttr)
+}
+
+function image(image: SVGXMLElement): KonvaFormat {
+  const commonAttr = commonAttributes('Group', 'image', image)
+  console.log('this is image', image)
+  //const href = use.attributes['xlink:href']
+  /*if (href) {
+    const id = href.substring(1, href.length)
+    const item = defs.find((element) => element.attrs.svgID == id)
+    if (item) {
+      const clone_obj = _.cloneDeep(item)
+      Object.assign(clone_obj.attrs, commonAttr.attrs)
+      return clone_obj
+    }
+  }*/
+  return commonAttr
 }
 
 function line(line: SVGXMLElement): KonvaFormat {
@@ -289,40 +379,19 @@ function line(line: SVGXMLElement): KonvaFormat {
       parseFloat(_.get(line, 'attributes.y2', 0)),
     ],
   })
-  return commonAttr
-}
-
-function use(use: SVGXMLElement): KonvaFormat {
-  const commonAttr = commonAttributes('Group', 'use', use)
-  const href = use.attributes['xlink:href']
-  if (href) {
-    const id = href.substring(1, href.length)
-    const item = defs.find((element) => element.attrs.svgID == id)
-    if (item) {
-      const clone_obj = _.cloneDeep(item)
-      Object.assign(clone_obj.attrs, commonAttr.attrs)
-      return clone_obj
-    }
-  }
-  return commonAttr
+  return clipPath(line, commonAttr)
 }
 
 function polyline(polyline: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Line', 'polyline', polyline)
   Object.assign(commonAttr.attrs, {
-    points: _.get(polygon, 'attributes.points', '')
+    points: _.get(polyline, 'attributes.points', '')
       .replaceAll(' ', ',')
       .split(',')
       .map((point: string) => parseFloat(point)),
     closed: true,
   })
-  return commonAttr
-}
-
-function translateToXY(translate: string) {
-  //translate(113.55 395.714)
-  const xy = translate.substring(10, translate.length - 1).split(' ')
-  return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
+  return clipPath(polyline, commonAttr)
 }
 
 function group(group: SVGXMLElement): KonvaFormat {
@@ -342,7 +411,8 @@ function group(group: SVGXMLElement): KonvaFormat {
       item.children?.push(generateItem(element))
     })
   }
-  return item
+  return clipPath(group, item)
+  //return item
 }
 
 function polygon(polygon: SVGXMLElement): KonvaFormat {
@@ -353,19 +423,10 @@ function polygon(polygon: SVGXMLElement): KonvaFormat {
       .split(',')
       .map((point: string) => parseFloat(point)),
     closed: true,
+    //fill: 'red',
   })
-  return commonAttr
+  return clipPath(polygon, commonAttr)
 }
-
-/*function converStyleToAttribute(stringStyle: string): object {
-  const attribute: object = {}
-  const temp: string[] = stringStyle.split(';')
-  temp.forEach((item) => {
-    const keyValue: string[] = item.split(':')
-    Object.assign(attribute, { [keyValue[0]]: keyValue[1] })
-  })
-  return attribute
-}*/
 
 function linearGradient(linear_gradient: SVGXMLElement): LinearGradient {
   const linearGradient: LinearGradient = {
@@ -433,18 +494,64 @@ function converClipPathToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
   const temp: KonvaFormat[] = []
   clip.forEach((element) => {
     element.elements?.forEach((el) => {
-      temp.push(generateItem(el))
+      const item = generateItem(el)
+      item.attrs.svgID = _.get(element, 'attributes.id', '')
+      temp.push(item)
+      //temp.push(Object.assign(.attrs, { svgID: _.get(el, 'attributes.id', '') }))
     })
   })
-
   return temp
 }
 
+function use(use: SVGXMLElement): KonvaFormat {
+  const commonAttr = commonAttributes('Group', 'use', use)
+  const href = use.attributes['xlink:href']
+  if (href) {
+    const id = href.substring(1, href.length)
+    const item = defs.find((element) => element.attrs.svgID == id)
+    if (item) {
+      const clone_obj = _.cloneDeep(item)
+      Object.assign(clone_obj.attrs, commonAttr.attrs)
+      return clone_obj
+    }
+  }
+  return commonAttr
+}
+
+function translateToXY(translate: string) {
+  //translate(113.55 395.714)
+  const xy = translate.substring(10, translate.length - 1).split(' ')
+  return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
+}
+
+/*function dataURLtoFile(dataurl: string, filename: string) {
+  const arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n)
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+
+  return new File([u8arr], filename, { type: mime })
+}*/
+
+/*function converStyleToAttribute(stringStyle: string): object {
+  const attribute: object = {}
+  const temp: string[] = stringStyle.split(';')
+  temp.forEach((item) => {
+    const keyValue: string[] = item.split(':')
+    Object.assign(attribute, { [keyValue[0]]: keyValue[1] })
+  })
+  return attribute
+}*/
+
 //image
-//transform  translate(x-value, y-value) matrix transform="rotate(x, y, z)"  scale(x-axis,y-axis) Skew
-//transform="matrix(a,b,c,d,e,f)"
+//transform  translate(x-value, y-value) matrix transform="rotate(x, y, z)"  scale(x-axis,y-axis) Skew //transform="matrix(a,b,c,d,e,f)"
 //tspan in text
-//clipPath
 //style
 //svg style
 //pattern
+//text path
