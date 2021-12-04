@@ -358,6 +358,7 @@ export default class StageOptionStore {
     const state = this._state
     // const w = state.docWidth > width ? state.docWidth : width
     // const h = state.docHeight > height ? state.docHeight : height
+
     const stage = Konva.Node.create(Import(), container)
     /*new Stage({
       container: container,

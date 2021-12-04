@@ -1,7 +1,10 @@
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './data2'
-
+import data from './data4'
+/*enum GRADIENT{
+  Linear,
+  Radial
+}*/
 interface KonvaFormat {
   attrs: any
   className: string
@@ -15,6 +18,7 @@ interface SVGXMLElement {
 }
 interface LinearGradient {
   svgID: string
+  type: string
   gradient: {
     fillLinearGradientStartPoint: any
     fillLinearGradientEndPoint: any
@@ -23,19 +27,25 @@ interface LinearGradient {
 }
 interface RadialGradient {
   svgID: string
+  type: string
   gradient: {
     fillRadialGradientStartPoint: any
+    fillRadialGradientEndPoint: any
     fillRadialGradientColorStops: any[]
     fillRadialGradientStartRadius: number
+    fillRadialGradientEndRadius: number
   }
 }
 
 let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
+let clipPath: KonvaFormat[] = []
 
 export function Import() {
   let temp: object = {}
   defs = converDefsToKonvaFormat(data)
+  clipPath = converClipPathToKonvaFormat(data)
+  console.log('this is clip path', clipPath)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
   const stage: KonvaFormat = {
@@ -83,10 +93,12 @@ function generateItem(item: SVGXMLElement): KonvaFormat {
       return rectangle(item)
     case 'polygon':
       return polygon(item)
+    case 'use':
+      return use(item)
     default:
       return {
         attrs: {},
-        className: '',
+        className: 'Group',
       }
   }
 }
@@ -136,7 +148,7 @@ function converLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradien
 }
 
 function svg(svg: SVGXMLElement) {
-  const viewbox = _.get(svg, 'attributes.viewBox', '0 0 0 0').split(' ')
+  const viewbox = _.get(svg, 'attributes.viewBox', '0 0 300 300').split(' ')
   const item: KonvaFormat = {
     attrs: {
       svgID: _.get(svg, 'attributes.id', ''),
@@ -161,175 +173,150 @@ function svg(svg: SVGXMLElement) {
 }
 
 function path(path: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(path, 'attributes.id', ''),
-      name: generateName('path'),
-      draggable: true,
-      data: _.get(path, 'attributes.d', ''), //.replaceAll(' ', ','),
-      stroke: _.get(path, 'attributes.stroke', 'red'),
-      strokeWidth: parseFloat(_.get(path, 'attributes.stroke-width', 1)),
-    },
-    className: 'Path',
-  }
-  /*if (path.attributes?.fill && path.attributes?.fill != 'none') {
-    if (path.attributes.fill.startsWith('url')) {
-      const key: string = path.attributes.fill.substring(5, path.attributes.fill.length - 1)
-      const grd = gradient.find((item) => item.svgID == key)
-      if (grd) {
-        Object.assign(item.attrs, grd.gradient)
-      }
-    } else {
-      item.attrs.fill = _.get(path, 'attributes.fill', 'black')
-    }
-  }*/
-  return item
+  const commonAttr = commonAttributes('Path', 'path', path)
+  Object.assign(commonAttr.attrs, {
+    data: _.get(path, 'attributes.d', ''), //.replaceAll(' ', ','),
+    //stroke: '#000',
+    //strokeWidth: 3,
+  })
+  return commonAttr
 }
 
 function circle(circle: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(circle, 'attributes.id', ''),
-      name: generateName('circle'),
-      draggable: true,
-      x: parseFloat(_.get(circle, 'attributes.cx', 0)),
-      y: parseFloat(_.get(circle, 'attributes.cy', 0)),
-      radius: parseFloat(_.get(circle, 'attributes.r', 0)),
-      fill: _.get(circle, 'attributes.fill', ''),
-      stroke: _.get(circle, 'attributes.stroke', ''),
-      strokeWidth: parseFloat(_.get(circle, 'attributes.stroke-width', 0)),
-      opacity: parseFloat(_.get(circle, 'attributes.opacity', 1)),
-    },
-    className: 'Circle',
-  }
-  return item
+  const commonAttr = commonAttributes('Circle', 'circle', circle)
+  Object.assign(commonAttr.attrs, {
+    x: parseFloat(_.get(circle, 'attributes.cx', 0)),
+    y: parseFloat(_.get(circle, 'attributes.cy', 0)),
+    radius: parseFloat(_.get(circle, 'attributes.r', 0)),
+  })
+  return commonAttr
 }
 
 function rectangle(rectangle: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      name: generateName('rectangle'),
-    },
-    className: 'Rect',
-  }
-  commonAttributes(item, rectangle)
-  console.log('this is common', item)
-  return item
+  const commonAttr = commonAttributes('Rect', 'rectangle', rectangle)
+  return commonAttr
 }
 
-function commonAttributes(konvaShape: KonvaFormat, element: SVGXMLElement) {
-  const attrs = {
-    svgID: _.get(element, 'attributes.id', ''),
-    draggable: true,
-    x: parseFloat(_.get(element, 'attributes.x', 0)),
-    y: parseFloat(_.get(element, 'attributes.y', 0)),
-    width: parseFloat(_.get(element, 'attributes.width', 0)),
-    height: parseFloat(_.get(element, 'attributes.height', 0)),
-    stroke: _.get(element, 'attributes.stroke', ''),
-    strokeWidth: parseFloat(_.get(element, 'attributes.stroke-width', 1)),
-    opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
+function commonAttributes(
+  className: string,
+  typeName: string,
+  element: SVGXMLElement,
+): KonvaFormat {
+  const item: KonvaFormat = {
+    attrs: {
+      svgID: _.get(element, 'attributes.id', ''),
+      name: generateName(typeName),
+      draggable: true,
+      width: parseFloat(_.get(element, 'attributes.width', 0)),
+      height: parseFloat(_.get(element, 'attributes.height', 0)),
+      x: parseFloat(_.get(element, 'attributes.x', 0)),
+      y: parseFloat(_.get(element, 'attributes.y', 0)),
+      opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
+    },
+    className: className,
   }
-  if (element.attributes?.fill && element.attributes?.fill != 'none') {
+
+  /*if (element.attributes.width) {
+    Object.assign(item.attrs, { width: parseFloat(element.attributes.width) })
+  }
+
+  if (element.attributes.height) {
+    Object.assign(item.attrs, { height: parseFloat(element.attributes.height) })
+  }*/
+
+  if (element.attributes.fill && element.attributes.fill != 'none') {
     if (element.attributes.fill.startsWith('url')) {
       const key: string = element.attributes.fill.substring(5, element.attributes.fill.length - 1)
       const grd = gradient.find((item) => item.svgID == key)
-      console.log('this is grd', grd)
       if (grd) {
-        Object.assign(attrs, grd.gradient)
+        if (grd.type == 'radial') {
+          Object.assign(grd.gradient, {
+            fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+            fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+          })
+        }
+        Object.assign(item.attrs, grd.gradient)
       }
     } else {
-      Object.assign(attrs, { fill: _.get(rectangle, 'attributes.fill', 'black') })
+      Object.assign(item.attrs, { fill: element.attributes.fill })
     }
   }
-  /*  if(element.attributes?.stroke){
-    Object.assign(attrs, {
-      stroke: _.get(element, 'attributes.stroke', ''),
-      strokeWidth: parseFloat(_.get(element, 'attributes.stroke-width', 0)),
+  if (element.attributes.stroke) {
+    Object.assign(item.attrs, { stroke: element.attributes.stroke })
+    Object.assign(item.attrs, {
+      strokeWidth: parseFloat(_.get(element, 'attributes.stroke-width', 1)),
     })
-  }*/
-
-  Object.assign(konvaShape.attrs, attrs)
+  }
+  return item
 }
 
 function ellipse(ellipse: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(ellipse, 'attributes.id', ''),
-      name: generateName('ellipse'),
-      draggable: true,
-      x: parseFloat(_.get(ellipse, 'attributes.cx', 0)),
-      y: parseFloat(_.get(ellipse, 'attributes.cy', 0)),
-      radiusX: parseFloat(_.get(ellipse, 'attributes.rx', 0)),
-      radiusY: parseFloat(_.get(ellipse, 'attributes.ry', 0)),
-      fill: _.get(ellipse, 'attributes.fill', ''),
-      stroke: _.get(ellipse, 'attributes.stroke', ''),
-      strokeWidth: parseFloat(_.get(ellipse, 'attributes.stroke-width', 0)),
-      opacity: parseFloat(_.get(ellipse, 'attributes.opacity', 1)),
-    },
-    className: 'Ellipse',
-  }
-  return item
+  const commonAttr = commonAttributes('Ellipse', 'ellipse', ellipse)
+  //override common attribute
+  Object.assign(commonAttr.attrs, {
+    x: parseFloat(_.get(ellipse, 'attributes.cx', 0)),
+    y: parseFloat(_.get(ellipse, 'attributes.cy', 0)),
+    radiusX: parseFloat(_.get(ellipse, 'attributes.rx', 0)),
+    radiusY: parseFloat(_.get(ellipse, 'attributes.ry', 0)),
+  })
+  return commonAttr
 }
 
 function text(text: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
+  const commonAttr = commonAttributes('Text', 'text', text)
+  Object.assign(commonAttr.attrs, {
+    fontFamily: _.get(text, 'attributes.font-family', ''),
+    fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
+    text: _.get(text, 'elements[0].text', ''),
+  })
+  return commonAttr
+  /*const item: KonvaFormat = {
     attrs: {
-      svgID: _.get(text, 'attributes.id', ''),
-      name: generateName('text'),
       x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
       y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
-      fontFamily: _.get(text, 'attributes.font-family', ''),
-      fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
-      text: _.get(text, 'elements[0].text', ''),
-      //fill: 'black',
-      draggable: true,
     },
-    className: 'Text',
   }
-  return item
+  return item*/
 }
 
 function line(line: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(line, 'attributes.id', ''),
-      name: generateName('line'),
-      draggable: true,
-      //x: parseFloat(_.get(line, 'attributes.x', 0)),
-      //y: parseFloat(_.get(line, 'attributes.y', 0)),
-      points: [
-        parseFloat(_.get(line, 'attributes.x1', 0)),
-        parseFloat(_.get(line, 'attributes.y1', 0)),
-        parseFloat(_.get(line, 'attributes.x2', 0)),
-        parseFloat(_.get(line, 'attributes.y2', 0)),
-      ],
-      fill: _.get(line, 'attributes.fill', ''),
-      stroke: _.get(line, 'attributes.stroke', ''),
-      strokeWidth: parseFloat(_.get(line, 'attributes.stroke-width', 0)),
-      opacity: parseFloat(_.get(line, 'attributes.opacity', 1)),
-    },
-    className: 'Line',
+  const commonAttr = commonAttributes('Line', 'line', line)
+  Object.assign(commonAttr.attrs, {
+    points: [
+      parseFloat(_.get(line, 'attributes.x1', 0)),
+      parseFloat(_.get(line, 'attributes.y1', 0)),
+      parseFloat(_.get(line, 'attributes.x2', 0)),
+      parseFloat(_.get(line, 'attributes.y2', 0)),
+    ],
+  })
+  return commonAttr
+}
+
+function use(use: SVGXMLElement): KonvaFormat {
+  const commonAttr = commonAttributes('Group', 'use', use)
+  const href = use.attributes['xlink:href']
+  if (href) {
+    const id = href.substring(1, href.length)
+    const item = defs.find((element) => element.attrs.svgID == id)
+    if (item) {
+      const clone_obj = _.cloneDeep(item)
+      Object.assign(clone_obj.attrs, commonAttr.attrs)
+      return clone_obj
+    }
   }
-  return item
+  return commonAttr
 }
 
 function polyline(polyline: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(polyline, 'attributes.id', ''),
-      name: generateName('line'),
-      draggable: true,
-      //x: parseFloat(_.get(line, 'attributes.x', 0)),
-      //y: parseFloat(_.get(line, 'attributes.y', 0)),
-      points: _.get(polyline, 'attributes.points', '').split(','),
-      fill: _.get(polyline, 'attributes.fill', ''),
-      stroke: _.get(polyline, 'attributes.stroke', ''),
-      strokeWidth: parseFloat(_.get(polyline, 'attributes.stroke-width', 0)),
-      opacity: parseFloat(_.get(polyline, 'attributes.opacity', 1)),
-    },
-    className: 'Line',
-  }
-  return item
+  const commonAttr = commonAttributes('Line', 'polyline', polyline)
+  Object.assign(commonAttr.attrs, {
+    points: _.get(polygon, 'attributes.points', '')
+      .replaceAll(' ', ',')
+      .split(',')
+      .map((point: string) => parseFloat(point)),
+    closed: true,
+  })
+  return commonAttr
 }
 
 function translateToXY(translate: string) {
@@ -344,6 +331,8 @@ function group(group: SVGXMLElement): KonvaFormat {
       svgID: _.get(group, 'attributes.id', ''),
       name: generateName('group'),
       opacity: parseFloat(_.get(group, 'attributes.opacity', 1)),
+      //width: 400,
+      //height: 400,
     },
     className: 'Group',
   }
@@ -357,23 +346,15 @@ function group(group: SVGXMLElement): KonvaFormat {
 }
 
 function polygon(polygon: SVGXMLElement): KonvaFormat {
-  const item: KonvaFormat = {
-    attrs: {
-      svgID: _.get(polygon, 'attributes.id', ''),
-      name: generateName('polygon'),
-      draggable: true,
-      points: _.get(polygon, 'attributes.points', '')
-        .replaceAll(' ', ',')
-        .split(',')
-        .map((point: string) => parseFloat(point)),
-      closed: true,
-      fill: _.get(polygon, 'attributes.fill', 'black'),
-      stroke: _.get(polygon, 'attributes.stroke', 'red'),
-      strokeWidth: parseFloat(_.get(polygon, 'attributes.stroke-width', 1)),
-    },
-    className: 'Line',
-  }
-  return item
+  const commonAttr = commonAttributes('Line', 'polygon', polygon)
+  Object.assign(commonAttr.attrs, {
+    points: _.get(polygon, 'attributes.points', '')
+      .replaceAll(' ', ',')
+      .split(',')
+      .map((point: string) => parseFloat(point)),
+    closed: true,
+  })
+  return commonAttr
 }
 
 /*function converStyleToAttribute(stringStyle: string): object {
@@ -389,6 +370,7 @@ function polygon(polygon: SVGXMLElement): KonvaFormat {
 function linearGradient(linear_gradient: SVGXMLElement): LinearGradient {
   const linearGradient: LinearGradient = {
     svgID: _.get(linear_gradient, 'attributes.id', ''),
+    type: 'linear',
     gradient: {
       fillLinearGradientStartPoint: {
         x: parseFloat(_.get(linear_gradient, 'attributes.x1', 0)),
@@ -422,14 +404,16 @@ function converRadialGradientToKonvaFormat(svgxml: SVGXMLElement): RadialGradien
 }
 
 function radialGradient(radial_gradient: SVGXMLElement): RadialGradient {
+  //const x = parseFloat(_.get(radial_gradient, 'attributes.cx', 0))
+  //const y = parseFloat(_.get(radial_gradient, 'attributes.cy', 0))
   const radialGradient: RadialGradient = {
     svgID: _.get(radial_gradient, 'attributes.id', ''),
+    type: 'radial',
     gradient: {
-      fillRadialGradientStartPoint: {
-        x: parseFloat(_.get(radial_gradient, 'attributes.cx', 0)),
-        y: parseFloat(_.get(radial_gradient, 'attributes.cy', 0)),
-      },
-      fillRadialGradientStartRadius: parseFloat(_.get(radial_gradient, 'attributes.r', 0)),
+      fillRadialGradientStartPoint: { x: 0, y: 0 },
+      fillRadialGradientEndPoint: { x: 0, y: 0 },
+      fillRadialGradientStartRadius: 0,
+      fillRadialGradientEndRadius: parseFloat(_.get(radial_gradient, 'attributes.r', 0)),
       fillRadialGradientColorStops: [],
     },
   }
@@ -444,12 +428,23 @@ function radialGradient(radial_gradient: SVGXMLElement): RadialGradient {
   return radialGradient
 }
 
-//used
+function converClipPathToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
+  const clip = findAllElementByName(svgxml, 'clipPath')
+  const temp: KonvaFormat[] = []
+  clip.forEach((element) => {
+    element.elements?.forEach((el) => {
+      temp.push(generateItem(el))
+    })
+  })
+
+  return temp
+}
+
 //image
-//transform matrix
+//transform  translate(x-value, y-value) matrix transform="rotate(x, y, z)"  scale(x-axis,y-axis) Skew
+//transform="matrix(a,b,c,d,e,f)"
 //tspan in text
 //clipPath
 //style
 //svg style
 //pattern
-//redial gradiant
