@@ -336,44 +336,45 @@ export default class StageOptionStore {
 
   public toJson(container: HTMLDivElement | string) {
     const state = this._state
-    const stage = Konva.Node.create(Import(), container)
+    const stage: Stage = Konva.Node.create(Import(), container)
+    this._state.pages.push(stage)
+    this._state.currentPage++
+    const main_group: Group = this.getGroup()
+    //load images
+    const images = stage.find((node) => {
+      return node.name().startsWith('element_image')
+    })
+    images.forEach((item) => {
+      const attr = item.attrs
+      const data = attr.href ? attr.href : attr.dataSrc
+      Konva.Image.fromURL(data, function (image) {
+        image.setAttrs(attr)
+        main_group.add(image)
+      })
+    })
+    //render clip
     const children = stage.find((node) => {
       return node.name().startsWith('element_group_clip') //=== 'Group'
     })
     console.log('this is children', children)
     children.forEach((item) => {
       item.clipFunc(function (ctx) {
+        //400_svg__a
         //debugger
         const shape = item.attrs.attr_clip
+        //if (shape.attrs.svgID == '400_svg__b') debugger
         if (shape.className == 'Rect') {
           ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
           //debugger
           // if (shape.attrs.svgID == '300_svg__d') debugger
           // ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
         } else if (shape.className == 'Line') {
-          console.log('6657567567567')
+          console.log('this clip poly and line')
+        } else if (shape.className == 'Path') {
+          console.log('this clip path')
         }
-        /*else if (shape.className == 'Path') {
-          //console.log('this is path')
-          //alert('sdasdasd')
-        }*/
       })
     })
-    /* const children2 = stage.find((node) => {
-      return node.name().startsWith('element_group') //=== 'Group'
-    })*/
-    /* children2[0].clipFunc(function (ctx) {
-      //const shape = item.attrs.attr_clip
-      ctx.rect(95.2, 31.61, 310, 437)
-    })
-    console.log('this is children', children2)*/
-    //console.log('this is export', stage.toJSON())
-    /* children.clipFunc(function (ctx) {
-      ctx.rect(0, 0, 100, 100)
-    })*/
-    //stage.find('.element_polygon') //stage.getChildren()
-    this._state.pages.push(stage)
-    this._state.currentPage++
   }
 
   private _init() {

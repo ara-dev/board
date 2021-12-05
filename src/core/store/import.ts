@@ -1,6 +1,8 @@
+import Konva from 'konva'
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './data7'
+import data from './t100'
+import Transform = Konva.Transform
 interface KonvaFormat {
   attrs: any
   className: string
@@ -33,6 +35,16 @@ interface RadialGradient {
   }
 }
 
+interface Matrix {
+  x: number
+  y: number
+  rotation: number
+  scaleX: number
+  scaleY: number
+  skewX: number
+  skewY: number
+}
+
 let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
@@ -41,11 +53,12 @@ export function Import() {
   let temp: object = {}
   defs = converDefsToKonvaFormat(data)
   clip_path = converClipPathToKonvaFormat(data)
-  console.log('this is clip path', clip_path)
+  //console.log('this is clip path', clip_path)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
   const stage: KonvaFormat = {
     attrs: {
+      name: generateName('stage', ''),
       width: 600,
       height: 480,
     },
@@ -53,7 +66,9 @@ export function Import() {
     children: [],
   }
   const layer: KonvaFormat = {
-    attrs: {},
+    attrs: {
+      name: 'layer',
+    },
     className: 'Layer',
     children: [],
   }
@@ -160,7 +175,7 @@ function svg(svg: SVGXMLElement) {
       //clipY: 0,
       //clipWidth: parseFloat(viewbox[2]),
       //clipHeight: parseFloat(viewbox[3]),
-      name: generateName('group', ''), //'group_' + useGenerateUniqueID(),
+      name: 'main_group', //'group_' + useGenerateUniqueID(),
     },
     className: 'Group',
   }
@@ -196,8 +211,11 @@ function circle(circle: SVGXMLElement): KonvaFormat {
 
 function rectangle(rectangle: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Rect', 'rectangle', rectangle)
-  Object.assign(commonAttr, {
-    //fill: 'red',
+  Object.assign(commonAttr.attrs, {
+    /* fill: 'red',
+    rotation: 0,
+    scaleX: 0,
+    scaleY: 0,*/
   })
   return clipPath(rectangle, commonAttr)
 }
@@ -259,6 +277,11 @@ function commonAttributes(
       //height: parseFloat(_.get(element, 'attributes.height', 0)),
       //x: parseFloat(_.get(element, 'attributes.x', 0)),
       //y: parseFloat(_.get(element, 'attributes.y', 0)),
+      //scaleX
+      //scaleY
+      //rotation
+      //skewY
+      //skewX
       opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
     },
     className: className,
@@ -266,6 +289,21 @@ function commonAttributes(
 
   if (!element.attributes) {
     return item
+  }
+
+  if (element.attributes.transform) {
+    if (element.attributes.transform.startsWith('matrix')) {
+      const matrix: Matrix = decomposeMatrix(element.attributes.transform)
+      Object.assign(item.attrs, matrix)
+    }
+
+    if (element.attributes.transform.startsWith('translate')) {
+      Object.assign(item.attrs, translateToXY(element.attributes.transform))
+    }
+
+    /*if (element.attributes.transform.startsWith('rotate')) {
+      Object.assign(item.attrs, translateToXY(element.attributes.transform))
+    }*/
   }
 
   //console.log('this is common', element)
@@ -339,9 +377,10 @@ function text(text: SVGXMLElement): KonvaFormat {
   Object.assign(commonAttr.attrs, {
     fontFamily: _.get(text, 'attributes.font-family', ''),
     fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
+    //rotation: 0.642,
     //text: _.get(text, 'elements[0].text', ''),
-    x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
-    y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
+    //x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
+    // y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
   })
   let temp_text = ''
   if (text.elements && text.elements.length > 0) {
@@ -358,18 +397,15 @@ function text(text: SVGXMLElement): KonvaFormat {
 }
 
 function image(image: SVGXMLElement): KonvaFormat {
-  const commonAttr = commonAttributes('Group', 'image', image)
-  console.log('this is image', image)
-  //const href = use.attributes['xlink:href']
-  /*if (href) {
-    const id = href.substring(1, href.length)
-    const item = defs.find((element) => element.attrs.svgID == id)
-    if (item) {
-      const clone_obj = _.cloneDeep(item)
-      Object.assign(clone_obj.attrs, commonAttr.attrs)
-      return clone_obj
+  const commonAttr = commonAttributes('Image', 'image', image)
+  const href: string = image.attributes['xlink:href']
+  if (href) {
+    if (href.startsWith('data')) {
+      Object.assign(commonAttr.attrs, { dataSrc: href })
+    } else {
+      Object.assign(commonAttr.attrs, { href: href })
     }
-  }*/
+  }
   return commonAttr
 }
 
@@ -523,10 +559,51 @@ function use(use: SVGXMLElement): KonvaFormat {
   return commonAttr
 }
 
+/*function convertTransform(transform: string) {}*/
+
 function translateToXY(translate: string) {
   //translate(113.55 395.714)
   const xy = translate.substring(10, translate.length - 1).split(' ')
   return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
+}
+
+function decomposeMatrix(matrix: string): Matrix {
+  const mat = matrix
+    .substring(7, matrix.length - 1)
+    .split(' ')
+    .map((point) => parseFloat(point))
+  return new Transform(mat).decompose()
+  /*const m = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0 }
+  if (matrix.length) {
+    m.a = mat[0]
+    m.b = mat[1]
+    m.c = mat[2]
+    m.d = mat[3]
+    m.e = mat[4]
+    m.f = mat[5]
+  }
+  const E = (m.a + m.d) / 2
+  const F = (m.a - m.d) / 2
+  const G = (m.c + m.b) / 2
+  const H = (m.c - m.b) / 2
+  const Q = Math.sqrt(E * E + H * H)
+  const R = Math.sqrt(F * F + G * G)
+  const a1 = Math.atan2(G, F)
+  const a2 = Math.atan2(H, E)
+  const theta = (a2 - a1) / 2
+  const phi = (a2 + a1) / 2
+  // The requested parameters are then theta,
+  // sx, sy, phi,
+  return {
+    x: m.e,
+    y: m.f,
+    rotation: (-phi * 180) / Math.PI,
+    scaleX: Q + R,
+    scaleY: Q - R,
+    skewX: 0,
+    skewY: 0,
+    //skew: (-theta * 180) / Math.PI,
+  }*/
 }
 
 /*function dataURLtoFile(dataurl: string, filename: string) {
@@ -553,10 +630,7 @@ function translateToXY(translate: string) {
   return attribute
 }*/
 
-//image
-//transform  translate(x-value, y-value) matrix transform="rotate(x, y, z)"  scale(x-axis,y-axis) Skew //transform="matrix(a,b,c,d,e,f)"
-//tspan in text
+//tspan in text and text path
 //style
 //svg style
 //pattern
-//text path
