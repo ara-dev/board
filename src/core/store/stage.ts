@@ -345,11 +345,14 @@ export default class StageOptionStore {
       return node.name().startsWith('element_image')
     })
     images.forEach((item) => {
+      //console.log('this is z index', item.zIndex())
       const attr = item.attrs
+      //Object.assign(attr, { zIndex: 1 })
       const data = attr.href ? attr.href : attr.dataSrc
       Konva.Image.fromURL(data, function (image) {
         image.setAttrs(attr)
         main_group.add(image)
+        image.zIndex(item.zIndex())
       })
     })
     //render clip

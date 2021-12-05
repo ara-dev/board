@@ -1,7 +1,7 @@
 import Konva from 'konva'
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './t100'
+import data from './3'
 import Transform = Konva.Transform
 interface KonvaFormat {
   attrs: any
@@ -81,7 +81,7 @@ export function Import() {
   })
   layer.children?.push(temp)
   //console.log(stage, 'this is temp')
-  console.log(JSON.stringify(stage), 'this is temp json')
+  //console.log(JSON.stringify(stage), 'this is temp json')
   return JSON.stringify(stage)
 }
 
@@ -301,9 +301,10 @@ function commonAttributes(
       Object.assign(item.attrs, translateToXY(element.attributes.transform))
     }
 
-    /*if (element.attributes.transform.startsWith('rotate')) {
-      Object.assign(item.attrs, translateToXY(element.attributes.transform))
-    }*/
+    if (element.attributes.transform.startsWith('rotate')) {
+      //console.log(rotate(element.attributes.transform))
+      //Object.assign(item.attrs, rotate(element.attributes.transform))
+    }
   }
 
   //console.log('this is common', element)
@@ -565,6 +566,12 @@ function translateToXY(translate: string) {
   //translate(113.55 395.714)
   const xy = translate.substring(10, translate.length - 1).split(' ')
   return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
+}
+
+function rotate(rotate: string) {
+  const rot = rotate.substring(7, rotate.length - 1).split(' ').map((point)=> parseFloat(point))
+  return { rotation: rot[0],offset:{x:rot[1], y: rot[2]},offsetX:rot[1], offsetY: rot[2] }
+  //offsetX:rot[1], offsetY: rot[2]
 }
 
 function decomposeMatrix(matrix: string): Matrix {
