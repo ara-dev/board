@@ -365,6 +365,8 @@ export default class StageOptionStore {
       if (shape.className == 'Rect') {
         item.clipFunc(function (ctx) {
           ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
+          //ctx.rotate(_.get(shape,'attrs.rotation',0) * Math.PI / 180);
+          //ctx.
         })
       }
 

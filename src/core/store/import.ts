@@ -2,7 +2,7 @@
 import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './1-1'
+import data from './2'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -59,8 +59,8 @@ export function Import() {
   const stage: KonvaFormat = {
     attrs: {
       name: generateName('stage', ''),
-      width: 750,
-      height: 500,
+      width: 1920,
+      height: 1080,
     },
     className: 'Stage',
     children: [],
@@ -82,7 +82,7 @@ export function Import() {
   })
   layer.children?.push(temp)
   //console.log(stage, 'this is temp')
-  //console.log(JSON.stringify(stage), 'this is temp json')
+  console.log(JSON.stringify(stage), 'this is temp json')
   return JSON.stringify(stage)
 }
 
@@ -192,7 +192,7 @@ function path(path: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Path', 'path', path)
   Object.assign(commonAttr.attrs, {
     data: _.get(path, 'attributes.d', ''), //.replaceAll(' ', ','),
-    //fill: 'red',
+    //fill: '#fff',
     //stroke: '#000',
     //strokeWidth: 3,
   })
@@ -274,6 +274,7 @@ function commonAttributes(
       name: generateName(typeName),
       draggable: true,
       opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
+
     },
     className: className,
   }
@@ -309,8 +310,6 @@ function commonAttributes(
     }
 
     if (element.attributes.transform.startsWith('rotate')) {
-      //console.log('this is item', item)
-      // console.log(rotate(item, element.attributes.transform))
       Object.assign(item.attrs, rotate(item, element.attributes.transform))
     }
   }
@@ -325,22 +324,27 @@ function commonAttributes(
     })
   }
 
-  if (element.attributes.fill && element.attributes.fill != 'none') {
-    if (element.attributes.fill.startsWith('url')) {
-      const key: string = element.attributes.fill.substring(5, element.attributes.fill.length - 1)
-      const grd = gradient.find((item) => item.svgID == key)
-      if (grd) {
-        if (grd.type == 'radial') {
-          Object.assign(grd.gradient, {
-            fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
-            fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
-          })
+  if (element.attributes.fill) {
+
+    if(element.attributes.fill != 'none'){
+      if (element.attributes.fill.startsWith('url')) {
+        const key: string = element.attributes.fill.substring(5, element.attributes.fill.length - 1)
+        const grd = gradient.find((item) => item.svgID == key)
+        if (grd) {
+          if (grd.type == 'radial') {
+            Object.assign(grd.gradient, {
+              fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+              fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+            })
+          }
+          Object.assign(item.attrs, grd.gradient)
         }
-        Object.assign(item.attrs, grd.gradient)
+      } else {
+        Object.assign(item.attrs, { fill: element.attributes.fill })
       }
-    } else {
-      Object.assign(item.attrs, { fill: element.attributes.fill })
     }
+  }else{
+    Object.assign(item.attrs, { fill: '#000' })
   }
   if (element.attributes.stroke) {
     Object.assign(item.attrs, { stroke: element.attributes.stroke })
@@ -565,16 +569,6 @@ function getCenter(shape) {
   }
 }
 
-function Show({ text, x, y, rotation, width, height }) {
-  const center = getCenter({
-    x,
-    y,
-    width,
-    height,
-    rotation: (rotation / 180) * Math.PI,
-  })
-}
-
 function translateToXY(translate: string) {
   //translate(113.55 395.714)
   const xy = translate.substring(10, translate.length - 1).split(' ')
@@ -603,81 +597,31 @@ function translateToXY(translate: string) {
   return newMatrix
 }*/
 
-function rotateAroundPoint(shape, angleDegrees, point) {
-  const angleRadians = (angleDegrees * Math.PI) / 180 // sin + cos require radians
-
+function rotateAroundPoint(shape:KonvaFormat, angleDegrees:number, point : {x:number,y:number}) {
+  let angleRadians = angleDegrees * Math.PI / 180; // sin + cos require radians
+  const shapeX = _.get(shape, 'attrs.x', 0)
+  const shapeY = _.get(shape, 'attrs.y', 0)
+  const shapeRotation = _.get(shape, 'attrs.rotation', 0)
   const x =
-    point.x +
-    (shape.x() - point.x) * Math.cos(angleRadians) -
-    (shape.y() - point.y) * Math.sin(angleRadians)
+      point.x +
+      (shapeX - point.x) * Math.cos(angleRadians) -
+      (shapeY - point.y) * Math.sin(angleRadians);
   const y =
-    point.y +
-    (shape.x() - point.x) * Math.sin(angleRadians) +
-    (shape.y() - point.y) * Math.cos(angleRadians)
-
-  shape.position({ x: x, y: y }) // move the rotated shape in relation to the rotation point.
-  shape.rotation(shape.rotation() + angleDegrees) // rotate the shape in place around its natural rotation point
-  shape.moveToTop()
+      point.y +
+      (shapeX - point.x) * Math.sin(angleRadians) +
+      (shapeY - point.y) * Math.cos(angleRadians);
+  //shape.position({x: x, y: y});  // move the rotated shape in relation to the rotation point.
+  //shape.rotation(shape.rotation()+angleDegrees); // rotate the shape in place around its natural rotation point
+  //shape.moveToTop()
+  return {position:{x, y},rotation:shapeRotation+angleDegrees}
 }
-
 function rotate(shape: KonvaFormat, rotate: string) {
   const rot = rotate
     .substring(7, rotate.length - 1)
     .split(' ')
     .map((p) => parseFloat(p))
-  //const point = { x: rot[1], y: rot[2] }
-
-  // debugger
-  /*return {
-    rotation: rot[0],
-    //offsetX: shape.attrs.width / 2 + shape.attrs.x,
-    //offsetY: shape.attrs.height / 2 + shape.attrs.y,
-  }*/
-
-  /* shape.x +
-  (shape.width / 2) * Math.cos(shape.rotation) +
-  (shape.height / 2) * Math.sin(-shape.rotation),
-      y:
-  shape.y +
-  (shape.height / 2) * Math.cos(shape.rotation) +
-  (shape.width / 2) * Math.sin(shape.rotation)*/
-
-  //const angleRad = degreesToRadians(rot[0])
-
-  /* const rot = rotate
-    .substring(7, rotate.length - 1)
-    .split(' ')
-    .map((p) => parseFloat(p))
-
-  //debugger
-
-  //return rotatePoint(point, angleRad)
-  //const angleRad = rot[0]
-  const shapeX = _.get(shape, 'attrs.x', 0)
-  const shapeY = _.get(shape, 'attrs.y', 0)
-  const shapeRotation = _.get(shape, 'attrs.rotation', 0)
-  //debugger
-  const x =
-    point.x + (shapeX - point.x) * Math.cos(angleRad) - (shapeY - point.y) * Math.sin(angleRad)
-  const y =
-    point.y + (shapeX - point.x) * Math.sin(angleRad) + (shapeY - point.y) * Math.cos(angleRad)
-  return { rotation: shapeRotation + angleRad, x, y }*/
-
-  /*return { rotation: rot[0], offset: { x: rot[1], y: rot[2] }, offsetX: rot[1], offsetY: rot[2] }*/
-  //offsetX:rot[1], offsetY: rot[2]
+  return rotateAroundPoint(shape,rot[0],{x:rot[1],y:rot[2]})
 }
-
-/*const rotatePoint = ({ x, y }, deg) => {
-  const degToRad = Math.PI / 180
-  const rcos = Math.cos(deg * degToRad),
-    rsin = Math.sin(deg * degToRad)
-  return { rotation: deg, x: x * rcos - y * rsin, y: y * rcos + x * rsin }
-}*/
-
-function degreesToRadians(degrees: number): number {
-  return degrees * (Math.PI / 180)
-}
-
 function decomposeMatrix(matrix: string): Matrix {
   const mat = matrix
     .substring(7, matrix.length - 1)
@@ -718,30 +662,6 @@ function decomposeMatrix(matrix: string): Matrix {
 }
 
 /*
-function rotateAroundPoint(shape: KonvaFormat, angleRad, point) {
-  const x =
-    point.x + (shape.x - point.x) * Math.cos(angleRad) - (shape.y - point.y) * Math.sin(angleRad)
-  const y =
-    point.y + (shape.x - point.x) * Math.sin(angleRad) + (shape.y - point.y) * Math.cos(angleRad)
-  //return Object.assign(Object.assign({}, shape), { rotation: shape.rotation + angleRad, x, y })
-  return Object.assign(Object.assign({}, shape), { rotation: shape.rotation + angleRad, x, y })
-}
-*/
-
-/*function dataURLtoFile(dataurl: string, filename: string) {
-  const arr = dataurl.split(','),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n)
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n)
-  }
-
-  return new File([u8arr], filename, { type: mime })
-}*/
-
 /*function converStyleToAttribute(stringStyle: string): object {
   const attribute: object = {}
   const temp: string[] = stringStyle.split(';')
