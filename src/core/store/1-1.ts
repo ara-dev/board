@@ -28,7 +28,7 @@ export default {
                         "height": "955",
                         "opacity": ".2",
                         "overflow": "visible",
-                        "transform": "matrix(0.48 0 0 0.48 71.0928 27.5279)"
+                        "transform": "matrix(.48 0 0 .48 71.093 27.528)"
                     }
                 },
                 {
@@ -145,7 +145,7 @@ export default {
                                         "x": "69.21",
                                         "y": "334.15",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -152.7286 155.6941)"
+                                        "transform": "rotate(-32.849 187.722 336.92)"
                                     }
                                 },
                                 {
@@ -157,7 +157,7 @@ export default {
                                         "x": "79.19",
                                         "y": "349.62",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -159.5209 163.5818)"
+                                        "transform": "rotate(-32.849 197.705 352.386)"
                                     }
                                 },
                                 {
@@ -169,7 +169,7 @@ export default {
                                         "x": "89.18",
                                         "y": "365.08",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -166.3126 171.4704)"
+                                        "transform": "rotate(-32.849 207.69 367.85)"
                                     }
                                 },
                                 {
@@ -181,7 +181,7 @@ export default {
                                         "x": "99.16",
                                         "y": "380.55",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -173.106 179.3602)"
+                                        "transform": "rotate(-32.849 217.676 383.32)"
                                     }
                                 },
                                 {
@@ -193,7 +193,7 @@ export default {
                                         "x": "109.15",
                                         "y": "396.02",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -179.8956 187.2433)"
+                                        "transform": "rotate(-32.849 227.652 398.778)"
                                     }
                                 },
                                 {
@@ -205,7 +205,7 @@ export default {
                                         "x": "119.13",
                                         "y": "411.48",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -186.689 195.1339)"
+                                        "transform": "rotate(-32.849 237.64 414.247)"
                                     }
                                 },
                                 {
@@ -217,7 +217,7 @@ export default {
                                         "x": "129.12",
                                         "y": "426.95",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -193.4805 203.0207)"
+                                        "transform": "rotate(-32.849 247.622 429.71)"
                                     }
                                 },
                                 {
@@ -229,7 +229,7 @@ export default {
                                         "x": "139.1",
                                         "y": "442.41",
                                         "fill": "#fffdfe",
-                                        "transform": "matrix(0.8401 -0.5424 0.5424 0.8401 -200.2746 210.9125)"
+                                        "transform": "rotate(-32.849 257.61 445.182)"
                                     }
                                 }
                             ]
@@ -24019,7 +24019,7 @@ export default {
                                 "x": "408.39",
                                 "y": "310.1",
                                 "fill": "#ffb915",
-                                "transform": "matrix(0.9835 -0.1811 0.1811 0.9835 -53.2339 85.0774)"
+                                "transform": "rotate(-10.433 439.282 334.055)"
                             }
                         },
                         {
@@ -24035,7 +24035,7 @@ export default {
                                         "height": "47.92",
                                         "x": "408.39",
                                         "y": "310.1",
-                                        "transform": "matrix(0.9835 -0.1811 0.1811 0.9835 -53.2339 85.0774)"
+                                        "transform": "rotate(-10.433 439.282 334.055)"
                                     }
                                 }
                             ]
@@ -24204,7 +24204,7 @@ export default {
                                 "x": "400.65",
                                 "y": "308.97",
                                 "fill": "#ff9517",
-                                "transform": "matrix(0.9835 -0.1811 0.1811 0.9835 -50.0144 84.1715)"
+                                "transform": "rotate(-10.433 435.93 315.971)"
                             }
                         },
                         {
@@ -24936,7 +24936,7 @@ export default {
                         "fill": "#ad70e5",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "26.139",
-                        "transform": "matrix(1 0 0 1 230.0195 181.5918)"
+                        "transform": "translate(230.02 181.592)"
                     },
                     "elements": [
                         {
@@ -24952,7 +24952,7 @@ export default {
                         "fill": "#f950c0",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "18.017",
-                        "transform": "matrix(1 0 0 1 202.2422 206.1949)"
+                        "transform": "translate(202.242 206.195)"
                     },
                     "elements": [
                         {
@@ -24968,7 +24968,7 @@ export default {
                         "fill": "#ad70e5",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "42.356",
-                        "transform": "matrix(1 0 0 1 185.1606 278.7915)"
+                        "transform": "translate(185.16 278.791)"
                     },
                     "elements": [
                         {
@@ -24984,7 +24984,7 @@ export default {
                         "fill": "#f950c0",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "18.862",
-                        "transform": "matrix(1 0 0 1 190.2334 298.98)"
+                        "transform": "translate(190.233 298.98)"
                     },
                     "elements": [
                         {
@@ -25000,7 +25000,7 @@ export default {
                         "fill": "#cba0f9",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "14.451",
-                        "transform": "matrix(1 0 0 1 192.063 314.2583)"
+                        "transform": "translate(192.063 314.258)"
                     },
                     "elements": [
                         {
@@ -25024,7 +25024,7 @@ export default {
                         "fill": "#ad70e5",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "12.079",
-                        "transform": "matrix(1 0 0 1 252.75 258.9409)"
+                        "transform": "translate(252.75 258.94)"
                     },
                     "elements": [
                         {
@@ -25040,7 +25040,7 @@ export default {
                         "fill": "#f950c0",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "12.079",
-                        "transform": "matrix(1 0 0 1 252.75 285.3033)"
+                        "transform": "translate(252.75 285.303)"
                     },
                     "elements": [
                         {
@@ -25056,7 +25056,7 @@ export default {
                         "fill": "#ad70e5",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "12.079",
-                        "transform": "matrix(1 0 0 1 252.75 309.3101)"
+                        "transform": "translate(252.75 309.31)"
                     },
                     "elements": [
                         {
@@ -25072,7 +25072,7 @@ export default {
                         "fill": "#ff82d1",
                         "font-family": "Montserrat-ExtraBold",
                         "font-size": "11.321",
-                        "transform": "matrix(1 0 0 1 211.2451 226.7315)"
+                        "transform": "translate(211.245 226.732)"
                     },
                     "elements": [
                         {

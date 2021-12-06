@@ -13,7 +13,7 @@
   const { width, height } = useElementSize(mainboard)
 
   watch([width, height], () => {
-    stageStore.resizeStage(width.value, height.value)
+    //stageStore.resizeStage(width.value, height.value)
   })
 
   onMounted(() => {

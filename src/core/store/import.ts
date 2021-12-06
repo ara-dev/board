@@ -1,8 +1,8 @@
-import Konva from 'konva'
+/*import Transform = Konva.Transform*/
+import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './3'
-import Transform = Konva.Transform
+import data from './1-1'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -59,8 +59,8 @@ export function Import() {
   const stage: KonvaFormat = {
     attrs: {
       name: generateName('stage', ''),
-      width: 600,
-      height: 480,
+      width: 750,
+      height: 500,
     },
     className: 'Stage',
     children: [],
@@ -77,7 +77,8 @@ export function Import() {
   //data.e
   //data.elements.reverse()
   data.elements.forEach((item) => {
-    temp = Object.assign(temp, generateItem(item))
+    const gItem = generateItem(item)
+    if (gItem) temp = Object.assign(temp, gItem)
   })
   layer.children?.push(temp)
   //console.log(stage, 'this is temp')
@@ -112,10 +113,7 @@ function generateItem(item: SVGXMLElement): KonvaFormat {
     case 'image':
       return image(item)
     default:
-      return {
-        attrs: {},
-        className: 'Group',
-      }
+      return null
   }
 }
 
@@ -148,7 +146,8 @@ function converDefsToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
   const temp: KonvaFormat[] = []
   defs.forEach((element) => {
     element.elements?.forEach((el) => {
-      temp.push(generateItem(el))
+      const gItem = generateItem(el)
+      if (gItem) temp.push(gItem)
     })
   })
   return temp
@@ -182,7 +181,8 @@ function svg(svg: SVGXMLElement) {
   if (svg.elements) {
     item.children = []
     svg.elements?.forEach((element) => {
-      item.children?.push(generateItem(element))
+      const gItem = generateItem(element)
+      if (gItem) item.children?.push(gItem)
     })
   }
   return item
@@ -226,9 +226,9 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
   }
   const attr = element.attributes['clip-path']
   if (attr) {
-    //debugger
     const id = attr.substring(5, attr.length - 1)
-    //if (id == '300_svg__d') debugger
+    //if (id == '3_svg__A') debugger
+    //console.log(shape, 'this is shape for clip path')
     const clip = clip_path.find((item) => item.attrs.svgID == id)
     if (clip) {
       if (shape.className == 'Group') {
@@ -273,15 +273,6 @@ function commonAttributes(
       svgID: _.get(element, 'attributes.id', ''),
       name: generateName(typeName),
       draggable: true,
-      //width: parseFloat(_.get(element, 'attributes.width', 0)),
-      //height: parseFloat(_.get(element, 'attributes.height', 0)),
-      //x: parseFloat(_.get(element, 'attributes.x', 0)),
-      //y: parseFloat(_.get(element, 'attributes.y', 0)),
-      //scaleX
-      //scaleY
-      //rotation
-      //skewY
-      //skewX
       opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
     },
     className: className,
@@ -290,24 +281,6 @@ function commonAttributes(
   if (!element.attributes) {
     return item
   }
-
-  if (element.attributes.transform) {
-    if (element.attributes.transform.startsWith('matrix')) {
-      const matrix: Matrix = decomposeMatrix(element.attributes.transform)
-      Object.assign(item.attrs, matrix)
-    }
-
-    if (element.attributes.transform.startsWith('translate')) {
-      Object.assign(item.attrs, translateToXY(element.attributes.transform))
-    }
-
-    if (element.attributes.transform.startsWith('rotate')) {
-      //console.log(rotate(element.attributes.transform))
-      //Object.assign(item.attrs, rotate(element.attributes.transform))
-    }
-  }
-
-  //console.log('this is common', element)
 
   if (element.attributes?.x) {
     Object.assign(item.attrs, { x: parseFloat(element.attributes.x) })
@@ -323,6 +296,23 @@ function commonAttributes(
 
   if (element.attributes?.height) {
     Object.assign(item.attrs, { height: parseFloat(element.attributes.height) })
+  }
+
+  if (element.attributes.transform) {
+    if (element.attributes.transform.startsWith('matrix')) {
+      const matrix: Matrix = decomposeMatrix(element.attributes.transform)
+      Object.assign(item.attrs, matrix)
+    }
+
+    if (element.attributes.transform.startsWith('translate')) {
+      Object.assign(item.attrs, translateToXY(element.attributes.transform))
+    }
+
+    if (element.attributes.transform.startsWith('rotate')) {
+      //console.log('this is item', item)
+      // console.log(rotate(item, element.attributes.transform))
+      Object.assign(item.attrs, rotate(item, element.attributes.transform))
+    }
   }
 
   if (element.attributes['stroke-linecap']) {
@@ -441,16 +431,14 @@ function group(group: SVGXMLElement): KonvaFormat {
       svgID: _.get(group, 'attributes.id', ''),
       name: generateName('group'),
       opacity: parseFloat(_.get(group, 'attributes.opacity', 1)),
-      //fill: 'red',
-      //width: 400,
-      //height: 400,
     },
     className: 'Group',
   }
   if (group.elements) {
     item.children = []
     group.elements.forEach((element) => {
-      item.children?.push(generateItem(element))
+      const gItem = generateItem(element)
+      if (gItem) item.children?.push(gItem)
     })
   }
   return clipPath(group, item)
@@ -537,8 +525,10 @@ function converClipPathToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
   clip.forEach((element) => {
     element.elements?.forEach((el) => {
       const item = generateItem(el)
-      item.attrs.svgID = _.get(element, 'attributes.id', '')
-      temp.push(item)
+      if (item) {
+        item.attrs.svgID = _.get(element, 'attributes.id', '')
+        temp.push(item)
+      }
       //temp.push(Object.assign(.attrs, { svgID: _.get(el, 'attributes.id', '') }))
     })
   })
@@ -562,16 +552,130 @@ function use(use: SVGXMLElement): KonvaFormat {
 
 /*function convertTransform(transform: string) {}*/
 
+function getCenter(shape) {
+  return {
+    x:
+      shape.x +
+      (shape.width / 2) * Math.cos(shape.rotation) +
+      (shape.height / 2) * Math.sin(-shape.rotation),
+    y:
+      shape.y +
+      (shape.height / 2) * Math.cos(shape.rotation) +
+      (shape.width / 2) * Math.sin(shape.rotation),
+  }
+}
+
+function Show({ text, x, y, rotation, width, height }) {
+  const center = getCenter({
+    x,
+    y,
+    width,
+    height,
+    rotation: (rotation / 180) * Math.PI,
+  })
+}
+
 function translateToXY(translate: string) {
   //translate(113.55 395.714)
   const xy = translate.substring(10, translate.length - 1).split(' ')
   return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
 }
 
-function rotate(rotate: string) {
-  const rot = rotate.substring(7, rotate.length - 1).split(' ').map((point)=> parseFloat(point))
-  return { rotation: rot[0],offset:{x:rot[1], y: rot[2]},offsetX:rot[1], offsetY: rot[2] }
+/*function multiplyMatrices(matrixA, matrixB) {
+  const aNumRows = matrixA.length
+  const aNumCols = matrixA[0].length
+  const bNumRows = matrixB.length
+  const bNumCols = matrixB[0].length
+  const newMatrix = new Array(aNumRows)
+
+  for (let r = 0; r < aNumRows; ++r) {
+    newMatrix[r] = new Array(bNumCols)
+
+    for (let c = 0; c < bNumCols; ++c) {
+      newMatrix[r][c] = 0
+
+      for (let i = 0; i < aNumCols; ++i) {
+        newMatrix[r][c] += matrixA[r][i] * matrixB[i][c]
+      }
+    }
+  }
+
+  return newMatrix
+}*/
+
+function rotateAroundPoint(shape, angleDegrees, point) {
+  const angleRadians = (angleDegrees * Math.PI) / 180 // sin + cos require radians
+
+  const x =
+    point.x +
+    (shape.x() - point.x) * Math.cos(angleRadians) -
+    (shape.y() - point.y) * Math.sin(angleRadians)
+  const y =
+    point.y +
+    (shape.x() - point.x) * Math.sin(angleRadians) +
+    (shape.y() - point.y) * Math.cos(angleRadians)
+
+  shape.position({ x: x, y: y }) // move the rotated shape in relation to the rotation point.
+  shape.rotation(shape.rotation() + angleDegrees) // rotate the shape in place around its natural rotation point
+  shape.moveToTop()
+}
+
+function rotate(shape: KonvaFormat, rotate: string) {
+  const rot = rotate
+    .substring(7, rotate.length - 1)
+    .split(' ')
+    .map((p) => parseFloat(p))
+  //const point = { x: rot[1], y: rot[2] }
+
+  // debugger
+  /*return {
+    rotation: rot[0],
+    //offsetX: shape.attrs.width / 2 + shape.attrs.x,
+    //offsetY: shape.attrs.height / 2 + shape.attrs.y,
+  }*/
+
+  /* shape.x +
+  (shape.width / 2) * Math.cos(shape.rotation) +
+  (shape.height / 2) * Math.sin(-shape.rotation),
+      y:
+  shape.y +
+  (shape.height / 2) * Math.cos(shape.rotation) +
+  (shape.width / 2) * Math.sin(shape.rotation)*/
+
+  //const angleRad = degreesToRadians(rot[0])
+
+  /* const rot = rotate
+    .substring(7, rotate.length - 1)
+    .split(' ')
+    .map((p) => parseFloat(p))
+
+  //debugger
+
+  //return rotatePoint(point, angleRad)
+  //const angleRad = rot[0]
+  const shapeX = _.get(shape, 'attrs.x', 0)
+  const shapeY = _.get(shape, 'attrs.y', 0)
+  const shapeRotation = _.get(shape, 'attrs.rotation', 0)
+  //debugger
+  const x =
+    point.x + (shapeX - point.x) * Math.cos(angleRad) - (shapeY - point.y) * Math.sin(angleRad)
+  const y =
+    point.y + (shapeX - point.x) * Math.sin(angleRad) + (shapeY - point.y) * Math.cos(angleRad)
+  return { rotation: shapeRotation + angleRad, x, y }*/
+
+  /*return { rotation: rot[0], offset: { x: rot[1], y: rot[2] }, offsetX: rot[1], offsetY: rot[2] }*/
   //offsetX:rot[1], offsetY: rot[2]
+}
+
+/*const rotatePoint = ({ x, y }, deg) => {
+  const degToRad = Math.PI / 180
+  const rcos = Math.cos(deg * degToRad),
+    rsin = Math.sin(deg * degToRad)
+  return { rotation: deg, x: x * rcos - y * rsin, y: y * rcos + x * rsin }
+}*/
+
+function degreesToRadians(degrees: number): number {
+  return degrees * (Math.PI / 180)
 }
 
 function decomposeMatrix(matrix: string): Matrix {
@@ -613,6 +717,17 @@ function decomposeMatrix(matrix: string): Matrix {
   }*/
 }
 
+/*
+function rotateAroundPoint(shape: KonvaFormat, angleRad, point) {
+  const x =
+    point.x + (shape.x - point.x) * Math.cos(angleRad) - (shape.y - point.y) * Math.sin(angleRad)
+  const y =
+    point.y + (shape.x - point.x) * Math.sin(angleRad) + (shape.y - point.y) * Math.cos(angleRad)
+  //return Object.assign(Object.assign({}, shape), { rotation: shape.rotation + angleRad, x, y })
+  return Object.assign(Object.assign({}, shape), { rotation: shape.rotation + angleRad, x, y })
+}
+*/
+
 /*function dataURLtoFile(dataurl: string, filename: string) {
   const arr = dataurl.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
@@ -637,7 +752,4 @@ function decomposeMatrix(matrix: string): Matrix {
   return attribute
 }*/
 
-//tspan in text and text path
-//style
-//svg style
 //pattern

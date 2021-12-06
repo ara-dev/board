@@ -8,6 +8,7 @@ import { Text } from 'konva/lib/shapes/Text'
 import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
+import _ from 'lodash'
 import { reactive, readonly } from 'vue'
 import { Import } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
@@ -345,9 +346,7 @@ export default class StageOptionStore {
       return node.name().startsWith('element_image')
     })
     images.forEach((item) => {
-      //console.log('this is z index', item.zIndex())
       const attr = item.attrs
-      //Object.assign(attr, { zIndex: 1 })
       const data = attr.href ? attr.href : attr.dataSrc
       Konva.Image.fromURL(data, function (image) {
         image.setAttrs(attr)
@@ -355,29 +354,48 @@ export default class StageOptionStore {
         image.zIndex(item.zIndex())
       })
     })
+    //end load images
     //render clip
     const children = stage.find((node) => {
-      return node.name().startsWith('element_group_clip') //=== 'Group'
+      return node.name().startsWith('element_group_clip')
     })
     console.log('this is children', children)
     children.forEach((item) => {
-      item.clipFunc(function (ctx) {
-        //400_svg__a
-        //debugger
-        const shape = item.attrs.attr_clip
-        //if (shape.attrs.svgID == '400_svg__b') debugger
-        if (shape.className == 'Rect') {
+      const shape = item.attrs.attr_clip
+      if (shape.className == 'Rect') {
+        item.clipFunc(function (ctx) {
           ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
-          //debugger
-          // if (shape.attrs.svgID == '300_svg__d') debugger
-          // ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
-        } else if (shape.className == 'Line') {
-          console.log('this clip poly and line')
-        } else if (shape.className == 'Path') {
-          console.log('this clip path')
-        }
-      })
+        })
+      }
+
+      if (shape.className == 'Line') {
+        item.clipFunc(function (ctx) {
+          const points = _.get(shape, 'attrs.points', [])
+          ctx.beginPath()
+          for (let i = 0; i < points.length; i = i + 2) {
+            ctx.lineTo(points[i], points[i + 1])
+          }
+          ctx.closePath()
+        })
+      }
+
+      if (shape.className == 'Path') {
+        console.log('this is shape for clip path', shape)
+        item.clipFunc(function (ctx) {
+          //method 1
+          const path = new Konva.Path({
+            data: shape.attrs.data,
+          })
+          path.sceneFunc().call(path, ctx, path)
+          //method 2
+          /* ctx.rect(0, 0, 4000, 2000)
+          const path2D = new Path2D(shape.attrs.data)
+          //path2D.rect(70, 70, 120, 80);
+          ctx._context.clip(path2D)*/
+        })
+      }
     })
+    //end render clip
   }
 
   private _init() {
