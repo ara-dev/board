@@ -1,8 +1,7 @@
-/*import Transform = Konva.Transform*/
 import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './2'
+import data from './1'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -53,14 +52,13 @@ export function Import() {
   let temp: object = {}
   defs = converDefsToKonvaFormat(data)
   clip_path = converClipPathToKonvaFormat(data)
-  //console.log('this is clip path', clip_path)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
   const stage: KonvaFormat = {
     attrs: {
       name: generateName('stage', ''),
-      width: 1920,
-      height: 1080,
+      width: 750,
+      height: 500,
     },
     className: 'Stage',
     children: [],
@@ -82,7 +80,7 @@ export function Import() {
   })
   layer.children?.push(temp)
   //console.log(stage, 'this is temp')
-  console.log(JSON.stringify(stage), 'this is temp json')
+  //console.log(JSON.stringify(stage), 'this is temp json')
   return JSON.stringify(stage)
 }
 
@@ -191,11 +189,11 @@ function svg(svg: SVGXMLElement) {
 function path(path: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Path', 'path', path)
   Object.assign(commonAttr.attrs, {
-    data: _.get(path, 'attributes.d', ''), //.replaceAll(' ', ','),
-    //fill: '#fff',
-    //stroke: '#000',
-    //strokeWidth: 3,
+    data: _.get(path, 'attributes.d', ''),
   })
+  if (!commonAttr.attrs.fill) {
+    Object.assign(commonAttr, { fill: '#000' })
+  }
   return clipPath(path, commonAttr)
 }
 
@@ -274,7 +272,6 @@ function commonAttributes(
       name: generateName(typeName),
       draggable: true,
       opacity: parseFloat(_.get(element, 'attributes.opacity', 1)),
-
     },
     className: className,
   }
@@ -324,28 +321,24 @@ function commonAttributes(
     })
   }
 
-  if (element.attributes.fill) {
-
-    if(element.attributes.fill != 'none'){
-      if (element.attributes.fill.startsWith('url')) {
-        const key: string = element.attributes.fill.substring(5, element.attributes.fill.length - 1)
-        const grd = gradient.find((item) => item.svgID == key)
-        if (grd) {
-          if (grd.type == 'radial') {
-            Object.assign(grd.gradient, {
-              fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
-              fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
-            })
-          }
-          Object.assign(item.attrs, grd.gradient)
+  if (element.attributes.fill && element.attributes.fill != 'none') {
+    if (element.attributes.fill.startsWith('url')) {
+      const key: string = element.attributes.fill.substring(5, element.attributes.fill.length - 1)
+      const grd = gradient.find((item) => item.svgID == key)
+      if (grd) {
+        if (grd.type == 'radial') {
+          Object.assign(grd.gradient, {
+            fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+            fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+          })
         }
-      } else {
-        Object.assign(item.attrs, { fill: element.attributes.fill })
+        Object.assign(item.attrs, grd.gradient)
       }
+    } else {
+      Object.assign(item.attrs, { fill: element.attributes.fill })
     }
-  }else{
-    Object.assign(item.attrs, { fill: '#000' })
   }
+
   if (element.attributes.stroke) {
     Object.assign(item.attrs, { stroke: element.attributes.stroke })
     Object.assign(item.attrs, {
@@ -393,6 +386,13 @@ function text(text: SVGXMLElement): KonvaFormat {
 
 function image(image: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Image', 'image', image)
+  /*const item: KonvaFormat = {
+    attrs: {
+      name: generateName('group_image'),
+    },
+    className: 'Group',
+    children: [],
+  }*/
   const href: string = image.attributes['xlink:href']
   if (href) {
     if (href.startsWith('data')) {
@@ -401,6 +401,10 @@ function image(image: SVGXMLElement): KonvaFormat {
       Object.assign(commonAttr.attrs, { href: href })
     }
   }
+
+  //item.children.push(commonAttr)
+
+  //return item
   return commonAttr
 }
 
@@ -597,30 +601,34 @@ function translateToXY(translate: string) {
   return newMatrix
 }*/
 
-function rotateAroundPoint(shape:KonvaFormat, angleDegrees:number, point : {x:number,y:number}) {
-  let angleRadians = angleDegrees * Math.PI / 180; // sin + cos require radians
+function rotateAroundPoint(
+  shape: KonvaFormat,
+  angleDegrees: number,
+  point: { x: number; y: number },
+) {
+  const angleRadians = (angleDegrees * Math.PI) / 180 // sin + cos require radians
   const shapeX = _.get(shape, 'attrs.x', 0)
   const shapeY = _.get(shape, 'attrs.y', 0)
   const shapeRotation = _.get(shape, 'attrs.rotation', 0)
   const x =
-      point.x +
-      (shapeX - point.x) * Math.cos(angleRadians) -
-      (shapeY - point.y) * Math.sin(angleRadians);
+    point.x +
+    (shapeX - point.x) * Math.cos(angleRadians) -
+    (shapeY - point.y) * Math.sin(angleRadians)
   const y =
-      point.y +
-      (shapeX - point.x) * Math.sin(angleRadians) +
-      (shapeY - point.y) * Math.cos(angleRadians);
+    point.y +
+    (shapeX - point.x) * Math.sin(angleRadians) +
+    (shapeY - point.y) * Math.cos(angleRadians)
   //shape.position({x: x, y: y});  // move the rotated shape in relation to the rotation point.
   //shape.rotation(shape.rotation()+angleDegrees); // rotate the shape in place around its natural rotation point
   //shape.moveToTop()
-  return {position:{x, y},rotation:shapeRotation+angleDegrees}
+  return { position: { x, y }, rotation: shapeRotation + angleDegrees }
 }
 function rotate(shape: KonvaFormat, rotate: string) {
   const rot = rotate
     .substring(7, rotate.length - 1)
     .split(' ')
     .map((p) => parseFloat(p))
-  return rotateAroundPoint(shape,rot[0],{x:rot[1],y:rot[2]})
+  return rotateAroundPoint(shape, rot[0], { x: rot[1], y: rot[2] })
 }
 function decomposeMatrix(matrix: string): Matrix {
   const mat = matrix

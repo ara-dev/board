@@ -13,6 +13,7 @@ import { reactive, readonly } from 'vue'
 import { Import } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+import { xmlToJson } from './xmlJson'
 
 interface StageOption {
   //Text Option
@@ -336,11 +337,13 @@ export default class StageOptionStore {
   }
 
   public toJson(container: HTMLDivElement | string) {
+    //console.log('this is svgo', svgo())
+    console.log('this is xml', xmlToJson())
     const state = this._state
     const stage: Stage = Konva.Node.create(Import(), container)
     this._state.pages.push(stage)
     this._state.currentPage++
-    const main_group: Group = this.getGroup()
+    //const main_group: Group = this.getGroup()
     //load images
     const images = stage.find((node) => {
       return node.name().startsWith('element_image')
@@ -348,9 +351,11 @@ export default class StageOptionStore {
     images.forEach((item) => {
       const attr = item.attrs
       const data = attr.href ? attr.href : attr.dataSrc
+      const parent = item.getParent()
       Konva.Image.fromURL(data, function (image) {
         image.setAttrs(attr)
-        main_group.add(image)
+        parent.add(image)
+        //main_group.add(image)
         image.zIndex(item.zIndex())
       })
     })
@@ -362,11 +367,15 @@ export default class StageOptionStore {
     console.log('this is children', children)
     children.forEach((item) => {
       const shape = item.attrs.attr_clip
+
       if (shape.className == 'Rect') {
         item.clipFunc(function (ctx) {
-          ctx.rect(shape.attrs.x, shape.attrs.y, shape.attrs.width, shape.attrs.height)
-          //ctx.rotate(_.get(shape,'attrs.rotation',0) * Math.PI / 180);
-          //ctx.
+          ctx.rect(
+            _.get(shape, 'attrs.x', 0),
+            _.get(shape, 'attrs.y', 0),
+            _.get(shape, 'attrs.width', 0),
+            _.get(shape, 'attrs.height', 0),
+          )
         })
       }
 
