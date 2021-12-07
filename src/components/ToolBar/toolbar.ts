@@ -35,6 +35,11 @@ const tools: Toolbar[] = [
     id: 'ui.right_sidebar.children.resize',
     icon: 'ion:resize-outline',
   },
+  {
+    title: 'بارگذاری فایل',
+    id: 'ui.right_sidebar.children.upload',
+    icon: 'ion:cloud-upload-outline',
+  },
 ]
 
 export default tools

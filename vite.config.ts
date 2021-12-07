@@ -39,7 +39,7 @@ export default defineConfig({
                     // where `name` is always CapitalCase
                     if (name.startsWith('Icon'))
                         return { importName: name.slice(3), path: 'vant' }
-                }*/
+            }*/
       ],
     }),
     vue(),

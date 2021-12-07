@@ -13,7 +13,6 @@ import { reactive, readonly } from 'vue'
 import { Import } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
-import { xmlToJson } from './xmlJson'
 
 interface StageOption {
   //Text Option
@@ -131,16 +130,11 @@ export default class StageOptionStore {
     group.y(stage.height() / 2 - state.docHeight / 2)
   }
 
-  //start snapping
-
   applyOpacity(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       item.opacity(this._state.opacity)
     })
   }
-
-  // what points of the object will trigger to snapping?
-  // it can be just center of the object
 
   applyDelete(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
@@ -167,8 +161,6 @@ export default class StageOptionStore {
       ;(item as Text).fontSize(this._state.textOption.fontSize)
     })
   }
-
-  //end snapping
 
   applyTextAlign(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
@@ -338,11 +330,18 @@ export default class StageOptionStore {
 
   public toJson(container: HTMLDivElement | string) {
     //console.log('this is svgo', svgo())
-    console.log('this is xml', xmlToJson())
+    //console.log('this is xml', xmlToJson(svgo()))
+    //console.log('this is svgo', svgo())
     const state = this._state
     const stage: Stage = Konva.Node.create(Import(), container)
     this._state.pages.push(stage)
     this._state.currentPage++
+    const layer: Layer = this.getBaseLayer()
+    const group: Group = this.getGroup()
+    this.setTransformer(stage, layer)
+    this.setSnapping(stage, layer, group)
+    this.setContextMenu(stage, group)
+
     //const main_group: Group = this.getGroup()
     //load images
     const images = stage.find((node) => {
@@ -364,7 +363,7 @@ export default class StageOptionStore {
     const children = stage.find((node) => {
       return node.name().startsWith('element_group_clip')
     })
-    console.log('this is children', children)
+    //console.log('this is children', children)
     children.forEach((item) => {
       const shape = item.attrs.attr_clip
 
@@ -465,9 +464,10 @@ export default class StageOptionStore {
 
   private initStage(stage: Stage) {
     const state = this._state
-    const layer = new Layer()
+    const layer = new Layer({
+      name: 'layer',
+    })
     stage.add(layer)
-
     const group = new Group({
       x: stage.width() / 2 - state.docWidth / 2,
       y: stage.height() / 2 - state.docHeight / 2,
@@ -480,7 +480,6 @@ export default class StageOptionStore {
       name: 'main_group',
     })
     layer.add(group)
-
     const background = new Rect({
       name: 'background',
       x: 0,
@@ -508,22 +507,11 @@ export default class StageOptionStore {
       // because we don't need any events on the background
       listening: true,
     })
-
     group.add(background)
     //background.zIndex(-1);
-
-    const transformer = new Transformer({
-      name: 'transformer',
-      nodes: [],
-      keepRatio: false,
-      //enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
-      //padding : 15,
-      // flipEnabled : false,
-    })
-    layer.add(transformer)
-
+    this.setTransformer(stage, layer)
     //start drag and drop on stage
-    const stageContainer = stage.container()
+    /* const stageContainer = stage.container()
     stageContainer.addEventListener('dragover', function (e) {
       console.log('stage container drag over', e)
       e.preventDefault() // !important
@@ -558,7 +546,7 @@ export default class StageOptionStore {
       // we can't use stage.getPointerPosition() here, because that event
       // is not registered by Konva.Stage
       // we can register it manually:
-    })
+    })*/
 
     //end drag and drop on stage
 
@@ -689,9 +677,9 @@ export default class StageOptionStore {
 
     const imageObj = new Image()
 
-    console.log(imageObj, 'dasfsfsdf')
+    //console.log(imageObj, 'dasfsfsdf')
 
-    imageObj.onload = function () {
+    /*imageObj.onload = function () {
       const yoda = new Konva.Image({
         x: 50,
         y: 50,
@@ -713,332 +701,10 @@ export default class StageOptionStore {
         // scaleY: 0.5,
       })
       group.add(darthNode)
-    })
+    })*/
 
     //end test
-
-    //start select transform
-    const selectionRectangle = new Rect({
-      fill: 'rgba(0, 161, 255,0.3)', //rgba(0,0,255,0.5)
-      visible: false,
-    })
-
-    layer.add(selectionRectangle)
-
-    let x1: number, y1: number, x2: number, y2: number
-
-    const mouseMove = (e: MouseEvent | TouchEvent) => {
-      stage.setPointersPositions(e)
-      // do nothing if we didn't start selection
-      if (!selectionRectangle.visible()) {
-        return
-      }
-
-      let pointerPosition: Vector2d = { x: 0, y: 0 }
-      if (stage.getPointerPosition() != null) {
-        pointerPosition = stage.getPointerPosition() as Vector2d
-      }
-      x2 = pointerPosition.x
-      y2 = pointerPosition.y
-
-      selectionRectangle.setAttrs({
-        x: Math.min(x1, x2),
-        y: Math.min(y1, y2),
-        width: Math.abs(x2 - x1),
-        height: Math.abs(y2 - y1),
-      })
-    }
-
-    const mouseUp = (e: MouseEvent | TouchEvent) => {
-      // do nothing if we didn't start selection
-      if (!selectionRectangle.visible()) {
-        return
-      }
-      // update visibility in timeout, so we can check it in click event
-      setTimeout(() => {
-        selectionRectangle.visible(false)
-      })
-
-      const shapes: Shape[] = stage.find('.element')
-      const box = selectionRectangle.getClientRect()
-      const selected: Shape[] = shapes.filter(
-        (shape) => Konva.Util.haveIntersection(box, shape.getClientRect()) && shape.draggable(), // no select element that tragable is false(locked)
-      )
-      this.changeResizeRotateEnableTransformer(true, transformer)
-      this.setShapesToTransformer(selected)
-      //transformer.nodes(selected)
-      //this.selectedElements = selected
-    }
-
-    stage.on('mousedown touchstart', (e) => {
-      // do nothing if we mousedown on any shape
-      if (e.target !== stage && e.target.name() !== 'background') {
-        return
-      }
-
-      let pointerPosition: Vector2d = { x: 0, y: 0 }
-      if (stage.getPointerPosition() != null) {
-        pointerPosition = stage.getPointerPosition() as Vector2d
-      }
-
-      x1 = pointerPosition.x
-      y1 = pointerPosition.y
-      x2 = pointerPosition.x
-      y2 = pointerPosition.y
-
-      selectionRectangle.visible(true)
-      selectionRectangle.width(0)
-      selectionRectangle.height(0)
-    })
-
-    window.addEventListener('mousemove', (e) => {
-      mouseMove(e)
-    })
-
-    window.addEventListener('touchmove', (e) => {
-      mouseMove(e)
-    })
-
-    /* stage.on('mousemove touchmove', (e) => {
-
-            e.evt.cancelBubble=false;
-            // do nothing if we didn't start selection
-            if (!selectionRectangle.visible()) {
-                return;
-            }
-
-            let pointerPosition: Vector2d = {x: 0, y: 0};
-            if (stage.getPointerPosition() != null) {
-                pointerPosition = stage.getPointerPosition() as Vector2d;
-            }
-
-            x2 = pointerPosition.x;
-            y2 = pointerPosition.y;
-
-            selectionRectangle.setAttrs({
-                x: Math.min(x1, x2),
-                y: Math.min(y1, y2),
-                width: Math.abs(x2 - x1),
-                height: Math.abs(y2 - y1),
-            });
-        });*/
-
-    window.addEventListener('mouseup', (e) => {
-      mouseUp(e)
-    })
-
-    window.addEventListener('touchend', (e) => {
-      mouseUp(e)
-    })
-
-    // clicks should select/deselect shapes or //click tap
-    stage.on('mousedown touchstart', (e) => {
-      // if we are selecting with rect, do nothing
-      if (selectionRectangle.visible()) {
-        return
-      }
-
-      // if click on empty area - remove all selections
-      if (e.target === stage || e.target.name() == 'background') {
-        transformer.nodes([])
-        this.selectedElements = []
-        return
-      }
-
-      // do nothing if clicked NOT on our rectangles
-      if (!e.target.hasName('element')) {
-        return
-      }
-
-      // do we pressed shift or ctrl?
-      const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey
-      //old method
-      //const isSelected = transformer.nodes().indexOf(e.target) >= 0
-      //new method
-      const isSelected = transformer.nodes().findIndex((item) => item._id == e.target._id) > -1
-
-      if (!metaPressed && !isSelected) {
-        // if no key pressed and the node is not selected
-        // select just one
-        transformer.nodes([e.target])
-        //deselect shape that draggable is false (locked)
-        this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
-        this.selectedElements = [e.target as Shape]
-      } else if (metaPressed && isSelected) {
-        // if we pressed keys and node was selected
-        // we need to remove it from selection:
-        this.changeResizeRotateEnableTransformer(true, transformer)
-        let nodes = transformer.nodes().slice() // use slice to have new copy of array
-        // remove node from array
-        nodes.splice(nodes.indexOf(e.target), 1)
-        nodes = nodes.filter((item) => {
-          return item.draggable()
-        })
-        transformer.nodes(nodes)
-        this.selectedElements = nodes as Shape[]
-      } else if (metaPressed && !isSelected) {
-        this.changeResizeRotateEnableTransformer(true, transformer)
-        // add the node into selection
-        //filter shape that is draggable is false (locked)
-        let nodes = transformer.nodes().slice()
-        nodes = nodes.filter((item) => {
-          return item.draggable()
-        })
-        //add shape to nodes if draggable is true
-        if (e.target.draggable()) {
-          nodes.push(e.target)
-        }
-        transformer.nodes(nodes)
-        this.selectedElements = nodes as Shape[]
-      }
-    })
-
-    //end select transform
-
-    //start snapping
-    group.on('dragmove', (e) => {
-      // clear all previous lines on the screen
-      layer.find('.guid-line').forEach((l) => l.destroy())
-
-      // find possible snapping lines
-      const lineGuideStops: LineGuideStops = this.getLineGuideStops(stage, e.target as Shape)
-      // find snapping points of current object
-      const itemBounds: SnappingEdges = this.getObjectSnappingEdges(e.target as Shape)
-
-      // now find where can we snap current object
-      const guides: guide[] = this.getGuides(lineGuideStops, itemBounds)
-
-      // do nothing of no snapping
-      if (!guides.length) {
-        return
-      }
-
-      this.drawGuides(layer, guides)
-
-      const absPos = e.target.absolutePosition()
-      // now force object position
-      guides.forEach((lg) => {
-        switch (lg.snap) {
-          case 'start': {
-            switch (lg.orientation) {
-              case 'V': {
-                absPos.x = lg.lineGuide + lg.offset
-                break
-              }
-              case 'H': {
-                absPos.y = lg.lineGuide + lg.offset
-                break
-              }
-            }
-            break
-          }
-          case 'center': {
-            switch (lg.orientation) {
-              case 'V': {
-                absPos.x = lg.lineGuide + lg.offset
-                break
-              }
-              case 'H': {
-                absPos.y = lg.lineGuide + lg.offset
-                break
-              }
-            }
-            break
-          }
-          case 'end': {
-            switch (lg.orientation) {
-              case 'V': {
-                absPos.x = lg.lineGuide + lg.offset
-                break
-              }
-              case 'H': {
-                absPos.y = lg.lineGuide + lg.offset
-                break
-              }
-            }
-            break
-          }
-        }
-      })
-      e.target.absolutePosition(absPos)
-    })
-
-    group.on('dragend', (e) => {
-      // clear all previous lines on the screen
-      layer.find('.guid-line').forEach((l) => l.destroy())
-    })
-
-    //end snapping
-
-    //start context-menu
-
-    const backgroundContextMenu: HTMLElement | null =
-      document.getElementById('background-context-menu')
-    const shapeContextMenu: HTMLElement | null = document.getElementById('shape-context-menu')
-    stage.on('contextmenu', (e) => {
-      /* let pos: Vector2d = {x: 0, y: 0};
-            const stage: Stage = this.currentStage();
-            if (stage.getPointerPosition() != null) {
-                pos = stage.getPointerPosition() as Vector2d;
-            }*/
-
-      this.lastPointerPosition = group.getRelativePointerPosition()
-      /*var shape = new Konva.Circle({
-                x: pos.x,
-                y: pos.y,
-                fill: 'red',
-                radius: 20,
-            });*/
-
-      //group.add(shape);
-
-      //this.lastPointerPosition=pointerPosition;
-
-      if (backgroundContextMenu != null) {
-        backgroundContextMenu.style.display = 'none'
-      }
-
-      if (shapeContextMenu != null) {
-        shapeContextMenu.style.display = 'none'
-      }
-
-      // prevent default behavior
-      e.evt.preventDefault()
-
-      if (e.target === stage) {
-        // if we are on empty place of the stage we will do nothing
-        return
-      }
-
-      if (e.target.name() == 'background') {
-        if (backgroundContextMenu != null) {
-          backgroundContextMenu.style.display = 'initial'
-          backgroundContextMenu.style.top = e.evt.clientY + 5 + 'px'
-          backgroundContextMenu.style.left = e.evt.clientX + 5 + 'px'
-        }
-      }
-
-      if (e.target.name() == 'element') {
-        if (shapeContextMenu != null) {
-          shapeContextMenu.style.display = 'initial'
-          shapeContextMenu.style.top = e.evt.clientY + 5 + 'px'
-          shapeContextMenu.style.left = e.evt.clientX + 5 + 'px'
-        }
-      }
-    })
-
-    window.addEventListener('click', () => {
-      // hide menu
-      if (backgroundContextMenu != null) {
-        backgroundContextMenu.style.display = 'none'
-      }
-
-      if (shapeContextMenu != null) {
-        shapeContextMenu.style.display = 'none'
-      }
-    })
-
-    //end context-menu
+    this.setSnapping(stage, layer, group)
   }
 
   // were can we snap our objects?
@@ -1258,6 +924,346 @@ export default class StageOptionStore {
     textOption.letterSpacing = text.letterSpacing()
     textOption.wrap = text.wrap()
     textOption.ellipsis = text.ellipsis()
+  }
+
+  private setTransformer(stage: Stage, layer: Layer) {
+    const transformer = new Transformer({
+      name: 'transformer',
+      nodes: [],
+      keepRatio: false,
+      //enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
+      //padding : 15,
+      // flipEnabled : false,
+    })
+    layer.add(transformer)
+
+    const selectionRectangle = new Rect({
+      fill: 'rgba(0, 161, 255,0.3)', //rgba(0,0,255,0.5)
+      visible: false,
+    })
+
+    layer.add(selectionRectangle)
+
+    let x1: number, y1: number, x2: number, y2: number
+
+    const mouseMove = (e: MouseEvent | TouchEvent) => {
+      stage.setPointersPositions(e)
+      // do nothing if we didn't start selection
+      if (!selectionRectangle.visible()) {
+        return
+      }
+
+      let pointerPosition: Vector2d = { x: 0, y: 0 }
+      if (stage.getPointerPosition() != null) {
+        pointerPosition = stage.getPointerPosition() as Vector2d
+      }
+      x2 = pointerPosition.x
+      y2 = pointerPosition.y
+
+      selectionRectangle.setAttrs({
+        x: Math.min(x1, x2),
+        y: Math.min(y1, y2),
+        width: Math.abs(x2 - x1),
+        height: Math.abs(y2 - y1),
+      })
+    }
+
+    const mouseUp = (e: MouseEvent | TouchEvent) => {
+      // do nothing if we didn't start selection
+      if (!selectionRectangle.visible()) {
+        return
+      }
+      // update visibility in timeout, so we can check it in click event
+      setTimeout(() => {
+        selectionRectangle.visible(false)
+      })
+
+      const shapes: Shape[] = stage.find((node) => {
+        return node.name().startsWith('element')
+      }) //stage.find('.element')
+      const box = selectionRectangle.getClientRect()
+      const selected: Shape[] = shapes.filter(
+        (shape) => Konva.Util.haveIntersection(box, shape.getClientRect()) && shape.draggable(), // no select element that tragable is false(locked)
+      )
+      this.changeResizeRotateEnableTransformer(true, transformer)
+      this.setShapesToTransformer(selected)
+      //transformer.nodes(selected)
+      //this.selectedElements = selected
+    }
+
+    stage.on('mousedown touchstart', (e) => {
+      // do nothing if we mousedown on any shape
+      if (e.target !== stage && e.target.name() !== 'background') {
+        return
+      }
+
+      let pointerPosition: Vector2d = { x: 0, y: 0 }
+      if (stage.getPointerPosition() != null) {
+        pointerPosition = stage.getPointerPosition() as Vector2d
+      }
+
+      x1 = pointerPosition.x
+      y1 = pointerPosition.y
+      x2 = pointerPosition.x
+      y2 = pointerPosition.y
+
+      selectionRectangle.visible(true)
+      selectionRectangle.width(0)
+      selectionRectangle.height(0)
+    })
+
+    window.addEventListener('mousemove', (e) => {
+      mouseMove(e)
+    })
+
+    window.addEventListener('touchmove', (e) => {
+      mouseMove(e)
+    })
+
+    /* stage.on('mousemove touchmove', (e) => {
+
+            e.evt.cancelBubble=false;
+            // do nothing if we didn't start selection
+            if (!selectionRectangle.visible()) {
+                return;
+            }
+
+            let pointerPosition: Vector2d = {x: 0, y: 0};
+            if (stage.getPointerPosition() != null) {
+                pointerPosition = stage.getPointerPosition() as Vector2d;
+            }
+
+            x2 = pointerPosition.x;
+            y2 = pointerPosition.y;
+
+            selectionRectangle.setAttrs({
+                x: Math.min(x1, x2),
+                y: Math.min(y1, y2),
+                width: Math.abs(x2 - x1),
+                height: Math.abs(y2 - y1),
+            });
+        });*/
+
+    window.addEventListener('mouseup', (e) => {
+      mouseUp(e)
+    })
+
+    window.addEventListener('touchend', (e) => {
+      mouseUp(e)
+    })
+
+    // clicks should select/deselect shapes or //click tap
+    stage.on('mousedown touchstart', (e) => {
+      // if we are selecting with rect, do nothing
+      if (selectionRectangle.visible()) {
+        return
+      }
+
+      // if click on empty area - remove all selections
+      if (e.target === stage || e.target.name() == 'background') {
+        transformer.nodes([])
+        this.selectedElements = []
+        return
+      }
+
+      // do nothing if clicked NOT on our rectangles
+      // .hasName('element')
+      if (!e.target.name().startsWith('element')) {
+        return
+      }
+
+      // do we pressed shift or ctrl?
+      const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey
+      //old method
+      //const isSelected = transformer.nodes().indexOf(e.target) >= 0
+      //new method
+      const isSelected = transformer.nodes().findIndex((item) => item._id == e.target._id) > -1
+
+      if (!metaPressed && !isSelected) {
+        // if no key pressed and the node is not selected
+        // select just one
+        transformer.nodes([e.target])
+        //deselect shape that draggable is false (locked)
+        this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
+        this.selectedElements = [e.target as Shape]
+      } else if (metaPressed && isSelected) {
+        // if we pressed keys and node was selected
+        // we need to remove it from selection:
+        this.changeResizeRotateEnableTransformer(true, transformer)
+        let nodes = transformer.nodes().slice() // use slice to have new copy of array
+        // remove node from array
+        nodes.splice(nodes.indexOf(e.target), 1)
+        nodes = nodes.filter((item) => {
+          return item.draggable()
+        })
+        transformer.nodes(nodes)
+        this.selectedElements = nodes as Shape[]
+      } else if (metaPressed && !isSelected) {
+        this.changeResizeRotateEnableTransformer(true, transformer)
+        // add the node into selection
+        //filter shape that is draggable is false (locked)
+        let nodes = transformer.nodes().slice()
+        nodes = nodes.filter((item) => {
+          return item.draggable()
+        })
+        //add shape to nodes if draggable is true
+        if (e.target.draggable()) {
+          nodes.push(e.target)
+        }
+        transformer.nodes(nodes)
+        this.selectedElements = nodes as Shape[]
+      }
+    })
+  }
+
+  private getBaseLayer(): Layer {
+    const stage: Stage = this.currentStage()
+    return stage.findOne('.layer')
+  }
+
+  private setSnapping(stage: Stage, layer: Layer, group: Group): void {
+    group.on('dragmove', (e) => {
+      // clear all previous lines on the screen
+      layer.find('.guid-line').forEach((l) => l.destroy())
+
+      // find possible snapping lines
+      const lineGuideStops: LineGuideStops = this.getLineGuideStops(stage, e.target as Shape)
+      // find snapping points of current object
+      const itemBounds: SnappingEdges = this.getObjectSnappingEdges(e.target as Shape)
+
+      // now find where can we snap current object
+      const guides: guide[] = this.getGuides(lineGuideStops, itemBounds)
+
+      // do nothing of no snapping
+      if (!guides.length) {
+        return
+      }
+
+      this.drawGuides(layer, guides)
+
+      const absPos = e.target.absolutePosition()
+      // now force object position
+      guides.forEach((lg) => {
+        switch (lg.snap) {
+          case 'start': {
+            switch (lg.orientation) {
+              case 'V': {
+                absPos.x = lg.lineGuide + lg.offset
+                break
+              }
+              case 'H': {
+                absPos.y = lg.lineGuide + lg.offset
+                break
+              }
+            }
+            break
+          }
+          case 'center': {
+            switch (lg.orientation) {
+              case 'V': {
+                absPos.x = lg.lineGuide + lg.offset
+                break
+              }
+              case 'H': {
+                absPos.y = lg.lineGuide + lg.offset
+                break
+              }
+            }
+            break
+          }
+          case 'end': {
+            switch (lg.orientation) {
+              case 'V': {
+                absPos.x = lg.lineGuide + lg.offset
+                break
+              }
+              case 'H': {
+                absPos.y = lg.lineGuide + lg.offset
+                break
+              }
+            }
+            break
+          }
+        }
+      })
+      e.target.absolutePosition(absPos)
+    })
+
+    group.on('dragend', (e) => {
+      // clear all previous lines on the screen
+      layer.find('.guid-line').forEach((l) => l.destroy())
+    })
+  }
+
+  private setContextMenu(stage: Stage, group: Group): void {
+    //start context-menu
+    const backgroundContextMenu: HTMLElement | null =
+      document.getElementById('background-context-menu')
+    const shapeContextMenu: HTMLElement | null = document.getElementById('shape-context-menu')
+    stage.on('contextmenu', (e) => {
+      /* let pos: Vector2d = {x: 0, y: 0};
+            const stage: Stage = this.currentStage();
+            if (stage.getPointerPosition() != null) {
+                pos = stage.getPointerPosition() as Vector2d;
+            }*/
+
+      this.lastPointerPosition = group.getRelativePointerPosition()
+      /*var shape = new Konva.Circle({
+                x: pos.x,
+                y: pos.y,
+                fill: 'red',
+                radius: 20,
+            });*/
+
+      //group.add(shape);
+
+      //this.lastPointerPosition=pointerPosition;
+
+      if (backgroundContextMenu != null) {
+        backgroundContextMenu.style.display = 'none'
+      }
+
+      if (shapeContextMenu != null) {
+        shapeContextMenu.style.display = 'none'
+      }
+
+      // prevent default behavior
+      e.evt.preventDefault()
+
+      if (e.target === stage) {
+        // if we are on empty place of the stage we will do nothing
+        return
+      }
+
+      if (e.target.name() == 'background') {
+        if (backgroundContextMenu != null) {
+          backgroundContextMenu.style.display = 'initial'
+          backgroundContextMenu.style.top = e.evt.clientY + 5 + 'px'
+          backgroundContextMenu.style.left = e.evt.clientX + 5 + 'px'
+        }
+      }
+
+      if (e.target.name().startsWith('element')) {
+        if (shapeContextMenu != null) {
+          shapeContextMenu.style.display = 'initial'
+          shapeContextMenu.style.top = e.evt.clientY + 5 + 'px'
+          shapeContextMenu.style.left = e.evt.clientX + 5 + 'px'
+        }
+      }
+    })
+
+    window.addEventListener('click', () => {
+      // hide menu
+      if (backgroundContextMenu != null) {
+        backgroundContextMenu.style.display = 'none'
+      }
+
+      if (shapeContextMenu != null) {
+        shapeContextMenu.style.display = 'none'
+      }
+    })
+
+    //end context-menu
   }
 }
 

@@ -8,6 +8,10 @@
           "active": true,
           "visibility": true
         },
+        "upload": {
+          "active": false,
+          "visibility": true
+        },
         "text": {
           "active": false,
           "visibility": true

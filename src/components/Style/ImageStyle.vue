@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-2 gap-2 mt-3 mr-2">
-    <img v-for="i in 50" :src="`https://picsum.photos/200?rand=${i}`" @dragstart="dragStart" />
+    <img v-for="i in 3" :src="`https://picsum.photos/200?rand=${i}`" @dragstart="dragStart" />
   </div>
 </template>
 

@@ -29,6 +29,7 @@
     uiStore.deActive(`${prefix}template`)
     uiStore.deActive(`${prefix}background`)
     uiStore.deActive(`${prefix}resize`)
+    uiStore.deActive(`${prefix}upload`)
     uiStore.active(activeMenuId)
   }
 

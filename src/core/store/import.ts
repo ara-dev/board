@@ -1,7 +1,9 @@
 import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
+import { optimize } from 'svgo/lib/svgo'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import data from './1'
+import './xml'
 interface KonvaFormat {
   attrs: any
   className: string
@@ -49,6 +51,8 @@ let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
 
 export function Import() {
+  //const svgJson = xmlToJson(svgo(data))
+  //console.log('10000', svgJson)
   let temp: object = {}
   defs = converDefsToKonvaFormat(data)
   clip_path = converClipPathToKonvaFormat(data)
@@ -636,48 +640,66 @@ function decomposeMatrix(matrix: string): Matrix {
     .split(' ')
     .map((point) => parseFloat(point))
   return new Transform(mat).decompose()
-  /*const m = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0 }
-  if (matrix.length) {
-    m.a = mat[0]
-    m.b = mat[1]
-    m.c = mat[2]
-    m.d = mat[3]
-    m.e = mat[4]
-    m.f = mat[5]
-  }
-  const E = (m.a + m.d) / 2
-  const F = (m.a - m.d) / 2
-  const G = (m.c + m.b) / 2
-  const H = (m.c - m.b) / 2
-  const Q = Math.sqrt(E * E + H * H)
-  const R = Math.sqrt(F * F + G * G)
-  const a1 = Math.atan2(G, F)
-  const a2 = Math.atan2(H, E)
-  const theta = (a2 - a1) / 2
-  const phi = (a2 + a1) / 2
-  // The requested parameters are then theta,
-  // sx, sy, phi,
-  return {
-    x: m.e,
-    y: m.f,
-    rotation: (-phi * 180) / Math.PI,
-    scaleX: Q + R,
-    scaleY: Q - R,
-    skewX: 0,
-    skewY: 0,
-    //skew: (-theta * 180) / Math.PI,
-  }*/
 }
 
-/*
-/*function converStyleToAttribute(stringStyle: string): object {
-  const attribute: object = {}
-  const temp: string[] = stringStyle.split(';')
-  temp.forEach((item) => {
-    const keyValue: string[] = item.split(':')
-    Object.assign(attribute, { [keyValue[0]]: keyValue[1] })
+function svgo(svg = '') {
+  const result = optimize(svg, {
+    // optional but recommended field
+    path: 'path-to.svg',
+    /*js2svg: {
+      indent: 2, // string with spaces or number of spaces. 4 by default
+      pretty: true, // boolean, false by default
+    },*/
+    // all config fields are also available here
+    multipass: true,
+    plugins: [
+      {
+        name: 'preset-default',
+        params: {
+          overrides: {
+            // customize options for plugins included in preset
+            inlineStyles: {
+              onlyMatchedOnce: false,
+            },
+            // or disable plugins
+            removeDoctype: false,
+            convertShapeToPath: false,
+            moveElemsAttrsToGroup: false,
+            moveGroupAttrsToElems: false,
+            mergePaths: false,
+            //convertTransform:false,
+          },
+        },
+      },
+      {
+        name: 'convertStyleToAttrs',
+        params: {},
+      },
+      // enable builtin plugin not included in default preset
+      'prefixIds',
+      // enable and configure builtin plugin not included in preset
+      {
+        name: 'sortAttrs',
+        params: {
+          xmlnsOrder: 'alphabetical',
+        },
+      },
+      /* {
+         name: 'convertShapeToPath',
+         active:true,
+         params: {
+           active:true,
+           overrides: {
+             active:true
+           }
+           //active:false
+         },
+       },*/
+    ],
   })
-  return attribute
-}*/
+  return result.data
+}
 
-//pattern
+function xmlToJson(xml = '') {
+  return xml2json(xml)
+}

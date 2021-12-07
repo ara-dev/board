@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'main',
-    redirect: '/profile/transactions',
+    redirect: '/board',
     component: () => import('./views/Profile'),
     meta: { transition: 'scale' },
   },
