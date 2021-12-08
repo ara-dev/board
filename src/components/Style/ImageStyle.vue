@@ -6,8 +6,8 @@
 
 <script lang="ts" setup>
   function dragStart(e: Event): void {
-    e.dataTransfer.setData('text', e.target.id)
-    console.log(e, 'sdfsdfsdfsfs')
+    //e.dataTransfer.setData('text', e.target.id)
+    //console.log(e, 'sdfsdfsdfsfs')
   }
 </script>
 

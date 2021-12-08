@@ -17,8 +17,11 @@
   })
 
   onMounted(() => {
-    //stageStore.addPage('container', width.value, height.value)
-    stageStore.toJson('container')
+    //debugger
+    stageStore.setContainer('container')
+    stageStore.addPage(width.value, height.value)
+    //stageStore.resizeStage(width.value, height.value)
+    //stageStore.toJson('container')
   })
 </script>
 

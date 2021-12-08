@@ -10,7 +10,7 @@ import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
 import _ from 'lodash'
 import { reactive, readonly } from 'vue'
-import { Import } from './import'
+import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
 
@@ -28,6 +28,7 @@ interface StageOption {
   docHeight: number
   copyElements: Shape[]
   currentColor: Color
+  container: HTMLDivElement | string | null
 }
 
 export default class StageOptionStore {
@@ -101,12 +102,16 @@ export default class StageOptionStore {
     return this._state.textOption
   }
 
-  addPage(container: HTMLDivElement | string, width: number, height: number): void {
+  setContainer(container: HTMLDivElement | string): void {
+    this._state.container = container
+  }
+
+  addPage(width: number, height: number): void {
     const state = this._state
     const w = state.docWidth > width ? state.docWidth : width
     const h = state.docHeight > height ? state.docHeight : height
     const stage = new Stage({
-      container: container,
+      container: this._state.container,
       width: w,
       height: h,
       //width: window.innerWidth,
@@ -119,6 +124,7 @@ export default class StageOptionStore {
   }
 
   resizeStage(newWidth: number, newHeight: number): void {
+    console.log('this is number', newWidth, newHeight)
     const state = this._state
     const w = state.docWidth > newWidth ? state.docWidth : newWidth
     const h = state.docHeight > newHeight ? state.docHeight : newHeight
@@ -328,12 +334,14 @@ export default class StageOptionStore {
     })
   }
 
-  public toJson(container: HTMLDivElement | string) {
-    //console.log('this is svgo', svgo())
-    //console.log('this is xml', xmlToJson(svgo()))
-    //console.log('this is svgo', svgo())
+  public toJson(container: HTMLDivElement | string) {}
+
+  importFromSvg(svg: string) {
+    this.importFromJson(ImportSvg(svg))
+  }
+  importFromJson(json: any) {
     const state = this._state
-    const stage: Stage = Konva.Node.create(Import(), container)
+    const stage: Stage = Konva.Node.create(json, state.container)
     this._state.pages.push(stage)
     this._state.currentPage++
     const layer: Layer = this.getBaseLayer()
@@ -341,8 +349,6 @@ export default class StageOptionStore {
     this.setTransformer(stage, layer)
     this.setSnapping(stage, layer, group)
     this.setContextMenu(stage, group)
-
-    //const main_group: Group = this.getGroup()
     //load images
     const images = stage.find((node) => {
       return node.name().startsWith('element_image')
@@ -354,7 +360,6 @@ export default class StageOptionStore {
       Konva.Image.fromURL(data, function (image) {
         image.setAttrs(attr)
         parent.add(image)
-        //main_group.add(image)
         image.zIndex(item.zIndex())
       })
     })
@@ -366,6 +371,18 @@ export default class StageOptionStore {
     //console.log('this is children', children)
     children.forEach((item) => {
       const shape = item.attrs.attr_clip
+
+      if (shape.className == 'circle') {
+        console.log('this is clip path circle')
+        /*item.clipFunc(function (ctx) {
+          ctx.rect(
+            _.get(shape, 'attrs.x', 0),
+            _.get(shape, 'attrs.y', 0),
+            _.get(shape, 'attrs.width', 0),
+            _.get(shape, 'attrs.height', 0),
+          )
+        })*/
+      }
 
       if (shape.className == 'Rect') {
         item.clipFunc(function (ctx) {
@@ -406,6 +423,20 @@ export default class StageOptionStore {
       }
     })
     //end render clip
+    /*this.resizeStage()*/
+  }
+
+  exportToJson(): string {
+    const stage: Stage = this.currentStage()
+    return stage.toJSON()
+  }
+
+  applyZoom() {
+    const stage: Stage = this.currentStage()
+    stage.scale({
+      x: stage.scale().x * 0.2,
+      y: stage.scale().y * 0.2,
+    })
   }
 
   private _init() {
@@ -429,8 +460,8 @@ export default class StageOptionStore {
       selectedElements: [],
       currentPage: 0,
       pages: [],
-      docWidth: 640,
-      docHeight: 480,
+      docWidth: 1000,
+      docHeight: 1400,
       copyElements: [],
       currentColor: {
         hsl: {
@@ -457,6 +488,7 @@ export default class StageOptionStore {
         source: 'hsva',
         a: 1,
       },
+      container: null,
     }
     //this.lastPointerPosition = {x:0,y:0};
     uiStore.deActiveElementWhenNoneSelected()

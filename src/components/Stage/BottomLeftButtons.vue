@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-button-group class="ml-3">
-      <AButton type="primary" @click="stageStore.toJson()">
+      <AButton type="primary">
         <Icon icon="ion:book-outline" size="23" />
       </AButton>
     </a-button-group>
@@ -36,6 +36,7 @@
         <AButton
           v-if="uiStore.isVisible('ui.zoom_button.children.zoom_in')"
           :disabled="!uiStore.isActive('ui.zoom_button.children.zoom_in')"
+          @click="stageStore.applyZoom()"
         >
           <Icon icon="fluent:zoom-in-20-regular" size="23" />
         </AButton>

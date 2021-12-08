@@ -2,7 +2,6 @@ import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 import { optimize } from 'svgo/lib/svgo'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
-import data from './1'
 import './xml'
 interface KonvaFormat {
   attrs: any
@@ -49,43 +48,30 @@ interface Matrix {
 let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
+let data = null
 
-export function Import() {
-  //const svgJson = xmlToJson(svgo(data))
-  //console.log('10000', svgJson)
-  let temp: object = {}
+export function ImportSvg(svg: string): Object {
+  console.log('this is svgo', svgo(svg))
+  data = JSON.parse(xmlToJson(svgo(svg)))
+  let temp: any = {}
   defs = converDefsToKonvaFormat(data)
   clip_path = converClipPathToKonvaFormat(data)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
-  const stage: KonvaFormat = {
-    attrs: {
-      name: generateName('stage', ''),
-      width: 750,
-      height: 500,
-    },
-    className: 'Stage',
-    children: [],
-  }
-  const layer: KonvaFormat = {
-    attrs: {
-      name: 'layer',
-    },
-    className: 'Layer',
-    children: [],
-  }
-  stage.children?.push(layer)
-  //d
-  //data.e
-  //data.elements.reverse()
+  //const _svg = svg(_.get(data, 'elements[0]', ''))
+  //console.log('this is svg', svg)
+  //console.log('dddddd', data)
+  //return
   data.elements.forEach((item) => {
+    // debugger
     const gItem = generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
   })
-  layer.children?.push(temp)
+  //layer.children?.push(temp)
   //console.log(stage, 'this is temp')
   //console.log(JSON.stringify(stage), 'this is temp json')
-  return JSON.stringify(stage)
+  return temp
+  //return JSON.stringify(temp)
 }
 
 function generateItem(item: SVGXMLElement): KonvaFormat {
@@ -165,21 +151,47 @@ function converLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradien
 }
 
 function svg(svg: SVGXMLElement) {
+  //debugger
   const viewbox = _.get(svg, 'attributes.viewBox', '0 0 300 300').split(' ')
+  const width = parseFloat(viewbox[2])
+  const height = parseFloat(viewbox[3])
   const item: KonvaFormat = {
     attrs: {
       svgID: _.get(svg, 'attributes.id', ''),
-      width: parseFloat(viewbox[2]),
-      height: parseFloat(viewbox[3]),
+      width: width,
+      height: height,
       opacity: parseFloat(_.get(svg, 'attributes.opacity', 1)),
-      //clipX: 0,
-      //clipY: 0,
+      clipX: 0,
+      clipY: 0,
       //clipWidth: parseFloat(viewbox[2]),
       //clipHeight: parseFloat(viewbox[3]),
+      clipWidth: width,
+      clipHeight: height,
+      //strokeWidth: 5,
+      //fill: 'red',
+      ///storke: 'red',
+      //opacity: 0.5,
       name: 'main_group', //'group_' + useGenerateUniqueID(),
     },
     className: 'Group',
   }
+  const stage: KonvaFormat = {
+    attrs: {
+      name: generateName('stage', ''),
+      width: width,
+      height: height,
+    },
+    className: 'Stage',
+    children: [],
+  }
+  const layer: KonvaFormat = {
+    attrs: {
+      name: 'layer',
+    },
+    className: 'Layer',
+    children: [],
+  }
+  stage.children?.push(layer)
   if (svg.elements) {
     item.children = []
     svg.elements?.forEach((element) => {
@@ -187,7 +199,9 @@ function svg(svg: SVGXMLElement) {
       if (gItem) item.children?.push(gItem)
     })
   }
-  return item
+  layer.children?.push(item)
+
+  return stage
 }
 
 function path(path: SVGXMLElement): KonvaFormat {
@@ -365,20 +379,31 @@ function ellipse(ellipse: SVGXMLElement): KonvaFormat {
 }
 
 function text(text: SVGXMLElement): KonvaFormat {
+  //console.log('this is text', text)
   const commonAttr = commonAttributes('Text', 'text', text)
-  Object.assign(commonAttr.attrs, {
-    fontFamily: _.get(text, 'attributes.font-family', ''),
-    fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
+  /*Object.assign(commonAttr.attrs, {
     //rotation: 0.642,
     //text: _.get(text, 'elements[0].text', ''),
     //x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
     // y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
-  })
+  })*/
   let temp_text = ''
+  //const temp_attr = {}
+  //debugger
   if (text.elements && text.elements.length > 0) {
     if (text.elements[0].type == 'text') {
       temp_text = _.get(text, 'elements[0].text', '')
+      Object.assign(commonAttr.attrs, {
+        fontFamily: _.get(text, 'attributes.font-family', ''),
+        fontSize: parseFloat(_.get(text, 'attributes.font-size', 16)),
+        fill: _.get(text, 'attributes.fill', '#000'),
+      })
     } else {
+      Object.assign(commonAttr.attrs, {
+        fontFamily: _.get(text.elements[0], 'attributes.font-family', ''),
+        fontSize: parseFloat(_.get(text.elements[0], 'attributes.font-size', 16)),
+        fill: _.get(text.elements[0], 'attributes.fill', '#000'),
+      })
       text.elements.forEach((item) => {
         temp_text += _.get(item, 'elements[0].text', '')
       })
@@ -405,9 +430,7 @@ function image(image: SVGXMLElement): KonvaFormat {
       Object.assign(commonAttr.attrs, { href: href })
     }
   }
-
   //item.children.push(commonAttr)
-
   //return item
   return commonAttr
 }
@@ -562,8 +585,7 @@ function use(use: SVGXMLElement): KonvaFormat {
   return commonAttr
 }
 
-/*function convertTransform(transform: string) {}*/
-
+/*
 function getCenter(shape) {
   return {
     x:
@@ -576,6 +598,7 @@ function getCenter(shape) {
       (shape.width / 2) * Math.sin(shape.rotation),
   }
 }
+*/
 
 function translateToXY(translate: string) {
   //translate(113.55 395.714)

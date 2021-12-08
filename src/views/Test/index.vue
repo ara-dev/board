@@ -5,10 +5,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { stageStore } from '../../core'
   import { ref, onMounted, watch } from 'vue'
   import { useElementSize } from '@vueuse/core'
-
   const mainboard = ref(null)
   const { width, height } = useElementSize(mainboard)
 
@@ -18,7 +16,7 @@
 
   onMounted(() => {
     //stageStore.addPage('container', width.value, height.value)
-    stageStore.toJson('container')
+    //stageStore.toJson('container')
   })
 </script>
 

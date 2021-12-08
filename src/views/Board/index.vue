@@ -11,44 +11,80 @@
       >
         <div class="px-2 pt-2 overflow-auto">
           <transition :css="false">
-            <ImageStyle
-              v-if="uiStore.isActive('ui.right_sidebar.children.image')"
-              v-motion="'cube'"
-              :enter="{ x: 0, opacity: 1 }"
-              :initial="{ x: 400, opacity: 0 }"
-              :leave="{ x: -400, opacity: 0 }"
-            />
+            <div>
+              <ImageStyle
+                v-if="uiStore.isActive('ui.right_sidebar.children.image')"
+                v-motion="'cube'"
+                :enter="{ x: 0, opacity: 1 }"
+                :initial="{ x: 400, opacity: 0 }"
+                :leave="{ x: -400, opacity: 0 }"
+              />
+              <ShapeStyle
+                v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
+                v-motion="'cube'"
+                :enter="{ x: 0, opacity: 1 }"
+                :initial="{ x: 400, opacity: 0 }"
+                :leave="{ x: -400, opacity: 0 }"
+              />
+              <TextStyle
+                v-if="uiStore.isActive('ui.right_sidebar.children.text')"
+                v-motion="'cube'"
+                :enter="{ x: 0, opacity: 1 }"
+                :initial="{ x: 400, opacity: 0 }"
+                :leave="{ x: -400, opacity: 0 }"
+              />
+              <BackgroundStyle
+                v-if="uiStore.isActive('ui.right_sidebar.children.background')"
+                v-motion="'cube'"
+                :enter="{ x: 0, opacity: 1 }"
+                :initial="{ x: 400, opacity: 0 }"
+                :leave="{ x: -400, opacity: 0 }"
+              />
+              <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
+                <!--                <AButton type="primary">انتخاب فایل</AButton>-->
+                <!--                <input type="file" @change="uploadFile" />-->
+                <a-upload
+                  :beforeUpload="handleBeforeUpload"
+                  :multiple="false"
+                  :showUploadList="false"
+                  @change="handleChangeSvg"
+                >
+                  <a-button class="mt-5"> بارگذاری فایل svg </a-button>
+                </a-upload>
+
+                <a-upload
+                  :beforeUpload="handleBeforeUpload"
+                  :multiple="false"
+                  :showUploadList="false"
+                  @change="handleChangeJson"
+                >
+                  <a-button class="mt-5"> بارگذاری فایل json </a-button>
+                </a-upload>
+
+                <a-button class="mt-5" @click="save"> ذخیره فایل </a-button>
+              </div>
+            </div>
           </transition>
 
-          <transition :css="false">
+          <!--          <transition :css="false">
             <ShapeStyle
-              v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
-              v-motion="'cube'"
-              :enter="{ x: 0, opacity: 1 }"
-              :initial="{ x: 400, opacity: 0 }"
-              :leave="{ x: -400, opacity: 0 }"
+                v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
+                v-motion="'cube'"
+                :enter="{ x: 0, opacity: 1 }"
+                :initial="{ x: 400, opacity: 0 }"
+                :leave="{ x: -400, opacity: 0 }"
             />
-          </transition>
+          </transition>-->
 
-          <transition :css="false">
-            <TextStyle
-              v-if="uiStore.isActive('ui.right_sidebar.children.text')"
-              v-motion="'cube'"
-              :enter="{ x: 0, opacity: 1 }"
-              :initial="{ x: 400, opacity: 0 }"
-              :leave="{ x: -400, opacity: 0 }"
-            />
-          </transition>
+          <!--          <transition :css="false" />-->
 
-          <transition :css="false">
-            <BackgroundStyle
-              v-if="uiStore.isActive('ui.right_sidebar.children.background')"
-              v-motion="'cube'"
-              :enter="{ x: 0, opacity: 1 }"
-              :initial="{ x: 400, opacity: 0 }"
-              :leave="{ x: -400, opacity: 0 }"
-            />
-          </transition>
+          <!--          <transition :css="false">
+
+          </transition>-->
+
+          <!--          <transition :css="false">
+
+          </transition>-->
         </div>
         <div class="price">قیمت کل : 25000</div>
       </div>
@@ -89,7 +125,7 @@
   import TopRightButtons from '../../components/Stage/TopRightButtons.vue'
   import BottomLeftButtons from '../../components/Stage/BottomLeftButtons.vue'
   import TextOptions from '../../components/Option/TextOptions.vue'
-  import { uiStore } from '../../core'
+  import { stageStore, uiStore } from '../../core'
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
   import Stage from '../../components/Stage/Stage.vue'
@@ -102,6 +138,86 @@
   import TopLeftButtons from '../../components/Stage/TopLeftButtons.vue'
 
   const { prefixCls } = useDesign('board')
+
+  function handleBeforeUpload(file, fileList) {
+    return false
+  }
+
+  function save() {
+    const data = stageStore.exportToJson()
+
+    // Get the data from each element on the form.
+    /*const name = document.getElementById('txtName');
+    const age = document.getElementById('txtAge');
+    const email = document.getElementById('txtEmail');
+    const country = document.getElementById('selCountry');
+    const msg = document.getElementById('msg');*/
+
+    // This variable stores all the data.
+    /* let data =
+        '\r Name: ' + name.value + ' \r\n ' +
+        'Age: ' +age.value + ' \r\n ' +
+        'Email: ' + email.value + ' \r\n ' +
+        'Country: ' + country.value + ' \r\n ' +
+        'Message: ' + msg.value;*/
+
+    // Convert the text to BLOB.
+    const textToBLOB = new Blob([data], { type: 'text/plain' })
+    const sFileName = 'formData.json' // The file to save the data.
+    let newLink = document.createElement('a')
+    newLink.download = sFileName
+    if (window.webkitURL != null) {
+      newLink.href = window.webkitURL.createObjectURL(textToBLOB)
+    } else {
+      newLink.href = window.URL.createObjectURL(textToBLOB)
+      newLink.style.display = 'none'
+      document.body.appendChild(newLink)
+    }
+    newLink.click()
+  }
+
+  function handleChangeSvg({ file, fileList }) {
+    const isSvg = file.type == 'image/svg+xml'
+    if (!isSvg) {
+      alert('فایل نامتعبر')
+      return
+    }
+    const isLt2M = file.size / 1024 / 1024 < 12
+    if (!isLt2M) {
+      alert('حجم فایل نامعتبر می باشد')
+      return
+    }
+
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', (event) => {
+      const data = event.target?.result
+      //console.log()
+      stageStore.importFromSvg(data)
+    })
+    fileReader.readAsText(file)
+  }
+
+  function handleChangeJson({ file, fileList }) {
+    console.log(file)
+    /* const isSvg = file.type == 'image/svg+xml'
+    if (!isSvg) {
+      alert('فایل نامتعبر')
+      return
+    }
+    const isLt2M = file.size / 1024 / 1024 < 12
+    if (!isLt2M) {
+      alert('حجم فایل نامعتبر می باشد')
+      return
+    }*/
+
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', (event) => {
+      const data = event.target?.result
+      //console.log()
+      stageStore.importFromJson(data)
+    })
+    fileReader.readAsText(file)
+  }
 </script>
 
 <style lang="less">

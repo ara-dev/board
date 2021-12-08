@@ -4,6 +4,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Each route should map to a component.
 // We'll talk about nested routes later.
 
+// @ts-ignore
+// @ts-ignore
 const routes = [
   {
     path: '/',

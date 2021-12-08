@@ -12,6 +12,7 @@ export default defineConfig({
     extensions: ['*', '.js', '.vue', '.json', '.ts'],
     alias: {
       '/^~/': '',
+      //'.': path.resolve(__dirname, '/node_modules'),
       /* '@': resolve(__dirname, './src'),*/
       //'~': path.resolve(__dirname, '/node_modules'),
     },
