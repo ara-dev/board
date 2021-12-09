@@ -9,10 +9,16 @@ import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
 import _ from 'lodash'
-import { reactive, readonly } from 'vue'
+import { reactive, readonly, UnwrapRef } from 'vue'
 import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+
+interface Page {
+  docWidth: number
+  docHeight: number
+  stage: Stage
+}
 
 interface StageOption {
   //Text Option
@@ -23,9 +29,7 @@ interface StageOption {
   //common Option
   selectedElements: Shape[]
   currentPage: number
-  pages: Stage[]
-  docWidth: number
-  docHeight: number
+  pages: Page[]
   copyElements: Shape[]
   currentColor: Color
   container: HTMLDivElement | string | null
@@ -67,7 +71,7 @@ export default class StageOptionStore {
     return this._state.layerLock
   }
 
-  get pages(): UnwrapNestedRefs<Stage[]> {
+  get pages(): UnwrapRef<StageOption['pages']> {
     return this._state.pages
   }
 
@@ -106,34 +110,49 @@ export default class StageOptionStore {
     this._state.container = container
   }
 
-  addPage(width: number, height: number): void {
+  addPage(
+    docWidth: number,
+    docHeight: number,
+    width: number,
+    height: number,
+    container: HTMLDivElement | string,
+  ): void {
     const state = this._state
-    const w = state.docWidth > width ? state.docWidth : width
-    const h = state.docHeight > height ? state.docHeight : height
+    const w = docWidth > width ? docWidth : width
+    const h = docHeight > height ? docHeight : height
     const stage = new Stage({
-      container: this._state.container,
+      container: container, //this._state.container
       width: w,
       height: h,
+      name: 'stage',
+      //docWidth: w,
+      //docheight: h,
       //width: window.innerWidth,
       //height: window.innerHeight
     })
     //stage.zIndex(5000);
-    this._state.pages.push(stage)
+    const page: Page = {
+      stage,
+      docWidth,
+      docHeight,
+    }
+    this._state.pages.push(page)
     this._state.currentPage++
-    this.initStage(stage)
+    this.initStage(page)
   }
 
-  resizeStage(newWidth: number, newHeight: number): void {
-    console.log('this is number', newWidth, newHeight)
-    const state = this._state
-    const w = state.docWidth > newWidth ? state.docWidth : newWidth
-    const h = state.docHeight > newHeight ? state.docHeight : newHeight
-    const stage: UnwrapNestedRefs<Stage> = state.pages[state.currentPage - 1]
+  resizePage(newWidth: number, newHeight: number): void {
+    //console.log('this is number', newWidth, newHeight)
+    //const state = this._state
+    const page = this.getCurrentPage()
+    const w = page.docWidth > newWidth ? page.docWidth : newWidth
+    const h = page.docHeight > newHeight ? page.docHeight : newHeight
+    const stage: UnwrapNestedRefs<Stage> = page.stage
     stage.width(w)
     stage.height(h)
-    const group: Group = this.getGroup()
-    group.x(stage.width() / 2 - state.docWidth / 2)
-    group.y(stage.height() / 2 - state.docHeight / 2)
+    const group: Group = this.getMainGroup(page.stage)
+    group.x(stage.width() / 2 - page.docWidth / 2)
+    group.y(stage.height() / 2 - page.docHeight / 2)
   }
 
   applyOpacity(): void {
@@ -175,7 +194,7 @@ export default class StageOptionStore {
   }
 
   applyDuplicate(): void {
-    const group: Group = this.getGroup()
+    const group: Group = this.getMainGroup()
     const tempShape: Shape[] = []
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       const copy = item.clone({
@@ -247,29 +266,29 @@ export default class StageOptionStore {
 
   applyTest(): void {
     /*  const tr=this.getTransFormer();
-        //const group=this.getGroup();
-        const background=this.getBackground().getClientRect().x;
-        //let temp=[];
-        const temp : number[] = this._state.selectedElements.map((item)=>{
-            return item.getClientRect().x;
-        });
-        console.log("this is temp",temp);
-        console.log("this is min",Math.min(...temp));
-        const distance=Math.min(...temp) - background;
-        //const temp= tr.getClientRect({ skipStroke:true,skipTransform:true }).x - background.getClientRect().x ;
-        //console.log("this is temp",temp);
-        //console.log("this is group",group.getClientRect());
-        //console.log("this is relative",tr.getClientRect({relativeTo: background }));
-        //console.log("this is transformer",tr.getClientRect({ skipStroke:true,skipTransform:true}));
-       // console.log("this is background",background.getClientRect());
-        this._state.selectedElements.forEach((item)=>{
-            //console.log("this is item x",item.x());
-            //console.log("this is item",item.getClassName(),item.getClientRect());
-            item.setAttrs({
-                x : item.x() - distance
+            //const group=this.getGroup();
+            const background=this.getBackground().getClientRect().x;
+            //let temp=[];
+            const temp : number[] = this._state.selectedElements.map((item)=>{
+                return item.getClientRect().x;
+            });
+            console.log("this is temp",temp);
+            console.log("this is min",Math.min(...temp));
+            const distance=Math.min(...temp) - background;
+            //const temp= tr.getClientRect({ skipStroke:true,skipTransform:true }).x - background.getClientRect().x ;
+            //console.log("this is temp",temp);
+            //console.log("this is group",group.getClientRect());
+            //console.log("this is relative",tr.getClientRect({relativeTo: background }));
+            //console.log("this is transformer",tr.getClientRect({ skipStroke:true,skipTransform:true}));
+           // console.log("this is background",background.getClientRect());
+            this._state.selectedElements.forEach((item)=>{
+                //console.log("this is item x",item.x());
+                //console.log("this is item",item.getClassName(),item.getClientRect());
+                item.setAttrs({
+                    x : item.x() - distance
+                })
             })
-        })
-        /*/
+            /*/
   }
 
   applyAlignLeft(): void {
@@ -334,18 +353,28 @@ export default class StageOptionStore {
     })
   }
 
-  public toJson(container: HTMLDivElement | string) {}
+  /* public toJson(container: HTMLDivElement | string) {}*/
 
-  importFromSvg(svg: string) {
-    this.importFromJson(ImportSvg(svg))
+  importFromSvg(svg: string, container: HTMLDivElement | string) {
+    this.importFromJson(ImportSvg(svg), container)
   }
-  importFromJson(json: any) {
-    const state = this._state
-    const stage: Stage = Konva.Node.create(json, state.container)
-    this._state.pages.push(stage)
+  importFromJson(json: any, container: HTMLDivElement | string) {
+    //const state = this._state
+    //console.log('this is 10000', json)
+    const stage: Stage = Konva.Node.create(json, container)
+    console.log('this is stage', stage)
+    /*stage.setAttrs({
+      docWidth: stage.width(),
+      docheight: stage.height(),
+    })*/
+    //const stage=gets
+    const page: Page = {
+      stage,
+    }
+    this._state.pages.push(page)
     this._state.currentPage++
     const layer: Layer = this.getBaseLayer()
-    const group: Group = this.getGroup()
+    const group: Group = this.getMainGroup()
     this.setTransformer(stage, layer)
     this.setSnapping(stage, layer, group)
     this.setContextMenu(stage, group)
@@ -374,14 +403,6 @@ export default class StageOptionStore {
 
       if (shape.className == 'circle') {
         console.log('this is clip path circle')
-        /*item.clipFunc(function (ctx) {
-          ctx.rect(
-            _.get(shape, 'attrs.x', 0),
-            _.get(shape, 'attrs.y', 0),
-            _.get(shape, 'attrs.width', 0),
-            _.get(shape, 'attrs.height', 0),
-          )
-        })*/
       }
 
       if (shape.className == 'Rect') {
@@ -407,7 +428,7 @@ export default class StageOptionStore {
       }
 
       if (shape.className == 'Path') {
-        console.log('this is shape for clip path', shape)
+        //console.log('this is shape for clip path', shape)
         item.clipFunc(function (ctx) {
           //method 1
           const path = new Konva.Path({
@@ -416,9 +437,9 @@ export default class StageOptionStore {
           path.sceneFunc().call(path, ctx, path)
           //method 2
           /* ctx.rect(0, 0, 4000, 2000)
-          const path2D = new Path2D(shape.attrs.data)
-          //path2D.rect(70, 70, 120, 80);
-          ctx._context.clip(path2D)*/
+                    const path2D = new Path2D(shape.attrs.data)
+                    //path2D.rect(70, 70, 120, 80);
+                    ctx._context.clip(path2D)*/
         })
       }
     })
@@ -427,12 +448,19 @@ export default class StageOptionStore {
   }
 
   exportToJson(): string {
-    const stage: Stage = this.currentStage()
-    return stage.toJSON()
+    //const stage: Stage = this.currentStage()
+    //this.pages
+    const pages = []
+    this.pages.forEach((item) => {
+      pages.push(item.toObject())
+    })
+    // console.log(pages, 'pages')
+    return JSON.stringify(pages)
+    //return stage.toJSON()
   }
 
   applyZoom() {
-    const stage: Stage = this.currentStage()
+    const stage: Stage = this.getCurrentPage()
     stage.scale({
       x: stage.scale().x * 0.2,
       y: stage.scale().y * 0.2,
@@ -460,8 +488,8 @@ export default class StageOptionStore {
       selectedElements: [],
       currentPage: 0,
       pages: [],
-      docWidth: 1000,
-      docHeight: 1400,
+      //docWidth: 1000,
+      //docHeight: 1400,
       copyElements: [],
       currentColor: {
         hsl: {
@@ -494,21 +522,21 @@ export default class StageOptionStore {
     uiStore.deActiveElementWhenNoneSelected()
   }
 
-  private initStage(stage: Stage) {
-    const state = this._state
+  private initStage(page: Page) {
+    //const state = this._state
     const layer = new Layer({
       name: 'layer',
     })
-    stage.add(layer)
+    page.stage.add(layer)
     const group = new Group({
-      x: stage.width() / 2 - state.docWidth / 2,
-      y: stage.height() / 2 - state.docHeight / 2,
-      width: state.docWidth,
-      height: state.docHeight,
+      x: page.stage.width() / 2 - page.docWidth / 2,
+      y: page.stage.height() / 2 - page.docHeight / 2,
+      width: page.docWidth,
+      height: page.docHeight,
       clipX: 0,
       clipY: 0,
-      clipWidth: state.docWidth,
-      clipHeight: state.docHeight,
+      clipWidth: page.docWidth,
+      clipHeight: page.docHeight,
       name: 'main_group',
     })
     layer.add(group)
@@ -516,69 +544,69 @@ export default class StageOptionStore {
       name: 'background',
       x: 0,
       y: 0,
-      width: state.docWidth,
-      height: state.docHeight,
+      width: page.docWidth,
+      height: page.docHeight,
       fill: '#fff',
       /*shadowBlur: 0,
-      shadowOffset: { x: 0, y: 0 },
-      shadowOpacity: 1,
-      shadowColor: 'black',*/
+            shadowOffset: { x: 0, y: 0 },
+            shadowOpacity: 1,
+            shadowColor: 'black',*/
       preventDefault: false,
       //fillLinearGradientStartPoint: { x: 0, y: 0 },
       //fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
       // gradient into transparent color, so we can see CSS styles
       /*fillLinearGradientColorStops: [
-              0,
-              'yellow',
-              0.5,
-              'blue',
-              0.6,
-              'rgba(0, 0, 0, 0)',
-            ],*/
+                    0,
+                    'yellow',
+                    0.5,
+                    'blue',
+                    0.6,
+                    'rgba(0, 0, 0, 0)',
+                  ],*/
       // remove background from hit graph for better perf
       // because we don't need any events on the background
       listening: true,
     })
     group.add(background)
     //background.zIndex(-1);
-    this.setTransformer(stage, layer)
+    this.setTransformer(page.stage, layer)
     //start drag and drop on stage
     /* const stageContainer = stage.container()
-    stageContainer.addEventListener('dragover', function (e) {
-      console.log('stage container drag over', e)
-      e.preventDefault() // !important
-    })
-
-    stageContainer.addEventListener('drop', function (e) {
-      console.log('stage container drop', e)
-      // @ts-ignore
-      const data = e.dataTransfer.getData('text')
-      console.log('this is data', data)
-      //const element = document.getElementById(data)
-      //console.log('this is element', element)
-      stage.setPointersPositions(e)
-
-      Konva.Image.fromURL(data, function (image) {
-        group.add(image)
-        image.position(stage.getPointerPosition())
-        //image.name('element')
-        image.setAttrs({
-          //x: 200,
-          // y: 50,
-          //scaleX: 0.5,
-          // scaleY: 0.5,
-          href: data,
+        stageContainer.addEventListener('dragover', function (e) {
+          console.log('stage container drag over', e)
+          e.preventDefault() // !important
         })
-        //image.h
-        //image.draggable(true)
-      })
 
-      e.preventDefault()
-      // now we need to find pointer position
-      // we can't use stage.getPointerPosition() here, because that event
-      // is not registered by Konva.Stage
-      // we can register it manually:
-    })*/
+        stageContainer.addEventListener('drop', function (e) {
+          console.log('stage container drop', e)
+          // @ts-ignore
+          const data = e.dataTransfer.getData('text')
+          console.log('this is data', data)
+          //const element = document.getElementById(data)
+          //console.log('this is element', element)
+          stage.setPointersPositions(e)
+
+          Konva.Image.fromURL(data, function (image) {
+            group.add(image)
+            image.position(stage.getPointerPosition())
+            //image.name('element')
+            image.setAttrs({
+              //x: 200,
+              // y: 50,
+              //scaleX: 0.5,
+              // scaleY: 0.5,
+              href: data,
+            })
+            //image.h
+            //image.draggable(true)
+          })
+
+          e.preventDefault()
+          // now we need to find pointer position
+          // we can't use stage.getPointerPosition() here, because that event
+          // is not registered by Konva.Stage
+          // we can register it manually:
+        })*/
 
     //end drag and drop on stage
 
@@ -683,60 +711,55 @@ export default class StageOptionStore {
       data: 'M0,0h640v480H0z',
       fill: '#c15959',
       /* scale: {
-        x: 2,
-        y: 2,
-      },*/
+              x: 2,
+              y: 2,
+            },*/
     })
 
     group.add(path)
 
-    const path2 = new Konva.Path({
+    /* const path2 = new Konva.Path({
       name: 'element',
       draggable: true,
-      /* x: 0,
-      y: 0,*/
-      data: 'm330.18 215.21 1.52 2.63c.22.4.61.68 1.06.76l3.05.61c.83.14 1.39.94 1.25 1.77-.05.3-.19.57-.4.79l-2.1 2.22c-.31.33-.46.77-.4 1.22l.36 3c.09.86-.55 1.63-1.41 1.72-.28.03-.56-.02-.81-.14l-2.81-1.27a1.6 1.6 0 0 0-1.32 0l-2.81 1.27c-.78.37-1.72.04-2.09-.74-.13-.26-.18-.55-.15-.84l.36-3c.06-.45-.09-.89-.4-1.22l-2.1-2.22a1.53 1.53 0 0 1 .83-2.56l3-.59c.45-.08.84-.36 1.06-.76l1.57-2.65c.45-.76 1.42-1.01 2.18-.56.23.13.42.33.56.56z'.replaceAll(
-        ' ',
-        ',',
-      ),
+      data: 'm330.18 215.21 1.52 2.63c.22.4.61.68 1.06.76l3.05.61c.83.14 1.39.94 1.25 1.77-.05.3-.19.57-.4.79l-2.1 2.22c-.31.33-.46.77-.4 1.22l.36 3c.09.86-.55 1.63-1.41 1.72-.28.03-.56-.02-.81-.14l-2.81-1.27a1.6 1.6 0 0 0-1.32 0l-2.81 1.27c-.78.37-1.72.04-2.09-.74-.13-.26-.18-.55-.15-.84l.36-3c.06-.45-.09-.89-.4-1.22l-2.1-2.22a1.53 1.53 0 0 1 .83-2.56l3-.59c.45-.08.84-.36 1.06-.76l1.57-2.65c.45-.76 1.42-1.01 2.18-.56.23.13.42.33.56.56z'
       fill: '#fccd1d',
-      /* scale: {
-        x: 2,
-        y: 2,
-      },*/
+      /!* scale: {
+              x: 2,
+              y: 2,
+            },*!/
     })
-    group.add(path2)
+    group.add(path2)*/
 
-    const imageObj = new Image()
+    //const imageObj = new Image()
 
     //console.log(imageObj, 'dasfsfsdf')
 
     /*imageObj.onload = function () {
-      const yoda = new Konva.Image({
-        x: 50,
-        y: 50,
-        image: imageObj,
-        width: 200,
-        height: 300,
-      })
+          const yoda = new Konva.Image({
+            x: 50,
+            y: 50,
+            image: imageObj,
+            width: 200,
+            height: 300,
+          })
 
-      // add the shape to the layer
-      group.add(yoda)
-    }
-    imageObj.src = 'https://picsum.photos/200/300'
+          // add the shape to the layer
+          group.add(yoda)
+        }
+        imageObj.src = 'https://picsum.photos/200/300'
 
-    Konva.Image.fromURL('https://picsum.photos/200/300?1', function (darthNode) {
-      darthNode.setAttrs({
-        x: 200,
-        y: 50,
-        // scaleX: 0.5,
-        // scaleY: 0.5,
-      })
-      group.add(darthNode)
-    })*/
+        Konva.Image.fromURL('https://picsum.photos/200/300?1', function (darthNode) {
+          darthNode.setAttrs({
+            x: 200,
+            y: 50,
+            // scaleX: 0.5,
+            // scaleY: 0.5,
+          })
+          group.add(darthNode)
+        })*/
 
     //end test
-    this.setSnapping(stage, layer, group)
+    this.setSnapping(page.stage, layer, group)
   }
 
   // were can we snap our objects?
@@ -894,8 +917,8 @@ export default class StageOptionStore {
     })
   }
 
-  private currentStage(): Stage {
-    return <Stage>this._state.pages[this._state.currentPage - 1]
+  private getCurrentPage(): Page {
+    return this.pages[this._state.currentPage - 1]
   }
 
   private setShapesToTransformer(shapes: Shape[]): void {
@@ -904,15 +927,15 @@ export default class StageOptionStore {
     this.selectedElements = shapes
   }
 
-  private getAllShapes(): Shape[] {
-    const stage: Stage = this.currentStage()
+  /* private getAllShapes(): Shape[] {
+    const stage: Stage = this.getCurrentPage().stage
     const shapes: Shape[] = stage.find('.element')
     return shapes
-  }
+  }*/
 
-  private getGroup(): Group {
-    const stage: Stage = this.currentStage()
-    const group: Group = stage.findOne('.main_group')
+  private getMainGroup(stage?: Stage): Group {
+    const _stage = stage ? stage : this.getCurrentPage().stage
+    const group: Group = _stage.findOne('.main_group')
     return group
   }
 
@@ -928,17 +951,17 @@ export default class StageOptionStore {
   }
 
   private getTransFormer(): Transformer {
-    const stage: Stage = this.currentStage()
+    const stage: Stage = this.getCurrentPage().stage
     return stage.findOne('.transformer')
   }
 
   private addShapeToGroup(shapes: Shape[]): void {
-    const group: Group = this.getGroup()
+    const group: Group = this.getMainGroup()
     group.add(...shapes)
   }
 
   private getBackground(): Rect {
-    const stage: Stage = this.currentStage()
+    const stage: Stage = this.getCurrentPage().stage
     return stage.findOne('.background')
   }
 
@@ -1054,27 +1077,27 @@ export default class StageOptionStore {
 
     /* stage.on('mousemove touchmove', (e) => {
 
-            e.evt.cancelBubble=false;
-            // do nothing if we didn't start selection
-            if (!selectionRectangle.visible()) {
-                return;
-            }
+                e.evt.cancelBubble=false;
+                // do nothing if we didn't start selection
+                if (!selectionRectangle.visible()) {
+                    return;
+                }
 
-            let pointerPosition: Vector2d = {x: 0, y: 0};
-            if (stage.getPointerPosition() != null) {
-                pointerPosition = stage.getPointerPosition() as Vector2d;
-            }
+                let pointerPosition: Vector2d = {x: 0, y: 0};
+                if (stage.getPointerPosition() != null) {
+                    pointerPosition = stage.getPointerPosition() as Vector2d;
+                }
 
-            x2 = pointerPosition.x;
-            y2 = pointerPosition.y;
+                x2 = pointerPosition.x;
+                y2 = pointerPosition.y;
 
-            selectionRectangle.setAttrs({
-                x: Math.min(x1, x2),
-                y: Math.min(y1, y2),
-                width: Math.abs(x2 - x1),
-                height: Math.abs(y2 - y1),
-            });
-        });*/
+                selectionRectangle.setAttrs({
+                    x: Math.min(x1, x2),
+                    y: Math.min(y1, y2),
+                    width: Math.abs(x2 - x1),
+                    height: Math.abs(y2 - y1),
+                });
+            });*/
 
     window.addEventListener('mouseup', (e) => {
       mouseUp(e)
@@ -1149,7 +1172,7 @@ export default class StageOptionStore {
   }
 
   private getBaseLayer(): Layer {
-    const stage: Stage = this.currentStage()
+    const stage: Stage = this.getCurrentPage().stage
     return stage.findOne('.layer')
   }
 
@@ -1234,18 +1257,18 @@ export default class StageOptionStore {
     const shapeContextMenu: HTMLElement | null = document.getElementById('shape-context-menu')
     stage.on('contextmenu', (e) => {
       /* let pos: Vector2d = {x: 0, y: 0};
-            const stage: Stage = this.currentStage();
-            if (stage.getPointerPosition() != null) {
-                pos = stage.getPointerPosition() as Vector2d;
-            }*/
+                  const stage: Stage = this.currentStage();
+                  if (stage.getPointerPosition() != null) {
+                      pos = stage.getPointerPosition() as Vector2d;
+                  }*/
 
       this.lastPointerPosition = group.getRelativePointerPosition()
       /*var shape = new Konva.Circle({
-                x: pos.x,
-                y: pos.y,
-                fill: 'red',
-                radius: 20,
-            });*/
+                      x: pos.x,
+                      y: pos.y,
+                      fill: 'red',
+                      radius: 20,
+                  });*/
 
       //group.add(shape);
 

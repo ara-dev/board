@@ -27,8 +27,8 @@ interface RadialGradient {
   svgID: string
   type: string
   gradient: {
-    fillRadialGradientStartPoint: any
-    fillRadialGradientEndPoint: any
+    fillRadialGradientStartPoint: { x: number; y: number }
+    fillRadialGradientEndPoint: { x: number; y: number }
     fillRadialGradientColorStops: any[]
     fillRadialGradientStartRadius: number
     fillRadialGradientEndRadius: number
@@ -51,24 +51,18 @@ let clip_path: KonvaFormat[] = []
 let data = null
 
 export function ImportSvg(svg: string): Object {
-  console.log('this is svgo', svgo(svg))
+  //console.log('this is svgo', svgo(svg))
   data = JSON.parse(xmlToJson(svgo(svg)))
   let temp: any = {}
   defs = converDefsToKonvaFormat(data)
   clip_path = converClipPathToKonvaFormat(data)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
-  //const _svg = svg(_.get(data, 'elements[0]', ''))
-  //console.log('this is svg', svg)
-  //console.log('dddddd', data)
-  //return
   data.elements.forEach((item) => {
-    // debugger
     const gItem = generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
   })
-  //layer.children?.push(temp)
-  //console.log(stage, 'this is temp')
+  //console.log(temp, 'this is temp')
   //console.log(JSON.stringify(stage), 'this is temp json')
   return temp
   //return JSON.stringify(temp)
@@ -151,7 +145,6 @@ function converLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradien
 }
 
 function svg(svg: SVGXMLElement) {
-  //debugger
   const viewbox = _.get(svg, 'attributes.viewBox', '0 0 300 300').split(' ')
   const width = parseFloat(viewbox[2])
   const height = parseFloat(viewbox[3])
@@ -163,6 +156,8 @@ function svg(svg: SVGXMLElement) {
       opacity: parseFloat(_.get(svg, 'attributes.opacity', 1)),
       clipX: 0,
       clipY: 0,
+      docWidth: width,
+      docheight: height,
       //clipWidth: parseFloat(viewbox[2]),
       //clipHeight: parseFloat(viewbox[3]),
       clipWidth: width,
@@ -174,7 +169,23 @@ function svg(svg: SVGXMLElement) {
       name: 'main_group', //'group_' + useGenerateUniqueID(),
     },
     className: 'Group',
+    children: [],
   }
+
+  const background: KonvaFormat = {
+    attrs: {
+      name: 'background',
+      x: 0,
+      y: 0,
+      width: width,
+      height: height,
+      fill: '#fff',
+      preventDefault: false,
+      listening: true,
+    },
+    className: 'Rect',
+  }
+
   const stage: KonvaFormat = {
     attrs: {
       name: generateName('stage', ''),
@@ -194,6 +205,7 @@ function svg(svg: SVGXMLElement) {
   stage.children?.push(layer)
   if (svg.elements) {
     item.children = []
+    item.children.push(background)
     svg.elements?.forEach((element) => {
       const gItem = generateItem(element)
       if (gItem) item.children?.push(gItem)
@@ -209,9 +221,6 @@ function path(path: SVGXMLElement): KonvaFormat {
   Object.assign(commonAttr.attrs, {
     data: _.get(path, 'attributes.d', ''),
   })
-  if (!commonAttr.attrs.fill) {
-    Object.assign(commonAttr, { fill: '#000' })
-  }
   return clipPath(path, commonAttr)
 }
 
@@ -243,8 +252,6 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
   const attr = element.attributes['clip-path']
   if (attr) {
     const id = attr.substring(5, attr.length - 1)
-    //if (id == '3_svg__A') debugger
-    //console.log(shape, 'this is shape for clip path')
     const clip = clip_path.find((item) => item.attrs.svgID == id)
     if (clip) {
       if (shape.className == 'Group') {
@@ -264,16 +271,6 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
         }
         return group
       }
-      /*const group: KonvaFormat = {
-        className: 'Group',
-        attrs: {
-          name: generateName('group_clip'),
-          draggable: true,
-          attr_clip: clip,
-        },
-        children: [shape],
-      }
-      return group*/
     }
   }
   return shape
@@ -346,8 +343,14 @@ function commonAttributes(
       if (grd) {
         if (grd.type == 'radial') {
           Object.assign(grd.gradient, {
-            fillRadialGradientStartPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
-            fillRadialGradientEndPoint: { x: item.attrs.width / 2, y: item.attrs.height / 2 },
+            fillRadialGradientStartPoint: {
+              x: _.get(item, 'attrs.width', 0) / 2,
+              y: _.get(item, 'attrs.height', 0) / 2,
+            },
+            fillRadialGradientEndPoint: {
+              x: _.get(item, 'attrs.width', 0) / 2,
+              y: _.get(item, 'attrs.height', 0) / 2,
+            },
           })
         }
         Object.assign(item.attrs, grd.gradient)
@@ -355,6 +358,10 @@ function commonAttributes(
     } else {
       Object.assign(item.attrs, { fill: element.attributes.fill })
     }
+  }
+
+  if (!element.attributes.fill) {
+    Object.assign(item.attrs, { fill: '#000' })
   }
 
   if (element.attributes.stroke) {
@@ -379,17 +386,15 @@ function ellipse(ellipse: SVGXMLElement): KonvaFormat {
 }
 
 function text(text: SVGXMLElement): KonvaFormat {
-  //console.log('this is text', text)
   const commonAttr = commonAttributes('Text', 'text', text)
-  /*Object.assign(commonAttr.attrs, {
+  Object.assign(commonAttr.attrs, {
+    font_id: null,
     //rotation: 0.642,
     //text: _.get(text, 'elements[0].text', ''),
     //x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
     // y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
-  })*/
+  })
   let temp_text = ''
-  //const temp_attr = {}
-  //debugger
   if (text.elements && text.elements.length > 0) {
     if (text.elements[0].type == 'text') {
       temp_text = _.get(text, 'elements[0].text', '')
@@ -415,13 +420,6 @@ function text(text: SVGXMLElement): KonvaFormat {
 
 function image(image: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Image', 'image', image)
-  /*const item: KonvaFormat = {
-    attrs: {
-      name: generateName('group_image'),
-    },
-    className: 'Group',
-    children: [],
-  }*/
   const href: string = image.attributes['xlink:href']
   if (href) {
     if (href.startsWith('data')) {
@@ -430,8 +428,9 @@ function image(image: SVGXMLElement): KonvaFormat {
       Object.assign(commonAttr.attrs, { href: href })
     }
   }
-  //item.children.push(commonAttr)
-  //return item
+  if (commonAttr.attrs.fill) {
+    delete commonAttr.attrs.fill
+  }
   return commonAttr
 }
 
@@ -530,8 +529,6 @@ function converRadialGradientToKonvaFormat(svgxml: SVGXMLElement): RadialGradien
 }
 
 function radialGradient(radial_gradient: SVGXMLElement): RadialGradient {
-  //const x = parseFloat(_.get(radial_gradient, 'attributes.cx', 0))
-  //const y = parseFloat(_.get(radial_gradient, 'attributes.cy', 0))
   const radialGradient: RadialGradient = {
     svgID: _.get(radial_gradient, 'attributes.id', ''),
     type: 'radial',
@@ -564,7 +561,6 @@ function converClipPathToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
         item.attrs.svgID = _.get(element, 'attributes.id', '')
         temp.push(item)
       }
-      //temp.push(Object.assign(.attrs, { svgID: _.get(el, 'attributes.id', '') }))
     })
   })
   return temp
@@ -667,46 +663,87 @@ function decomposeMatrix(matrix: string): Matrix {
 
 function svgo(svg = '') {
   const result = optimize(svg, {
-    // optional but recommended field
-    path: 'path-to.svg',
-    /*js2svg: {
+    //multipass: true, // boolean. false by default
+    //datauri: 'enc', // 'base64', 'enc' or 'unenc'. 'base64' by default
+    /* js2svg: {
       indent: 2, // string with spaces or number of spaces. 4 by default
       pretty: true, // boolean, false by default
     },*/
-    // all config fields are also available here
-    multipass: true,
     plugins: [
+      /* {
+         name: 'preset-default',
+         params: {
+           overrides: {
+             // customize options for plugins included in preset
+             inlineStyles: {
+               onlyMatchedOnce: false,
+             },
+             // or disable plugins
+             //removeDoctype: false,
+             //convertShapeToPath:false,
+             //moveElemsAttrsToGroup:false,
+             //moveGroupAttrsToElems:false,
+             //mergePaths:false,
+             //convertTransform:false,
+           },
+         },
+       },
+       {
+           name:'convertStyleToAttrs',
+           params: {
+
+           }
+       },*/
+      // enable builtin plugin not included in default preset
+      //'prefixIds',
+      // enable and configure builtin plugin not included in preset
       {
-        name: 'preset-default',
+        name: 'inlineStyles',
         params: {
-          overrides: {
+          onlyMatchedOnce: false,
+          /*overrides: {
             // customize options for plugins included in preset
             inlineStyles: {
               onlyMatchedOnce: false,
             },
-            // or disable plugins
-            removeDoctype: false,
-            convertShapeToPath: false,
-            moveElemsAttrsToGroup: false,
-            moveGroupAttrsToElems: false,
-            mergePaths: false,
-            //convertTransform:false,
-          },
+          },*/
         },
       },
-      {
-        name: 'convertStyleToAttrs',
-        params: {},
-      },
-      // enable builtin plugin not included in default preset
-      'prefixIds',
-      // enable and configure builtin plugin not included in preset
       {
         name: 'sortAttrs',
         params: {
           xmlnsOrder: 'alphabetical',
         },
       },
+      {
+        name: 'convertStyleToAttrs',
+        //active: false,
+        /*params: {
+         active: true,
+        keepImportant: true,
+       },*/
+      },
+      {
+        name: 'cleanupAttrs',
+      },
+      {
+        name: 'removeDoctype',
+      },
+      {
+        name: 'removeComments',
+      },
+      {
+        name: 'removeEmptyAttrs',
+      },
+      {
+        name: 'removeEmptyText',
+      },
+      {
+        name: 'convertTransform',
+      },
+      /*{
+        name: 'moveGroupAttrsToElems',
+      },*/
       /* {
          name: 'convertShapeToPath',
          active:true,

@@ -89,13 +89,17 @@
         <div class="price">قیمت کل : 25000</div>
       </div>
       <div class="h-screen relative h-screen board-main">
-        <div class="absolute z-50 p-3 w-full" style="background: #fff">
+        <div v-if="false" class="absolute z-50 p-3 w-full" style="background: #fff">
           <div class="flex justify-between">
             <TopRightButtons />
             <TopLeftButtons />
           </div>
         </div>
-        <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
+        <div
+          v-if="false"
+          class="absolute bottom-board left-0 bottom-0 z-50 p-3"
+          style="background: #fff"
+        >
           <BottomLeftButtons />
         </div>
         <pages v-if="false" />
@@ -145,6 +149,7 @@
 
   function save() {
     const data = stageStore.exportToJson()
+    console.log(data)
 
     // Get the data from each element on the form.
     /*const name = document.getElementById('txtName');
@@ -192,7 +197,7 @@
     fileReader.addEventListener('load', (event) => {
       const data = event.target?.result
       //console.log()
-      stageStore.importFromSvg(data)
+      stageStore.importFromSvg(data, 'container')
     })
     fileReader.readAsText(file)
   }

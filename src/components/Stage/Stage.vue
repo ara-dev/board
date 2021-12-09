@@ -13,13 +13,13 @@
   const { width, height } = useElementSize(mainboard)
 
   watch([width, height], () => {
-    stageStore.resizeStage(width.value, height.value)
+    stageStore.resizePage(width.value, height.value)
   })
 
   onMounted(() => {
     //debugger
-    stageStore.setContainer('container')
-    stageStore.addPage(width.value, height.value)
+    //stageStore.setContainer('container')
+    stageStore.addPage(150, 300, width.value, height.value, 'container')
     //stageStore.resizeStage(width.value, height.value)
     //stageStore.toJson('container')
   })
