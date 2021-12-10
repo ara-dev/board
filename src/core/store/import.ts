@@ -236,15 +236,8 @@ function circle(circle: SVGXMLElement): KonvaFormat {
 
 function rectangle(rectangle: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Rect', 'rectangle', rectangle)
-  Object.assign(commonAttr.attrs, {
-    // fill: 'red',
-   /* rotation: 0,
-    scaleX: 0,
-    scaleY: 0,*/
-  })
-  const t=clipPath(rectangle, commonAttr)
-  console.log(t,"this is t")
-  return t
+  //Object.assign(commonAttr.attrs, {})
+  return clipPath(rectangle, commonAttr)
 }
 
 function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
