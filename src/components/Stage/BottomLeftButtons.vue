@@ -7,7 +7,7 @@
     </a-button-group>
 
     <a-button-group v-if="uiStore.isVisible('ui.preview_button')">
-      <AButton :disabled="!uiStore.isActive('ui.preview_button')" @click="stageStore.applyTest()">
+      <AButton :disabled="!uiStore.isActive('ui.preview_button')" >
         <Icon icon="fluent:play-20-regular" size="23" />
       </AButton>
     </a-button-group>
@@ -25,6 +25,7 @@
       <AButton
         v-if="uiStore.isVisible('ui.fullscreen_fit_button.children.fit')"
         :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fit')"
+        @click="stageStore.applyFitScreen()"
       >
         100%
       </AButton>
@@ -36,7 +37,7 @@
         <AButton
           v-if="uiStore.isVisible('ui.zoom_button.children.zoom_in')"
           :disabled="!uiStore.isActive('ui.zoom_button.children.zoom_in')"
-          @click="stageStore.applyZoom()"
+          @click="stageStore.applyZoomIn()"
         >
           <Icon icon="fluent:zoom-in-20-regular" size="23" />
         </AButton>
@@ -46,6 +47,7 @@
         <AButton
           v-if="uiStore.isVisible('ui.zoom_button.children.zoom_out')"
           :disabled="!uiStore.isActive('ui.zoom_button.children.zoom_out')"
+          @click="stageStore.applyZoomOut()"
         >
           <Icon icon="fluent:zoom-out-20-regular" size="23" />
         </AButton>

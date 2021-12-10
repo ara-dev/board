@@ -156,8 +156,6 @@ function svg(svg: SVGXMLElement) {
       opacity: parseFloat(_.get(svg, 'attributes.opacity', 1)),
       clipX: 0,
       clipY: 0,
-      docWidth: width,
-      docheight: height,
       //clipWidth: parseFloat(viewbox[2]),
       //clipHeight: parseFloat(viewbox[3]),
       clipWidth: width,
@@ -189,8 +187,10 @@ function svg(svg: SVGXMLElement) {
   const stage: KonvaFormat = {
     attrs: {
       name: generateName('stage', ''),
-      width: width,
-      height: height,
+      //width: width,
+      //height: height,
+      docWidth: width,
+      docHeight: height,
     },
     className: 'Stage',
     children: [],
@@ -237,12 +237,14 @@ function circle(circle: SVGXMLElement): KonvaFormat {
 function rectangle(rectangle: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Rect', 'rectangle', rectangle)
   Object.assign(commonAttr.attrs, {
-    /* fill: 'red',
-    rotation: 0,
+    // fill: 'red',
+   /* rotation: 0,
     scaleX: 0,
     scaleY: 0,*/
   })
-  return clipPath(rectangle, commonAttr)
+  const t=clipPath(rectangle, commonAttr)
+  console.log(t,"this is t")
+  return t
 }
 
 function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {

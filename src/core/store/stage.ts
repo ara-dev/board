@@ -122,8 +122,8 @@ export default class StageOptionStore {
     const h = docHeight > height ? docHeight : height
     const stage = new Stage({
       container: container, //this._state.container
-      width: w,
-      height: h,
+      width: width,
+      height: height,
       name: 'stage',
       //docWidth: w,
       //docheight: h,
@@ -142,17 +142,39 @@ export default class StageOptionStore {
   }
 
   resizePage(newWidth: number, newHeight: number): void {
-    //console.log('this is number', newWidth, newHeight)
-    //const state = this._state
+    console.log('this is windows', newWidth, newHeight)
+   // debugger
     const page = this.getCurrentPage()
-    const w = page.docWidth > newWidth ? page.docWidth : newWidth
-    const h = page.docHeight > newHeight ? page.docHeight : newHeight
-    const stage: UnwrapNestedRefs<Stage> = page.stage
-    stage.width(w)
-    stage.height(h)
     const group: Group = this.getMainGroup(page.stage)
-    group.x(stage.width() / 2 - page.docWidth / 2)
-    group.y(stage.height() / 2 - page.docHeight / 2)
+    const stage: UnwrapNestedRefs<Stage> = page.stage
+    console.log("this is doc",page.docWidth,page.docHeight)
+    const w=(newWidth - 50) / page.docWidth
+    const h=(newHeight - 150) / page.docHeight
+    console.log("this is scale",w,h)
+    const min=Math.min(w,h);
+    stage.width(newWidth)
+    stage.height(newHeight)
+    // group.scale({
+    //   x: 1,
+    //   y: 1,
+    // })
+    group.scale({
+      x: min,
+      y: min,
+    })
+    console.log("ggggg",group.width(),group.height())
+    //const state = this._state
+    //debugger
+    //console.log("this is page",page)
+    //debugger
+    //const w = page.docWidth > newWidth ? page.docWidth : newWidth
+    //const h = page.docHeight > newHeight ? page.docHeight : newHeight
+   // console.log("this is width",stage.width(),page.docWidth)
+   // console.log("this is height",stage.height(),page.docHeight)
+    group.x(stage.width() / 2 - page.docWidth * min / 2)
+    group.y(stage.height() / 2 - page.docHeight * min / 2)
+    //console.log("this is x",group.x())
+    //console.log("this is y",group.y())
   }
 
   applyOpacity(): void {
@@ -356,25 +378,29 @@ export default class StageOptionStore {
   /* public toJson(container: HTMLDivElement | string) {}*/
 
   importFromSvg(svg: string, container: HTMLDivElement | string) {
+    //console.log("this is object",ImportSvg(svg))
     this.importFromJson(ImportSvg(svg), container)
   }
   importFromJson(json: any, container: HTMLDivElement | string) {
     //const state = this._state
     //console.log('this is 10000', json)
     const stage: Stage = Konva.Node.create(json, container)
-    console.log('this is stage', stage)
+    //console.log('this is stage 222222', stage)
     /*stage.setAttrs({
       docWidth: stage.width(),
       docheight: stage.height(),
     })*/
     //const stage=gets
+    //debugger
     const page: Page = {
       stage,
+      docWidth:stage.attrs.docWidth,
+      docHeight:stage.attrs.docHeight,
     }
     this._state.pages.push(page)
     this._state.currentPage++
-    const layer: Layer = this.getBaseLayer()
-    const group: Group = this.getMainGroup()
+    const layer: Layer = this.getBaseLayer(stage)
+    const group: Group = this.getMainGroup(stage)
     this.setTransformer(stage, layer)
     this.setSnapping(stage, layer, group)
     this.setContextMenu(stage, group)
@@ -444,7 +470,7 @@ export default class StageOptionStore {
       }
     })
     //end render clip
-    /*this.resizeStage()*/
+    //this.resizePage()
   }
 
   exportToJson(): string {
@@ -459,13 +485,7 @@ export default class StageOptionStore {
     //return stage.toJSON()
   }
 
-  applyZoom() {
-    const stage: Stage = this.getCurrentPage()
-    stage.scale({
-      x: stage.scale().x * 0.2,
-      y: stage.scale().y * 0.2,
-    })
-  }
+
 
   private _init() {
     this._state = {
@@ -917,8 +937,9 @@ export default class StageOptionStore {
     })
   }
 
-  private getCurrentPage(): Page {
-    return this.pages[this._state.currentPage - 1]
+  private getCurrentPage(): Page | null{
+    //debugger
+    return this._state.pages[this._state.currentPage - 1]
   }
 
   private setShapesToTransformer(shapes: Shape[]): void {
@@ -927,11 +948,13 @@ export default class StageOptionStore {
     this.selectedElements = shapes
   }
 
-  /* private getAllShapes(): Shape[] {
+   private getAllShapes(): Shape[] {
     const stage: Stage = this.getCurrentPage().stage
-    const shapes: Shape[] = stage.find('.element')
+    const shapes: Shape[] = stage.find((node) => {
+       return node.name().startsWith('element')
+     })
     return shapes
-  }*/
+  }
 
   private getMainGroup(stage?: Stage): Group {
     const _stage = stage ? stage : this.getCurrentPage().stage
@@ -1171,8 +1194,8 @@ export default class StageOptionStore {
     })
   }
 
-  private getBaseLayer(): Layer {
-    const stage: Stage = this.getCurrentPage().stage
+  private getBaseLayer(stage? : Stage): Layer {
+    const _stage: Stage = stage ? stage : this.getCurrentPage().stage
     return stage.findOne('.layer')
   }
 
@@ -1320,6 +1343,67 @@ export default class StageOptionStore {
 
     //end context-menu
   }
+
+  applyZoomIn(){
+    //alert('dsfsdf')
+    const stage: Stage = this.getCurrentPage().stage
+    const group:Group=this.getMainGroup();
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x: group.scale().x * 1.2,
+      y: group.scale().y * 1.2,
+    })
+    this.setCenter();
+  }
+
+  applyZoomOut(){
+    //alert('dsfsdf')
+    /*const stage: Stage = this.getCurrentPage().stage
+    stage.scale({
+      x: stage.scale().x / 1.2,
+      y: stage.scale().y / 1.2,
+    })*/
+    //alert('dsfsdf')
+    const stage: Stage = this.getCurrentPage().stage
+    const group:Group=this.getMainGroup();
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x: group.scale().x / 1.2,
+      y: group.scale().y / 1.2,
+    })
+    this.setCenter();
+  }
+
+  applyFitScreen(){
+
+
+
+
+
+   /* //const stage: Stage = this.getCurrentPage().stage
+    const group:Group=this.getMainGroup();
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x:1,
+      y: 1,
+    })
+    this.setCenter();*/
+
+
+  }
+
+  setCenter(){
+    const page : Page=this.getCurrentPage()
+    const group: Group = this.getMainGroup(page.stage)
+    group.x(page.stage.width() / 2 - page.docWidth / 2)
+    group.y(page.stage.height() / 2 - page.docHeight / 2)
+  }
+
+  /*applyZoom() {
+
+  }*/
+
+
 }
 
 export const stageStore = new StageOptionStore()

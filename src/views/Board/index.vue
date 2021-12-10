@@ -96,7 +96,7 @@
           </div>
         </div>
         <div
-          v-if="false"
+          v-if="true"
           class="absolute bottom-board left-0 bottom-0 z-50 p-3"
           style="background: #fff"
         >

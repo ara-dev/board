@@ -6,6 +6,11 @@ interface Toolbar {
 
 const tools: Toolbar[] = [
   {
+    title: 'فایل',
+    id: 'ui.right_sidebar.children.upload',
+    icon: 'ion:cloud-upload-outline',
+  },
+  {
     title: 'تصاویر',
     id: 'ui.right_sidebar.children.image',
     icon: 'ion:images-outline',
@@ -35,11 +40,7 @@ const tools: Toolbar[] = [
     id: 'ui.right_sidebar.children.resize',
     icon: 'ion:resize-outline',
   },
-  {
-    title: 'فایل',
-    id: 'ui.right_sidebar.children.upload',
-    icon: 'ion:cloud-upload-outline',
-  },
+
 ]
 
 export default tools
