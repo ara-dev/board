@@ -7,7 +7,7 @@
     </a-button-group>
 
     <a-button-group v-if="uiStore.isVisible('ui.preview_button')">
-      <AButton :disabled="!uiStore.isActive('ui.preview_button')" >
+      <AButton :disabled="!uiStore.isActive('ui.preview_button')" @click="stageStore.applyTest()" >
         <Icon icon="fluent:play-20-regular" size="23" />
       </AButton>
     </a-button-group>

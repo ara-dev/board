@@ -108,7 +108,10 @@
           <Stage />
         </div>
       </div>
-      <div class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300">
+      <div
+        id="board-left-side"
+        class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300"
+      >
         <transition :css="false">
           <TextOptions
             v-if="uiStore.isVisible('ui.text_option')"
@@ -219,7 +222,7 @@
     fileReader.addEventListener('load', (event) => {
       const data = event.target?.result
       //console.log()
-      stageStore.importFromJson(data)
+      stageStore.importFromJson(JSON.parse(data), 'container')
     })
     fileReader.readAsText(file)
   }

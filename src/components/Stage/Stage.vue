@@ -19,7 +19,7 @@
   onMounted(() => {
     //debugger
     //stageStore.setContainer('container')
-    stageStore.addPage(1080, 1080, width.value, height.value, 'container')
+    stageStore.addPage(800, 500, width.value, height.value, 'container')
     //stageStore.resizeStage(width.value, height.value)
     //stageStore.toJson('container')
   })

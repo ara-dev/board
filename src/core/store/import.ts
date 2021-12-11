@@ -1,4 +1,5 @@
 import { Transform } from 'konva/lib/Util'
+// @ts-ignore
 import _ from 'lodash'
 import { optimize } from 'svgo/lib/svgo'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
@@ -160,11 +161,7 @@ function svg(svg: SVGXMLElement) {
       //clipHeight: parseFloat(viewbox[3]),
       clipWidth: width,
       clipHeight: height,
-      //strokeWidth: 5,
-      //fill: 'red',
-      ///storke: 'red',
-      //opacity: 0.5,
-      name: 'main_group', //'group_' + useGenerateUniqueID(),
+      name: 'main_group',
     },
     className: 'Group',
     children: [],
@@ -576,48 +573,11 @@ function use(use: SVGXMLElement): KonvaFormat {
   return commonAttr
 }
 
-/*
-function getCenter(shape) {
-  return {
-    x:
-      shape.x +
-      (shape.width / 2) * Math.cos(shape.rotation) +
-      (shape.height / 2) * Math.sin(-shape.rotation),
-    y:
-      shape.y +
-      (shape.height / 2) * Math.cos(shape.rotation) +
-      (shape.width / 2) * Math.sin(shape.rotation),
-  }
-}
-*/
-
 function translateToXY(translate: string) {
   //translate(113.55 395.714)
   const xy = translate.substring(10, translate.length - 1).split(' ')
   return { x: parseFloat(xy[0]), y: parseFloat(xy[1]) }
 }
-
-/*function multiplyMatrices(matrixA, matrixB) {
-  const aNumRows = matrixA.length
-  const aNumCols = matrixA[0].length
-  const bNumRows = matrixB.length
-  const bNumCols = matrixB[0].length
-  const newMatrix = new Array(aNumRows)
-
-  for (let r = 0; r < aNumRows; ++r) {
-    newMatrix[r] = new Array(bNumCols)
-
-    for (let c = 0; c < bNumCols; ++c) {
-      newMatrix[r][c] = 0
-
-      for (let i = 0; i < aNumCols; ++i) {
-        newMatrix[r][c] += matrixA[r][i] * matrixB[i][c]
-      }
-    }
-  }
-
-  return newMatrix
-}*/
 
 function rotateAroundPoint(
   shape: KonvaFormat,
@@ -756,5 +716,6 @@ function svgo(svg = '') {
 }
 
 function xmlToJson(xml = '') {
+  // @ts-ignore
   return xml2json(xml)
 }

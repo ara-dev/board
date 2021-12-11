@@ -8,11 +8,26 @@ import { Text } from 'konva/lib/shapes/Text'
 import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
+// @ts-ignore
 import _ from 'lodash'
-import { reactive, readonly, UnwrapRef } from 'vue'
+import { reactive, readonly } from 'vue'
 import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+
+interface ModelPage {
+  docWidth: number
+  docHeight: number
+  stage: Object
+}
+
+interface Model {
+  pages: ModelPage[]
+  fonts: number[]
+  price: number
+  pageSize: { width: number; height: number }[]
+  pageCount: number
+}
 
 interface Page {
   docWidth: number
@@ -37,10 +52,12 @@ interface StageOption {
 
 export default class StageOptionStore {
   private lastPointerPosition: Vector2d
+  private lastWidthHeightMainBoard: { width: number; height: number }
 
   constructor() {
     this._init()
     this.lastPointerPosition = { x: 0, y: 0 }
+    this.lastWidthHeightMainBoard = { width: 0, height: 0 }
     this._state = reactive(this._state)
   }
 
@@ -71,9 +88,9 @@ export default class StageOptionStore {
     return this._state.layerLock
   }
 
-  get pages(): UnwrapRef<StageOption['pages']> {
+  /*get pages(): UnwrapRef<StageOption['pages']> {
     return this._state.pages
-  }
+  }*/
 
   set selectedElements(shapes: Shape[]) {
     if (shapes.length == 0) {
@@ -106,9 +123,9 @@ export default class StageOptionStore {
     return this._state.textOption
   }
 
-  setContainer(container: HTMLDivElement | string): void {
+  /* setContainer(container: HTMLDivElement | string): void {
     this._state.container = container
-  }
+  }*/
 
   addPage(
     docWidth: number,
@@ -117,9 +134,9 @@ export default class StageOptionStore {
     height: number,
     container: HTMLDivElement | string,
   ): void {
-    const state = this._state
-    const w = docWidth > width ? docWidth : width
-    const h = docHeight > height ? docHeight : height
+    // const state = this._state
+    // const w = docWidth > width ? docWidth : width
+    // const h = docHeight > height ? docHeight : height
     const stage = new Stage({
       container: container, //this._state.container
       width: width,
@@ -142,37 +159,42 @@ export default class StageOptionStore {
   }
 
   resizePage(newWidth: number, newHeight: number): void {
-    console.log('this is windows', newWidth, newHeight)
-   // debugger
+    //console.log('fdgdfgdfg', newWidth, newHeight)
+    this.lastWidthHeightMainBoard.width = newWidth
+    this.lastWidthHeightMainBoard.height = newWidth
     const page = this.getCurrentPage()
     const group: Group = this.getMainGroup(page.stage)
-    const stage: UnwrapNestedRefs<Stage> = page.stage
-    console.log("this is doc",page.docWidth,page.docHeight)
-    const w=(newWidth - 50) / page.docWidth
-    const h=(newHeight - 150) / page.docHeight
-    console.log("this is scale",w,h)
-    const min=Math.min(w,h);
-    stage.width(newWidth)
-    stage.height(newHeight)
-    // group.scale({
-    //   x: 1,
-    //   y: 1,
-    // })
+    //const stage: UnwrapNestedRefs<Stage> = page.stage
+    //console.log("this is doc",page.docWidth,page.docHeight)
+    const w = (newWidth - 50) / page.docWidth
+    const h = (newHeight - 150) / page.docHeight
+    //console.log("this is scale",w,h)
+    const min = Math.min(w, h)
+    console.log(min, 'this is min')
+    page.stage.width(newWidth)
+    page.stage.height(newHeight)
+
+    group.x(page.stage.width() / 2 - (page.docWidth * min) / 2)
+    group.y(page.stage.height() / 2 - (page.docHeight * min) / 2)
+
     group.scale({
       x: min,
       y: min,
     })
-    console.log("ggggg",group.width(),group.height())
+
+    // group.scale({
+    //   x: 1,
+    //   y: 1,
+    // })
+    //console.log('ggggg', group.width(), group.height())
     //const state = this._state
     //debugger
     //console.log("this is page",page)
     //debugger
     //const w = page.docWidth > newWidth ? page.docWidth : newWidth
     //const h = page.docHeight > newHeight ? page.docHeight : newHeight
-   // console.log("this is width",stage.width(),page.docWidth)
-   // console.log("this is height",stage.height(),page.docHeight)
-    group.x(stage.width() / 2 - page.docWidth * min / 2)
-    group.y(stage.height() / 2 - page.docHeight * min / 2)
+    // console.log("this is width",stage.width(),page.docWidth)
+    // console.log("this is height",stage.height(),page.docHeight)
     //console.log("this is x",group.x())
     //console.log("this is y",group.y())
   }
@@ -287,6 +309,33 @@ export default class StageOptionStore {
   }
 
   applyTest(): void {
+    ///console.log(data)
+    /* const matrix = []
+    for (let i = 0; i <= 999; i++) {
+      const temp = []
+      for (let j = 0; j <= 999; j++) {
+        temp.push(0)
+      }
+      matrix.push(temp)
+    }
+    // console.log(matrix[0], 'tttttt')
+
+    data.forEach((item) => {
+      matrix[item[0]][item[1]] = item[2]
+    })
+
+    const temp = []
+    matrix.forEach((item, index) => {
+      const count = item.filter((i) => i > 0).length
+      let sum = 0
+      item.forEach((i) => (sum += i))
+
+      temp.push([index, count, sum, sum / count])
+    })
+    console.log('this is temp', temp)
+
+    console.log('this is matrix', matrix)*/
+    //console.log(matrix)
     /*  const tr=this.getTransFormer();
             //const group=this.getGroup();
             const background=this.getBackground().getClientRect().x;
@@ -327,7 +376,7 @@ export default class StageOptionStore {
   }
 
   applyAlignRight(): void {
-    const backgroundDistance = this.getBackground().getClientRect().x
+    /*const backgroundDistance = this.getBackground().getClientRect().x
     const distanceX: number[] = this._state.selectedElements.map((item) => {
       const rect = item.getClientRect()
       return rect.x + rect.width
@@ -338,7 +387,7 @@ export default class StageOptionStore {
       item.setAttrs({
         x: item.x() + distance,
       })
-    })
+    })*/
   }
 
   applyZIndexTop(): void {
@@ -375,117 +424,177 @@ export default class StageOptionStore {
     })
   }
 
-  /* public toJson(container: HTMLDivElement | string) {}*/
-
   importFromSvg(svg: string, container: HTMLDivElement | string) {
-    //console.log("this is object",ImportSvg(svg))
-    this.importFromJson(ImportSvg(svg), container)
-  }
-  importFromJson(json: any, container: HTMLDivElement | string) {
-    //const state = this._state
-    //console.log('this is 10000', json)
-    const stage: Stage = Konva.Node.create(json, container)
-    //console.log('this is stage 222222', stage)
-    /*stage.setAttrs({
-      docWidth: stage.width(),
-      docheight: stage.height(),
-    })*/
-    //const stage=gets
-    //debugger
-    const page: Page = {
-      stage,
-      docWidth:stage.attrs.docWidth,
-      docHeight:stage.attrs.docHeight,
+    const _model: Model = {
+      fonts: [],
+      pageSize: [],
+      pages: [],
+      price: 0,
+      pageCount: 0,
     }
-    this._state.pages.push(page)
-    this._state.currentPage++
-    const layer: Layer = this.getBaseLayer(stage)
-    const group: Group = this.getMainGroup(stage)
-    this.setTransformer(stage, layer)
-    this.setSnapping(stage, layer, group)
-    this.setContextMenu(stage, group)
-    //load images
-    const images = stage.find((node) => {
-      return node.name().startsWith('element_image')
+    const stage = ImportSvg(svg)
+    //console.log('this is stage', stage)
+    _model.pages.push({
+      stage,
+      docWidth: _.get(stage, 'attrs.docWidth', 0),
+      docHeight: _.get(stage, 'attrs.docHeight', 0),
     })
-    images.forEach((item) => {
-      const attr = item.attrs
-      const data = attr.href ? attr.href : attr.dataSrc
-      const parent = item.getParent()
-      Konva.Image.fromURL(data, function (image) {
-        image.setAttrs(attr)
-        parent.add(image)
-        image.zIndex(item.zIndex())
+    this.importFromJson(_model, container)
+  }
+
+  importFromJson(model: Model, container: HTMLDivElement | string) {
+    this._state.pages = []
+    model.pages.forEach((item) => {
+      const stage: Stage = Konva.Node.create(item.stage, container)
+      const page: Page = {
+        stage,
+        docWidth: item.docWidth,
+        docHeight: item.docHeight,
+      }
+      this._state.pages.push(page)
+      //this._state.currentPage++
+      const layer: Layer = this.getBaseLayer(stage)
+      const group: Group = this.getMainGroup(stage)
+      this.setTransformer(stage, layer)
+      this.setSnapping(stage, layer, group)
+      this.setContextMenu(stage, group)
+      //load images
+      const images = stage.find((node) => {
+        return node.name().startsWith('element_image')
       })
-    })
-    //end load images
-    //render clip
-    const children = stage.find((node) => {
-      return node.name().startsWith('element_group_clip')
-    })
-    //console.log('this is children', children)
-    children.forEach((item) => {
-      const shape = item.attrs.attr_clip
-
-      if (shape.className == 'circle') {
-        console.log('this is clip path circle')
-      }
-
-      if (shape.className == 'Rect') {
-        item.clipFunc(function (ctx) {
-          ctx.rect(
-            _.get(shape, 'attrs.x', 0),
-            _.get(shape, 'attrs.y', 0),
-            _.get(shape, 'attrs.width', 0),
-            _.get(shape, 'attrs.height', 0),
-          )
+      images.forEach((item) => {
+        const attr = item.attrs
+        const data = attr.href ? attr.href : attr.dataSrc
+        const parent = item.getParent()
+        Konva.Image.fromURL(data, function (image) {
+          image.setAttrs(attr)
+          parent.add(image)
+          image.zIndex(item.zIndex())
         })
-      }
+      })
+      //end load images
+      //render clip
+      const children: Group[] = stage.find((node) => {
+        return node.name().startsWith('element_group_clip') as Group
+      })
+      //console.log('this is children', children)
+      children.forEach((item) => {
+        const shape = item.attrs.attr_clip
 
-      if (shape.className == 'Line') {
-        item.clipFunc(function (ctx) {
-          const points = _.get(shape, 'attrs.points', [])
-          ctx.beginPath()
-          for (let i = 0; i < points.length; i = i + 2) {
-            ctx.lineTo(points[i], points[i + 1])
-          }
-          ctx.closePath()
-        })
-      }
+        if (shape.className == 'circle') {
+          console.log('this is clip path circle')
+        }
 
-      if (shape.className == 'Path') {
-        //console.log('this is shape for clip path', shape)
-        item.clipFunc(function (ctx) {
-          //method 1
-          const path = new Konva.Path({
-            data: shape.attrs.data,
+        if (shape.className == 'Rect') {
+          item.clipFunc(function (ctx) {
+            ctx.rect(
+              _.get(shape, 'attrs.x', 0),
+              _.get(shape, 'attrs.y', 0),
+              _.get(shape, 'attrs.width', 0),
+              _.get(shape, 'attrs.height', 0),
+            )
           })
-          path.sceneFunc().call(path, ctx, path)
-          //method 2
-          /* ctx.rect(0, 0, 4000, 2000)
-                    const path2D = new Path2D(shape.attrs.data)
-                    //path2D.rect(70, 70, 120, 80);
-                    ctx._context.clip(path2D)*/
-        })
-      }
+        }
+
+        if (shape.className == 'Line') {
+          item.clipFunc(function (ctx) {
+            const points = _.get(shape, 'attrs.points', [])
+            ctx.beginPath()
+            for (let i = 0; i < points.length; i = i + 2) {
+              ctx.lineTo(points[i], points[i + 1])
+            }
+            ctx.closePath()
+          })
+        }
+
+        if (shape.className == 'Path') {
+          //console.log('this is shape for clip path', shape)
+          item.clipFunc(function (ctx) {
+            //method 1
+            const path = new Konva.Path({
+              data: shape.attrs.data,
+            })
+            path.sceneFunc().call(path, ctx, path)
+            //method 2
+            /* ctx.rect(0, 0, 4000, 2000)
+                      const path2D = new Path2D(shape.attrs.data)
+                      //path2D.rect(70, 70, 120, 80);
+                      ctx._context.clip(path2D)*/
+          })
+        }
+      })
+      //end render clip
     })
-    //end render clip
-    //this.resizePage()
+    this._state.currentPage = 1
+    this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
   }
 
   exportToJson(): string {
-    //const stage: Stage = this.currentStage()
-    //this.pages
-    const pages = []
-    this.pages.forEach((item) => {
-      pages.push(item.toObject())
+    const _export: Model = {
+      price: 0,
+      pages: [],
+      pageSize: [],
+      fonts: [],
+      pageCount: 0,
+    }
+    _export.pageCount = this._state.pages.length
+    this._state.pages.forEach((item) => {
+      _export.pages.push({
+        docWidth: item.docWidth,
+        docHeight: item.docHeight,
+        stage: item.stage.toObject(),
+      })
+      _export.pageSize.push({ width: item.docWidth, height: item.docHeight })
     })
-    // console.log(pages, 'pages')
-    return JSON.stringify(pages)
-    //return stage.toJSON()
+    return JSON.stringify(_export)
   }
 
+  applyZoomIn() {
+    /*const stage: Stage = this.getCurrentPage().stage
+    const group: Group = this.getMainGroup()
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x: group.scale().x * 1.2,
+      y: group.scale().y * 1.2,
+    })
+    this.setCenter()*/
+  }
 
+  applyZoomOut() {
+    //alert('dsfsdf')
+    /*const stage: Stage = this.getCurrentPage().stage
+    stage.scale({
+      x: stage.scale().x / 1.2,
+      y: stage.scale().y / 1.2,
+    })*/
+    //alert('dsfsdf')
+    /* const stage: Stage = this.getCurrentPage().stage
+    const group: Group = this.getMainGroup()
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x: group.scale().x / 1.2,
+      y: group.scale().y / 1.2,
+    })
+    this.setCenter()*/
+  }
+
+  applyFitScreen() {
+    /* //const stage: Stage = this.getCurrentPage().stage
+    const group:Group=this.getMainGroup();
+    //console.log("this is scale",stage.scale())
+    group.scale({
+      x:1,
+      y: 1,
+    })
+    this.setCenter();*/
+  }
+
+  setCenter() {
+    const page: Page = this.getCurrentPage()
+    const group: Group = this.getMainGroup(page.stage)
+    group.x(page.stage.width() / 2 - page.docWidth / 2)
+    group.y(page.stage.height() / 2 - page.docHeight / 2)
+  }
 
   private _init() {
     this._state = {
@@ -638,7 +747,7 @@ export default class StageOptionStore {
       width: 100,
       height: 90,
       fill: 'red',
-      name: 'element',
+      name: 'element_rectangle_5152',
       draggable: true,
       //offsetX :   - 50 ,
       //offsetY : -80 ,
@@ -652,7 +761,7 @@ export default class StageOptionStore {
       width: 150,
       height: 90,
       fill: 'green',
-      name: 'element',
+      name: 'element_rectangle_858693',
       draggable: true,
       offsetX: 150 / 2,
       offsetY: 90 / 2,
@@ -661,7 +770,7 @@ export default class StageOptionStore {
     group.add(rect2)
 
     const circle = new Konva.Circle({
-      name: 'element',
+      name: 'element_circle_dsfsdfsdf',
       x: 230,
       y: 100,
       radius: 60,
@@ -694,21 +803,21 @@ export default class StageOptionStore {
     })
 
     const text = new Konva.Text({
-      name: 'element',
+      name: 'element_text_5252',
       x: 30,
       y: 30,
       fontFamily: 'Calibri',
       fontSize: 24,
       text: 'this is text',
       //fill: 'black',
-      //draggable: true,
+      draggable: true,
       fill: 'blue',
     })
     grp.add(text)
     //group.add(text)
 
     const text2 = new Konva.Text({
-      name: 'element',
+      name: 'element_text_5525',
       x: 10,
       y: 10,
       fontFamily: 'Calibri',
@@ -716,7 +825,7 @@ export default class StageOptionStore {
       text: 'نمونه متن فارسی',
       fill: 'black',
       fontSrc: 'henzagold.com',
-      //draggable: true,
+      draggable: true,
     })
     grp.add(text2)
     //group.add(text2)
@@ -780,6 +889,7 @@ export default class StageOptionStore {
 
     //end test
     this.setSnapping(page.stage, layer, group)
+    this.setEditableText(page.stage)
   }
 
   // were can we snap our objects?
@@ -937,9 +1047,8 @@ export default class StageOptionStore {
     })
   }
 
-  private getCurrentPage(): Page | null{
-    //debugger
-    return this._state.pages[this._state.currentPage - 1]
+  private getCurrentPage(): Page {
+    return <Page>this._state.pages[this._state.currentPage - 1]
   }
 
   private setShapesToTransformer(shapes: Shape[]): void {
@@ -948,11 +1057,11 @@ export default class StageOptionStore {
     this.selectedElements = shapes
   }
 
-   private getAllShapes(): Shape[] {
+  private getAllShapes(): Shape[] {
     const stage: Stage = this.getCurrentPage().stage
     const shapes: Shape[] = stage.find((node) => {
-       return node.name().startsWith('element')
-     })
+      return node.name().startsWith('element')
+    })
     return shapes
   }
 
@@ -973,8 +1082,8 @@ export default class StageOptionStore {
     }
   }
 
-  private getTransFormer(): Transformer {
-    const stage: Stage = this.getCurrentPage().stage
+  private getTransFormer(stage?: Stage): Transformer {
+    const _stage: Stage = stage ? stage : this.getCurrentPage().stage
     return stage.findOne('.transformer')
   }
 
@@ -1194,7 +1303,7 @@ export default class StageOptionStore {
     })
   }
 
-  private getBaseLayer(stage? : Stage): Layer {
+  private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
     return stage.findOne('.layer')
   }
@@ -1340,70 +1449,157 @@ export default class StageOptionStore {
         shapeContextMenu.style.display = 'none'
       }
     })
-
     //end context-menu
   }
 
-  applyZoomIn(){
-    //alert('dsfsdf')
-    const stage: Stage = this.getCurrentPage().stage
-    const group:Group=this.getMainGroup();
-    //console.log("this is scale",stage.scale())
-    group.scale({
-      x: group.scale().x * 1.2,
-      y: group.scale().y * 1.2,
+  private setEditableText(stage: Stage) {
+    stage.on('dblclick dbltap', function (e) {
+      //console.log('this is get position', e.target.getPosition())
+      //console.log('this is absolut position', e.target.absolutePosition())
+      // console.log('this is  position x y', e.target.x(), e.target.y())
+      //console.log('this is width , hieght', document.getElementById('board-left-side').clientHeight)
+
+      if (e.target.name().startsWith('element_text')) {
+        const leftSideWidth = document.getElementById('board-left-side').clientWidth
+        const text: Text = e.target as Text
+        // const transformer: Transformer = this.getTransform()
+
+        // hide text node and transformer:
+        text.hide()
+        //tr.hide();
+
+        // create textarea over canvas with absolute position
+        // first we need to find position for textarea
+        // how to find it?
+
+        // at first lets find position of text node relative to the stage:
+        const textPosition = text.absolutePosition()
+        console.log('this is text postion', textPosition)
+
+        // so position of textarea will be the sum of positions above:
+        const areaPosition = {
+          x: textPosition.x + leftSideWidth, //stage.container().offsetLeft + textPosition.x,
+          y: textPosition.y, //stage.container().offsetTop + textPosition.y,
+        }
+
+        // create textarea and style it
+        const textarea = document.createElement('textarea')
+        document.body.appendChild(textarea)
+
+        // apply many styles to match text on canvas as close as possible
+        // remember that text rendering on canvas and on the textarea can be different
+        // and sometimes it is hard to make it 100% the same. But we will try...
+        textarea.value = text.text()
+        textarea.style.position = 'absolute'
+        textarea.style.top = areaPosition.y - 5 + 'px'
+        textarea.style.left = areaPosition.x + 'px'
+        textarea.style.width = text.width() - text.padding() * 2 + 'px'
+        textarea.style.height = text.height() - text.padding() * 2 + 5 + 'px'
+        textarea.style.fontSize = text.fontSize() * 0.76 + 'px'
+        textarea.style.border = 'none'
+        textarea.style.padding = '0px'
+        textarea.style.margin = '0px'
+        textarea.style.overflow = 'hidden'
+        textarea.style.background = 'none'
+        textarea.style.outline = 'none'
+        textarea.style.resize = 'none'
+        //textarea.style.lineHeight = text.lineHeight()
+        textarea.style.fontFamily = text.fontFamily()
+        textarea.style.transformOrigin = 'left top'
+        textarea.style.textAlign = text.align()
+        textarea.style.color = text.fill()
+        /*rotation = textNode.rotation();
+        const transform = '';
+        if (rotation) {
+          transform += 'rotateZ(' + rotation + 'deg)';
+        }*/
+
+        let px = 0
+        // also we need to slightly move textarea on firefox
+        // because it jumps a bit
+        const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+        if (isFirefox) {
+          px += 2 + Math.round(text.fontSize() / 20)
+        }
+        //transform += 'translateY(-' + px + 'px)'
+
+        //textarea.style.transform = transform
+
+        // reset height
+        textarea.style.height = 'auto'
+        // after browsers resized it we can set actual value
+        textarea.style.height = textarea.scrollHeight + 3 + 'px'
+
+        textarea.focus()
+
+        function removeTextarea() {
+          textarea.parentNode.removeChild(textarea)
+          window.removeEventListener('click', handleOutsideClick)
+          text.show()
+          //tr.show()
+          //tr.forceUpdate()
+        }
+
+        function setTextareaWidth(newWidth) {
+          if (!newWidth) {
+            // set width for placeholder
+            newWidth = text.placeholder.length * text.fontSize()
+          }
+          // some extra fixes on different browsers
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+          const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+          if (isSafari || isFirefox) {
+            newWidth = Math.ceil(newWidth)
+          }
+
+          const isEdge = document.documentMode || /Edge/.test(navigator.userAgent)
+          if (isEdge) {
+            newWidth += 1
+          }
+          textarea.style.width = newWidth + 'px'
+        }
+
+        textarea.addEventListener('keydown', function (e) {
+          // hide on enter
+          // but don't hide on shift + enter
+          /* if (e.keyCode === 13 && !e.shiftKey) {
+            text.text(textarea.value)
+            removeTextarea()
+          }*/
+          // on esc do not set value back to node
+          if (e.keyCode === 27) {
+            removeTextarea()
+          }
+        })
+
+        textarea.addEventListener('keydown', function (e) {
+          const scale = text.getAbsoluteScale().x
+          setTextareaWidth(text.width() * scale)
+          textarea.style.height = 'auto'
+          textarea.style.height = textarea.scrollHeight + text.fontSize() + 'px'
+        })
+
+        function handleOutsideClick(e) {
+          if (e.target !== textarea) {
+            text.text(textarea.value)
+            removeTextarea()
+          }
+        }
+        setTimeout(() => {
+          window.addEventListener('click', handleOutsideClick)
+        })
+      }
+
+      //console.log('this is text')
+      // e.target is a clicked Konva.Shape or current stage if you clicked on empty space
+      //console.log('clicked on', e.target)
+      //console.log('usual click on ' + JSON.stringify(stage.getPointerPosition()))
     })
-    this.setCenter();
-  }
-
-  applyZoomOut(){
-    //alert('dsfsdf')
-    /*const stage: Stage = this.getCurrentPage().stage
-    stage.scale({
-      x: stage.scale().x / 1.2,
-      y: stage.scale().y / 1.2,
-    })*/
-    //alert('dsfsdf')
-    const stage: Stage = this.getCurrentPage().stage
-    const group:Group=this.getMainGroup();
-    //console.log("this is scale",stage.scale())
-    group.scale({
-      x: group.scale().x / 1.2,
-      y: group.scale().y / 1.2,
-    })
-    this.setCenter();
-  }
-
-  applyFitScreen(){
-
-
-
-
-
-   /* //const stage: Stage = this.getCurrentPage().stage
-    const group:Group=this.getMainGroup();
-    //console.log("this is scale",stage.scale())
-    group.scale({
-      x:1,
-      y: 1,
-    })
-    this.setCenter();*/
-
-
-  }
-
-  setCenter(){
-    const page : Page=this.getCurrentPage()
-    const group: Group = this.getMainGroup(page.stage)
-    group.x(page.stage.width() / 2 - page.docWidth / 2)
-    group.y(page.stage.height() / 2 - page.docHeight / 2)
   }
 
   /*applyZoom() {
 
   }*/
-
-
 }
 
 export const stageStore = new StageOptionStore()
