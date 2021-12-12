@@ -10,7 +10,7 @@ module.exports = defineConfig({
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
     sourceType: 'module',
     jsxPragma: 'React',
     ecmaFeatures: {

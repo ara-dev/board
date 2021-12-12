@@ -35,7 +35,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-mydesign';
+  @pre: ~'@{prefix}-mydesign';
 
   .@{pre}-btn-edit {
     .ant-btn-primary {

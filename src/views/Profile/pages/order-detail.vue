@@ -90,7 +90,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-order-detail';
+  @pre: ~'@{prefix}-order-detail';
 
   .@{pre}{
     .ant-card-body {

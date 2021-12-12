@@ -7,19 +7,26 @@
     </a-button-group>
 
     <a-button-group v-if="uiStore.isVisible('ui.preview_button')">
-      <AButton :disabled="!uiStore.isActive('ui.preview_button')" @click="stageStore.applyTest()" >
-        <Icon icon="fluent:play-20-regular" size="23" />
+      <AButton :disabled="!uiStore.isActive('ui.preview_button')" @click="stageStore.applyTest()">
+        <Icon icon="ion:play-outline" size="23" />
       </AButton>
     </a-button-group>
 
     <a-button-group v-if="uiStore.isVisible('ui.fullscreen_fit_button')" class="mr-3" dir="ltr">
       <ATooltip v-if="uiStore.isVisible('ui.fullscreen_fit_button.children.fullscreen')">
-        <!--<template #title v-if="isFullscreen"> حال عادی</template>-->
-        <!--<template #title v-else>تمام صفحه</template>-->
-        <template #title>تمام صفحه</template>
-        <AButton :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fullscreen')">
-          <Icon v-if="false" icon="akar-icons:normal-screen" />
-          <Icon v-else icon="ion:expand-outline" size="23" />
+        <template v-if="isFullscreen" #title> حال عادی</template>
+        <template v-else #title>تمام صفحه</template>
+        <AButton
+          :disabled="!uiStore.isActive('ui.fullscreen_fit_button.children.fullscreen')"
+          @click="toggle"
+        >
+          <div v-if="isFullscreen">
+            <!--            <Icon icon="akar-icons:normal-screen" />-->
+            <Icon icon="ion:contract-outline" size="23" />
+          </div>
+          <div v-else>
+            <Icon icon="ion:expand-outline" size="23" />
+          </div>
         </AButton>
       </ATooltip>
       <AButton
@@ -59,9 +66,10 @@
 <script lang="ts" setup>
   import { uiStore, stageStore } from '../../core'
   import Icon from '../Icon/Icon.vue'
+  import { useFullscreen } from '@vueuse/core'
 
-  /*const body = ref<HTMLElement | null>(null);
-const {isFullscreen, enter, exit, toggle} = useFullscreen(body);*/
+  const body = document.getElementsByTagName('body')
+  const { isFullscreen, enter, exit, toggle } = useFullscreen(body[0])
 </script>
 
 <style scoped></style>

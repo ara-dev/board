@@ -53,11 +53,15 @@ interface StageOption {
 export default class StageOptionStore {
   private lastPointerPosition: Vector2d
   private lastWidthHeightMainBoard: { width: number; height: number }
+  private scale: number
+  private scaleFactor: number
 
   constructor() {
     this._init()
     this.lastPointerPosition = { x: 0, y: 0 }
     this.lastWidthHeightMainBoard = { width: 0, height: 0 }
+    this.scale = 1
+    this.scaleFactor = 1.2
     this._state = reactive(this._state)
   }
 
@@ -106,7 +110,6 @@ export default class StageOptionStore {
       this._state.layerLock = !selectedShape.draggable()
       //no common sample image not color
       //this._state.currentColor = _colorChange(selectedShape.fill())
-
       if (selectedShape.getClassName() == 'Text') {
         this.setTextOptions(selectedShape as Text)
         uiStore.show('ui.text_option')
@@ -163,40 +166,20 @@ export default class StageOptionStore {
     this.lastWidthHeightMainBoard.width = newWidth
     this.lastWidthHeightMainBoard.height = newWidth
     const page = this.getCurrentPage()
-    const group: Group = this.getMainGroup(page.stage)
-    //const stage: UnwrapNestedRefs<Stage> = page.stage
-    //console.log("this is doc",page.docWidth,page.docHeight)
+    //const group: Group = this.getMainGroup(page.stage)
     const w = (newWidth - 50) / page.docWidth
     const h = (newHeight - 150) / page.docHeight
-    //console.log("this is scale",w,h)
     const min = Math.min(w, h)
-    console.log(min, 'this is min')
+    this.scale = min
     page.stage.width(newWidth)
     page.stage.height(newHeight)
-
-    group.x(page.stage.width() / 2 - (page.docWidth * min) / 2)
+    this.changeScale(min)
+    /*group.x(page.stage.width() / 2 - (page.docWidth * min) / 2)
     group.y(page.stage.height() / 2 - (page.docHeight * min) / 2)
-
     group.scale({
       x: min,
       y: min,
-    })
-
-    // group.scale({
-    //   x: 1,
-    //   y: 1,
-    // })
-    //console.log('ggggg', group.width(), group.height())
-    //const state = this._state
-    //debugger
-    //console.log("this is page",page)
-    //debugger
-    //const w = page.docWidth > newWidth ? page.docWidth : newWidth
-    //const h = page.docHeight > newHeight ? page.docHeight : newHeight
-    // console.log("this is width",stage.width(),page.docWidth)
-    // console.log("this is height",stage.height(),page.docHeight)
-    //console.log("this is x",group.x())
-    //console.log("this is y",group.y())
+    })*/
   }
 
   applyOpacity(): void {
@@ -458,6 +441,7 @@ export default class StageOptionStore {
       this.setTransformer(stage, layer)
       this.setSnapping(stage, layer, group)
       this.setContextMenu(stage, group)
+      this.setEditableText(stage)
       //load images
       const images = stage.find((node) => {
         return node.name().startsWith('element_image')
@@ -550,35 +534,29 @@ export default class StageOptionStore {
   }
 
   applyZoomIn() {
-    /*const stage: Stage = this.getCurrentPage().stage
+    this.scale *= this.scaleFactor
+    this.changeScale(this.scale)
+  }
+
+  changeScale(scale: number) {
+    console.log('this is %', scale * 100)
+    const page: Page = this.getCurrentPage()
     const group: Group = this.getMainGroup()
-    //console.log("this is scale",stage.scale())
     group.scale({
-      x: group.scale().x * 1.2,
-      y: group.scale().y * 1.2,
+      x: scale,
+      y: scale,
     })
-    this.setCenter()*/
+    group.x(page.stage.width() / 2 - (page.docWidth * scale) / 2)
+    group.y(page.stage.height() / 2 - (page.docHeight * scale) / 2)
   }
 
   applyZoomOut() {
-    //alert('dsfsdf')
-    /*const stage: Stage = this.getCurrentPage().stage
-    stage.scale({
-      x: stage.scale().x / 1.2,
-      y: stage.scale().y / 1.2,
-    })*/
-    //alert('dsfsdf')
-    /* const stage: Stage = this.getCurrentPage().stage
-    const group: Group = this.getMainGroup()
-    //console.log("this is scale",stage.scale())
-    group.scale({
-      x: group.scale().x / 1.2,
-      y: group.scale().y / 1.2,
-    })
-    this.setCenter()*/
+    this.scale /= this.scaleFactor
+    this.changeScale(this.scale)
   }
 
   applyFitScreen() {
+    this.changeScale(1)
     /* //const stage: Stage = this.getCurrentPage().stage
     const group:Group=this.getMainGroup();
     //console.log("this is scale",stage.scale())
@@ -847,6 +825,10 @@ export default class StageOptionStore {
 
     group.add(path)
 
+    this.setSnapping(page.stage, layer, group)
+    this.setContextMenu(page.stage, group)
+    this.setEditableText(page.stage)
+
     /* const path2 = new Konva.Path({
       name: 'element',
       draggable: true,
@@ -888,8 +870,6 @@ export default class StageOptionStore {
         })*/
 
     //end test
-    this.setSnapping(page.stage, layer, group)
-    this.setEditableText(page.stage)
   }
 
   // were can we snap our objects?
@@ -1052,7 +1032,7 @@ export default class StageOptionStore {
   }
 
   private setShapesToTransformer(shapes: Shape[]): void {
-    const transformer: Transformer = this.getTransFormer()
+    const transformer: Transformer = this.getTransformer()
     transformer.nodes(shapes)
     this.selectedElements = shapes
   }
@@ -1076,15 +1056,15 @@ export default class StageOptionStore {
       transformer.resizeEnabled(isEnable)
       transformer.rotateEnabled(isEnable)
     } else {
-      const tr: Transformer = this.getTransFormer()
+      const tr: Transformer = this.getTransformer()
       tr.resizeEnabled(isEnable)
       tr.rotateEnabled(isEnable)
     }
   }
 
-  private getTransFormer(stage?: Stage): Transformer {
+  private getTransformer(stage?: Stage): Transformer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
-    return stage.findOne('.transformer')
+    return _stage.findOne('.transformer')
   }
 
   private addShapeToGroup(shapes: Shape[]): void {
@@ -1453,20 +1433,15 @@ export default class StageOptionStore {
   }
 
   private setEditableText(stage: Stage) {
-    stage.on('dblclick dbltap', function (e) {
-      //console.log('this is get position', e.target.getPosition())
-      //console.log('this is absolut position', e.target.absolutePosition())
-      // console.log('this is  position x y', e.target.x(), e.target.y())
-      //console.log('this is width , hieght', document.getElementById('board-left-side').clientHeight)
-
+    stage.on('dblclick dbltap', (e) => {
       if (e.target.name().startsWith('element_text')) {
         const leftSideWidth = document.getElementById('board-left-side').clientWidth
         const text: Text = e.target as Text
-        // const transformer: Transformer = this.getTransform()
+        const transformer: Transformer = this.getTransformer(stage)
 
         // hide text node and transformer:
         text.hide()
-        //tr.hide();
+        transformer.hide()
 
         // create textarea over canvas with absolute position
         // first we need to find position for textarea
@@ -1474,7 +1449,6 @@ export default class StageOptionStore {
 
         // at first lets find position of text node relative to the stage:
         const textPosition = text.absolutePosition()
-        console.log('this is text postion', textPosition)
 
         // so position of textarea will be the sum of positions above:
         const areaPosition = {
@@ -1493,9 +1467,9 @@ export default class StageOptionStore {
         textarea.style.position = 'absolute'
         textarea.style.top = areaPosition.y - 5 + 'px'
         textarea.style.left = areaPosition.x + 'px'
-        textarea.style.width = text.width() - text.padding() * 2 + 'px'
+        textarea.style.width = text.width() * 2 - text.padding() * 2 + 20 + 'px'
         textarea.style.height = text.height() - text.padding() * 2 + 5 + 'px'
-        textarea.style.fontSize = text.fontSize() * 0.76 + 'px'
+        textarea.style.fontSize = text.fontSize() * this.scale + 'px'
         textarea.style.border = 'none'
         textarea.style.padding = '0px'
         textarea.style.margin = '0px'
@@ -1503,17 +1477,16 @@ export default class StageOptionStore {
         textarea.style.background = 'none'
         textarea.style.outline = 'none'
         textarea.style.resize = 'none'
-        //textarea.style.lineHeight = text.lineHeight()
+        textarea.style.lineHeight = text.lineHeight().toString()
         textarea.style.fontFamily = text.fontFamily()
         textarea.style.transformOrigin = 'left top'
         textarea.style.textAlign = text.align()
         textarea.style.color = text.fill()
-        /*rotation = textNode.rotation();
-        const transform = '';
+        const rotation = text.rotation()
+        let tr = ''
         if (rotation) {
-          transform += 'rotateZ(' + rotation + 'deg)';
-        }*/
-
+          tr += 'rotateZ(' + rotation + 'deg)'
+        }
         let px = 0
         // also we need to slightly move textarea on firefox
         // because it jumps a bit
@@ -1521,9 +1494,9 @@ export default class StageOptionStore {
         if (isFirefox) {
           px += 2 + Math.round(text.fontSize() / 20)
         }
-        //transform += 'translateY(-' + px + 'px)'
+        tr += 'translateY(-' + px + 'px)'
 
-        //textarea.style.transform = transform
+        textarea.style.transform = tr
 
         // reset height
         textarea.style.height = 'auto'
@@ -1532,18 +1505,25 @@ export default class StageOptionStore {
 
         textarea.focus()
 
-        function removeTextarea() {
+        const handleOutsideClick = (e) => {
+          if (e.target !== textarea) {
+            text.text(textarea.value)
+            removeTextarea()
+          }
+        }
+
+        const removeTextarea = () => {
           textarea.parentNode.removeChild(textarea)
           window.removeEventListener('click', handleOutsideClick)
           text.show()
-          //tr.show()
-          //tr.forceUpdate()
+          transformer.show()
+          transformer.forceUpdate()
         }
 
-        function setTextareaWidth(newWidth) {
+        const setTextareaWidth = (newWidth) => {
           if (!newWidth) {
             // set width for placeholder
-            newWidth = text.placeholder.length * text.fontSize()
+            newWidth = text.fontSize() //* text.placeholder.length
           }
           // some extra fixes on different browsers
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
@@ -1552,14 +1532,14 @@ export default class StageOptionStore {
             newWidth = Math.ceil(newWidth)
           }
 
-          const isEdge = document.documentMode || /Edge/.test(navigator.userAgent)
+          /*const isEdge = document.documentMode || /Edge/.test(navigator.userAgent)
           if (isEdge) {
             newWidth += 1
-          }
+          }*/
           textarea.style.width = newWidth + 'px'
         }
 
-        textarea.addEventListener('keydown', function (e) {
+        textarea.addEventListener('keydown', (e) => {
           // hide on enter
           // but don't hide on shift + enter
           /* if (e.keyCode === 13 && !e.shiftKey) {
@@ -1572,34 +1552,19 @@ export default class StageOptionStore {
           }
         })
 
-        textarea.addEventListener('keydown', function (e) {
+        textarea.addEventListener('keydown', (e) => {
           const scale = text.getAbsoluteScale().x
           setTextareaWidth(text.width() * scale)
           textarea.style.height = 'auto'
-          textarea.style.height = textarea.scrollHeight + text.fontSize() + 'px'
+          textarea.style.height = textarea.scrollHeight + text.fontSize() * this.scale + 'px'
         })
 
-        function handleOutsideClick(e) {
-          if (e.target !== textarea) {
-            text.text(textarea.value)
-            removeTextarea()
-          }
-        }
         setTimeout(() => {
           window.addEventListener('click', handleOutsideClick)
         })
       }
-
-      //console.log('this is text')
-      // e.target is a clicked Konva.Shape or current stage if you clicked on empty space
-      //console.log('clicked on', e.target)
-      //console.log('usual click on ' + JSON.stringify(stage.getPointerPosition()))
     })
   }
-
-  /*applyZoom() {
-
-  }*/
 }
 
 export const stageStore = new StageOptionStore()

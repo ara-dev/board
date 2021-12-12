@@ -69,7 +69,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-tabs';
+  @pre: ~'@{prefix}-tabs';
 
   .@{pre}{
 

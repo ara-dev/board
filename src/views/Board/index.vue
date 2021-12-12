@@ -41,8 +41,6 @@
                 :leave="{ x: -400, opacity: 0 }"
               />
               <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
-                <!--                <AButton type="primary">انتخاب فایل</AButton>-->
-                <!--                <input type="file" @change="uploadFile" />-->
                 <a-upload
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
@@ -89,17 +87,13 @@
         <div class="price">قیمت کل : 25000</div>
       </div>
       <div class="h-screen relative h-screen board-main">
-        <div v-if="false" class="absolute z-50 p-3 w-full" style="background: #fff">
+        <div class="absolute z-50 p-3 w-full" style="background: #fff">
           <div class="flex justify-between">
             <TopRightButtons />
             <TopLeftButtons />
           </div>
         </div>
-        <div
-          v-if="true"
-          class="absolute bottom-board left-0 bottom-0 z-50 p-3"
-          style="background: #fff"
-        >
+        <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
           <BottomLeftButtons />
         </div>
         <pages v-if="false" />
@@ -229,7 +223,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-board';
+  @pre: ~'@{prefix}-board';
 
   .@{pre}-main {
     display: grid;

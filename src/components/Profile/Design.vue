@@ -34,7 +34,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-design';
+  @pre: ~'@{prefix}-design';
 
   .@{pre}{
     border: 1px solid #eeee;

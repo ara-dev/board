@@ -8,7 +8,7 @@
 </script>
 
 <style lang="less" scoped>
-  @pre : ~'@{namespace}-logo';
+  @pre : ~'@{prefix}-logo';
   #@{pre}-logo{
     width: @cp-side-width*0.6;
     height: @cp-side-width*0.6;

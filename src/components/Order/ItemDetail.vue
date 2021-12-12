@@ -70,7 +70,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-order-item-detail';
+  @pre: ~'@{prefix}-order-item-detail';
 
   .@{pre}{
     background-color: #fff ;

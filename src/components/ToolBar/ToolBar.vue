@@ -48,7 +48,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-toolbar';
+  @pre: ~'@{prefix}-toolbar';
 
   .@{pre}-menu-btn {
     transition: all 0.2s ease;

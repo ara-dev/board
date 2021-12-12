@@ -41,16 +41,7 @@
       <div>
         <AButton
           :id="`${prefixCls}-design-adv`"
-          class="
-            border-2
-            text-center text-gray-300
-            border-dashed
-            w-full
-            h-20
-            flex
-            items-center
-            justify-center
-          "
+          class="border-2 text-center text-gray-300 border-dashed w-full h-20 flex items-center justify-center"
         >
           <p class="">
             در کنترل پی طراح شوید
@@ -87,7 +78,7 @@
   }
 </script>
 <style lang="less">
-  @pre: ~'@{namespace}-profile';
+  @pre: ~'@{prefix}-profile';
   #@{pre}-design-adv {
     border-radius: @border-radius-base*2;
   }

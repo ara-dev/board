@@ -47,7 +47,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{namespace}-orders';
+  @pre: ~'@{prefix}-orders';
 
   .@{pre} {
     &-alert {
