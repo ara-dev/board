@@ -8,13 +8,13 @@ import { Text } from 'konva/lib/shapes/Text'
 import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
+import {} from 'l'
 // @ts-ignore
 import _ from 'lodash'
 import { reactive, readonly } from 'vue'
 import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
-
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -55,12 +55,14 @@ export default class StageOptionStore {
   private lastWidthHeightMainBoard: { width: number; height: number }
   private scale: number
   private scaleFactor: number
+  private inZoom: boolean
 
   constructor() {
     this._init()
     this.lastPointerPosition = { x: 0, y: 0 }
     this.lastWidthHeightMainBoard = { width: 0, height: 0 }
     this.scale = 1
+    this.inZoom = false
     this.scaleFactor = 1.2
     this._state = reactive(this._state)
   }
@@ -162,24 +164,62 @@ export default class StageOptionStore {
   }
 
   resizePage(newWidth: number, newHeight: number): void {
-    //console.log('fdgdfgdfg', newWidth, newHeight)
+    alert('sdfsdfsf')
+    /*  setTimeout(function () {
+      alert('Hello')
+    }, 3600)*/
+    //return
+    console.log('new width height', newWidth, newHeight)
     this.lastWidthHeightMainBoard.width = newWidth
-    this.lastWidthHeightMainBoard.height = newWidth
+    this.lastWidthHeightMainBoard.height = newHeight
     const page = this.getCurrentPage()
-    //const group: Group = this.getMainGroup(page.stage)
-    const w = (newWidth - 50) / page.docWidth
-    const h = (newHeight - 150) / page.docHeight
+    const w = newWidth / page.docWidth //
+    const h = (newHeight - 150) / page.docHeight //
     const min = Math.min(w, h)
     this.scale = min
-    page.stage.width(newWidth)
-    page.stage.height(newHeight)
     this.changeScale(min)
+    //page.stage.width(newWidth)
+    //page.stage.height(newHeight)
+    //const group: Group = this.getMainGroup(page.stage)
+    /* if (!this.inZoom) {
+
+    } else {
+      //this.inZoom = false
+    }*/
+
+    /*page.stage.width(2000)
+    page.stage.height(800)*/
+
     /*group.x(page.stage.width() / 2 - (page.docWidth * min) / 2)
     group.y(page.stage.height() / 2 - (page.docHeight * min) / 2)
     group.scale({
       x: min,
       y: min,
     })*/
+  }
+
+  changeScale(scale: number) {
+    const page: Page = this.getCurrentPage()
+    const group: Group = this.getMainGroup()
+    console.log('this is %', scale)
+    //console.log('this page width , height', page.docWidth * scale, page.docHeight * scale)
+    const a =
+      page.docWidth * scale > this.lastWidthHeightMainBoard.width
+        ? page.docWidth * scale + 100
+        : this.lastWidthHeightMainBoard.width
+    const b =
+      page.docHeight * scale > this.lastWidthHeightMainBoard.height
+        ? page.docHeight * scale + 100
+        : this.lastWidthHeightMainBoard.height
+    console.log('this is a b', a, b)
+    page.stage.width(a)
+    page.stage.height(b)
+    group.scale({
+      x: scale,
+      y: scale,
+    })
+    group.x(page.stage.width() / 2 - (page.docWidth * scale) / 2)
+    group.y(page.stage.height() / 2 - (page.docHeight * scale) / 2)
   }
 
   applyOpacity(): void {
@@ -534,20 +574,10 @@ export default class StageOptionStore {
   }
 
   applyZoomIn() {
+    this.inZoom = true
     this.scale *= this.scaleFactor
     this.changeScale(this.scale)
-  }
-
-  changeScale(scale: number) {
-    console.log('this is %', scale * 100)
-    const page: Page = this.getCurrentPage()
-    const group: Group = this.getMainGroup()
-    group.scale({
-      x: scale,
-      y: scale,
-    })
-    group.x(page.stage.width() / 2 - (page.docWidth * scale) / 2)
-    group.y(page.stage.height() / 2 - (page.docHeight * scale) / 2)
+    //this.inZoom = false
   }
 
   applyZoomOut() {

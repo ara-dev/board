@@ -63,30 +63,10 @@
               </div>
             </div>
           </transition>
-
-          <!--          <transition :css="false">
-            <ShapeStyle
-                v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
-                v-motion="'cube'"
-                :enter="{ x: 0, opacity: 1 }"
-                :initial="{ x: 400, opacity: 0 }"
-                :leave="{ x: -400, opacity: 0 }"
-            />
-          </transition>-->
-
-          <!--          <transition :css="false" />-->
-
-          <!--          <transition :css="false">
-
-          </transition>-->
-
-          <!--          <transition :css="false">
-
-          </transition>-->
         </div>
         <div class="price">قیمت کل : 25000</div>
       </div>
-      <div class="h-screen relative h-screen board-main">
+      <!--      <div class="h-screen relative h-screen board-main">
         <div class="absolute z-50 p-3 w-full" style="background: #fff">
           <div class="flex justify-between">
             <TopRightButtons />
@@ -101,7 +81,44 @@
         <div class="stages overflow-auto">
           <Stage />
         </div>
+      </div>-->
+
+      <div class="relative board-main h-full w-full">
+        <div class="z-50 p-3 w-full" style="background: #fff">
+          <div class="flex justify-between">
+            <TopRightButtons />
+            <TopLeftButtons />
+          </div>
+        </div>
+        <div class="h-full w-full" style="position: relative">
+          <Stage />
+          <!--            <div style="height: 1500px; width: 2000px">5555555</div>-->
+        </div>
+        <div>
+          <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
+            <BottomLeftButtons />
+          </div>
+        </div>
+        <!--        <div class="overflow-auto" style="height: 2000px; width: 2000px">dsfsdf</div>-->
+        <!--
+
+        <div class="stages p-5 overflow-auto" style="position: relative">
+          <Stage />
+        </div>-->
+        <!-- <div class="absolute z-50 p-3 w-full" style="background: #fff">
+          <div class="flex justify-between">
+            <TopRightButtons />
+            <TopLeftButtons />
+          </div>
+        </div>
+
+        <pages v-if="false" />
+
+        <div class="stages overflow-auto">
+
+        </div>-->
       </div>
+
       <div
         id="board-left-side"
         class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300"
@@ -123,20 +140,15 @@
 </template>
 
 <script lang="ts" setup>
-  import TopRightButtons from '../../components/Stage/TopRightButtons.vue'
-  import BottomLeftButtons from '../../components/Stage/BottomLeftButtons.vue'
   import TextOptions from '../../components/Option/TextOptions.vue'
   import { stageStore, uiStore } from '../../core'
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
-  import Stage from '../../components/Stage/Stage.vue'
   import { useDesign } from '../../utils/useDesign'
-  import Pages from '../../components/Stage/Pages.vue'
   import ImageStyle from '../../components/Style/ImageStyle.vue'
   import ShapeStyle from '../../components/Style/ShapeStyle.vue'
   import TextStyle from '../../components/Style/TextStyle.vue'
   import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
-  import TopLeftButtons from '../../components/Stage/TopLeftButtons.vue'
 
   const { prefixCls } = useDesign('board')
 
@@ -228,6 +240,7 @@
   .@{pre}-main {
     display: grid;
     grid-template-columns: 230px auto 230px;
+    /* grid-template-columns: 15% 70% 15%;*/
   }
 
   .board-main {

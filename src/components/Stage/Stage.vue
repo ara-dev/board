@@ -1,6 +1,8 @@
 <template>
-  <div ref="mainboard" class="relative h-screen">
-    <div id="container"></div>
+  <div ref="mainboard" class="overflow-auto" style="width: 100%; height: 90%; position: absolute">
+    <div class="relative h-full">
+      <div id="container"></div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +21,7 @@
   onMounted(() => {
     //debugger
     //stageStore.setContainer('container')
-    stageStore.addPage(800, 500, width.value, height.value, 'container')
+    stageStore.addPage(1080, 1080, width.value, height.value, 'container')
     //stageStore.resizeStage(width.value, height.value)
     //stageStore.toJson('container')
   })
