@@ -52,7 +52,7 @@ let clip_path: KonvaFormat[] = []
 let data = null
 
 export function ImportSvg(svg: string): Object {
-  //console.log('this is svgo', svgo(svg))
+  // console.log('this is svgo', svgo(svg))
   data = JSON.parse(xmlToJson(svgo(svg)))
   let temp: any = {}
   defs = converDefsToKonvaFormat(data)
@@ -64,7 +64,7 @@ export function ImportSvg(svg: string): Object {
     if (gItem) temp = Object.assign(temp, gItem)
   })
   //console.log(temp, 'this is temp')
-  //console.log(JSON.stringify(stage), 'this is temp json')
+  //console.log(JSON.stringify(temp), 'this is temp json')
   return temp
   //return JSON.stringify(temp)
 }
@@ -306,10 +306,13 @@ function commonAttributes(
   if (element.attributes.transform) {
     if (element.attributes.transform.startsWith('matrix')) {
       const matrix: Matrix = decomposeMatrix(element.attributes.transform)
+      //console.log('this is decompose', decomposeMatrix(element.attributes.transform))
+      //console.log('this is decompose2', decomposeMatrix2(element.attributes.transform))
       Object.assign(item.attrs, matrix)
     }
 
     if (element.attributes.transform.startsWith('translate')) {
+      //console.log('this is translate x y ', translateToXY(element.attributes.transform))
       Object.assign(item.attrs, translateToXY(element.attributes.transform))
     }
 
@@ -407,6 +410,7 @@ function text(text: SVGXMLElement): KonvaFormat {
     }
   }
   Object.assign(commonAttr.attrs, { text: temp_text })
+  //console.log('this 10000 text', clipPath(text, commonAttr))
   return clipPath(text, commonAttr)
 }
 
@@ -719,3 +723,37 @@ function xmlToJson(xml = '') {
   // @ts-ignore
   return xml2json(xml)
 }
+
+/*function deltaTransformPoint(matrix, point) {
+  const dx = point.x * matrix.a + point.y * matrix.c + 0
+  const dy = point.x * matrix.b + point.y * matrix.d + 0
+  return { x: dx, y: dy }
+}
+
+function decomposeMatrix2(matrix: string) {
+  // @see https://gist.github.com/2052247
+  const mat = matrix
+    .substring(7, matrix.length - 1)
+    .split(' ')
+    .map((point) => parseFloat(point))
+
+  const m2 = { a: mat[0], b: mat[1], c: mat[2], d: mat[3], e: mat[4], f: mat[5] }
+
+  // calculate delta transform point
+  const px = deltaTransformPoint(m2, { x: 0, y: 1 })
+  const py = deltaTransformPoint(m2, { x: 1, y: 0 })
+
+  // calculate skew
+  const skewX = (180 / Math.PI) * Math.atan2(px.y, px.x) - 90
+  const skewY = (180 / Math.PI) * Math.atan2(py.y, py.x)
+
+  return {
+    translateX: m2.e,
+    translateY: m2.f,
+    scaleX: Math.sqrt(m2.a * m2.a + m2.b * m2.b),
+    scaleY: Math.sqrt(m2.c * m2.c + m2.d * m2.d),
+    skewX: skewX,
+    skewY: skewY,
+    rotation: skewX, // rotation is the same as skew x
+  }
+}*/

@@ -8,7 +8,6 @@ import { Text } from 'konva/lib/shapes/Text'
 import { Transformer } from 'konva/lib/shapes/Transformer'
 import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
-import {} from 'l'
 // @ts-ignore
 import _ from 'lodash'
 import { reactive, readonly } from 'vue'
@@ -164,7 +163,7 @@ export default class StageOptionStore {
   }
 
   resizePage(newWidth: number, newHeight: number): void {
-    alert('sdfsdfsf')
+    // alert('sdfsdfsf')
     /*  setTimeout(function () {
       alert('Hello')
     }, 3600)*/
@@ -483,7 +482,7 @@ export default class StageOptionStore {
       this.setContextMenu(stage, group)
       this.setEditableText(stage)
       //load images
-      const images = stage.find((node) => {
+      const images = stage.find((node: any) => {
         return node.name().startsWith('element_image')
       })
       images.forEach((item) => {
