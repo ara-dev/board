@@ -1,6 +1,7 @@
 import { Transform } from 'konva/lib/Util'
 // @ts-ignore
 import _ from 'lodash'
+// @ts-ignore
 import { optimize } from 'svgo/lib/svgo'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import './xml'
@@ -59,7 +60,7 @@ export function ImportSvg(svg: string): Object {
   clip_path = converClipPathToKonvaFormat(data)
   gradient = converLinearGradientToKonvaFormat(data)
   gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
-  data.elements.forEach((item) => {
+  data.elements.forEach((item: SVGXMLElement) => {
     const gItem = generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
   })
@@ -69,7 +70,7 @@ export function ImportSvg(svg: string): Object {
   //return JSON.stringify(temp)
 }
 
-function generateItem(item: SVGXMLElement): KonvaFormat {
+function generateItem(item: SVGXMLElement): KonvaFormat | null {
   switch (item.name) {
     case 'svg':
       return svg(item)
@@ -306,13 +307,10 @@ function commonAttributes(
   if (element.attributes.transform) {
     if (element.attributes.transform.startsWith('matrix')) {
       const matrix: Matrix = decomposeMatrix(element.attributes.transform)
-      //console.log('this is decompose', decomposeMatrix(element.attributes.transform))
-      //console.log('this is decompose2', decomposeMatrix2(element.attributes.transform))
       Object.assign(item.attrs, matrix)
     }
 
     if (element.attributes.transform.startsWith('translate')) {
-      //console.log('this is translate x y ', translateToXY(element.attributes.transform))
       Object.assign(item.attrs, translateToXY(element.attributes.transform))
     }
 
@@ -327,7 +325,9 @@ function commonAttributes(
 
   if (element.attributes['stroke-dasharray']) {
     Object.assign(item.attrs, {
-      dash: element.attributes['stroke-dasharray'].split(',').map((point) => parseFloat(point)),
+      dash: element.attributes['stroke-dasharray']
+        .split(',')
+        .map((point: string) => parseFloat(point)),
     })
   }
 
@@ -384,7 +384,6 @@ function text(text: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Text', 'text', text)
   Object.assign(commonAttr.attrs, {
     font_id: null,
-    //rotation: 0.642,
     //text: _.get(text, 'elements[0].text', ''),
     //x: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).x,
     // y: translateToXY(_.get(text, 'attributes.transform', 'translate(0 0)')).y,
@@ -410,7 +409,6 @@ function text(text: SVGXMLElement): KonvaFormat {
     }
   }
   Object.assign(commonAttr.attrs, { text: temp_text })
-  //console.log('this 10000 text', clipPath(text, commonAttr))
   return clipPath(text, commonAttr)
 }
 

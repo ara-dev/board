@@ -489,7 +489,7 @@ export default class StageOptionStore {
         const attr = item.attrs
         const data = attr.href ? attr.href : attr.dataSrc
         const parent = item.getParent()
-        Konva.Image.fromURL(data, function (image) {
+        Konva.Image.fromURL(data, function (image: any) {
           image.setAttrs(attr)
           parent.add(image)
           image.zIndex(item.zIndex())
@@ -497,7 +497,7 @@ export default class StageOptionStore {
       })
       //end load images
       //render clip
-      const children: Group[] = stage.find((node) => {
+      const children: Group[] = stage.find((node: any) => {
         return node.name().startsWith('element_group_clip') as Group
       })
       //console.log('this is children', children)
@@ -1068,7 +1068,7 @@ export default class StageOptionStore {
 
   private getAllShapes(): Shape[] {
     const stage: Stage = this.getCurrentPage().stage
-    const shapes: Shape[] = stage.find((node) => {
+    const shapes: Shape[] = stage.find((node: any) => {
       return node.name().startsWith('element')
     })
     return shapes
@@ -1174,7 +1174,7 @@ export default class StageOptionStore {
         selectionRectangle.visible(false)
       })
 
-      const shapes: Shape[] = stage.find((node) => {
+      const shapes: Shape[] = stage.find((node: any) => {
         return node.name().startsWith('element')
       }) //stage.find('.element')
       const box = selectionRectangle.getClientRect()
@@ -1314,7 +1314,7 @@ export default class StageOptionStore {
 
   private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
-    return stage.findOne('.layer')
+    return _stage.findOne('.layer')
   }
 
   private setSnapping(stage: Stage, layer: Layer, group: Group): void {
@@ -1464,7 +1464,7 @@ export default class StageOptionStore {
   private setEditableText(stage: Stage) {
     stage.on('dblclick dbltap', (e) => {
       if (e.target.name().startsWith('element_text')) {
-        const leftSideWidth = document.getElementById('board-left-side').clientWidth
+        const leftSideWidth = document.getElementById('board-left-side')?.clientWidth || 0
         const text: Text = e.target as Text
         const transformer: Transformer = this.getTransformer(stage)
 
@@ -1534,7 +1534,7 @@ export default class StageOptionStore {
 
         textarea.focus()
 
-        const handleOutsideClick = (e) => {
+        const handleOutsideClick = (e: any) => {
           if (e.target !== textarea) {
             text.text(textarea.value)
             removeTextarea()
@@ -1542,14 +1542,14 @@ export default class StageOptionStore {
         }
 
         const removeTextarea = () => {
-          textarea.parentNode.removeChild(textarea)
+          textarea.parentNode?.removeChild(textarea)
           window.removeEventListener('click', handleOutsideClick)
           text.show()
           transformer.show()
           transformer.forceUpdate()
         }
 
-        const setTextareaWidth = (newWidth) => {
+        const setTextareaWidth = (newWidth: number) => {
           if (!newWidth) {
             // set width for placeholder
             newWidth = text.fontSize() //* text.placeholder.length

@@ -5,69 +5,79 @@ import { createRouter, createWebHistory } from 'vue-router'
 // We'll talk about nested routes later.
 
 const routes = [
+  //Main page
   {
     path: '/',
     name: 'main',
-    redirect: '/board',
-    component: () => import('./views/Profile'),
+    redirect: '/profile',
+    component: () => import('./views/main'),
     meta: { transition: 'scale' },
-  },
-  {
-    path: '/board',
-    name: 'board',
-    component: () => import('./views/Board'),
-    meta: { transition: 'scale' },
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('./views/Test'),
-    meta: { transition: 'scale' },
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    redirect: '/profile/dashboard',
-    component: () => import('./views/Profile'),
-    meta: {},
     children: [
       {
-        path: 'dashboard',
-        component: () => import('./views/Profile/pages/dashboard'),
+        path: '/board',
+        name: 'board',
+        component: () => import('./views/Board'),
+        meta: { transition: 'scale' },
       },
       {
-        path: 'transactions',
-        component: () => import('./views/Profile/pages/transactions'),
+        path: '/test',
+        name: 'test',
+        component: () => import('./views/Test'),
+        meta: { transition: 'scale' },
       },
       {
-        path: 'accounting',
-        component: () => import('./views/Profile/pages/account'),
-      },
-      {
-        path: 'important-dates',
-        component: () => import('./views/Profile/pages/important-dates'),
-      },
-      {
-        path: 'orders',
-        component: () => import('./views/Profile/pages/orders'),
-      },
-      {
-        path: 'order/detail',
-        component: () => import('./views/Profile/pages/order-detail'),
-      },
-      {
-        path: 'addresses',
-        component: () => import('./views/Profile/pages/my-address'),
-      },
-      {
-        path: 'files',
-        component: () => import('./views/Profile/pages/files'),
-      },
-      {
-        path: 'bookmark',
-        component: () => import('./views/Profile/pages/bookmark'),
+        path: '/profile',
+        name: 'profile',
+        redirect: '/profile/dashboard',
+        component: () => import('./views/Profile'),
+        meta: {},
+        children: [
+          {
+            path: 'dashboard',
+            component: () => import('./views/Profile/pages/dashboard'),
+          },
+          {
+            path: 'transactions',
+            component: () => import('./views/Profile/pages/transactions'),
+          },
+          {
+            path: 'accounting',
+            component: () => import('./views/Profile/pages/account'),
+          },
+          {
+            path: 'important-dates',
+            component: () => import('./views/Profile/pages/important-dates'),
+          },
+          {
+            path: 'orders',
+            component: () => import('./views/Profile/pages/orders'),
+          },
+          {
+            path: 'order/detail',
+            component: () => import('./views/Profile/pages/order-detail'),
+          },
+          {
+            path: 'addresses',
+            component: () => import('./views/Profile/pages/my-address'),
+          },
+          {
+            path: 'files',
+            component: () => import('./views/Profile/pages/files'),
+          },
+          {
+            path: 'bookmark',
+            component: () => import('./views/Profile/pages/bookmark'),
+          },
+        ],
       },
     ],
+  },
+  //full page
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('./views/Login'),
+    meta: { transition: 'scale' },
   },
   {
     path: '/:pathMatch(.*)*',
