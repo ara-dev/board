@@ -31,15 +31,15 @@
         </a-tab-pane>
       </Tabs>
     </div>
-    <AModal title="ثبت دستمزد" visible="true" width="40%">
+    <AModal :visible="false" cancelText="بستن" okText="ثبت دستمزد" title="ثبت دستمزد" width="40%">
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
           <img class="rounded" src="https://picsum.photos/200/120" />
         </div>
         <div class="col-span-9 flex flex-col">
-          <div>1255525550</div>
-          <div>سید مهدی بنی لوحی</div>
-          <div>
+          <div class="text-gray-300">1255525550</div>
+          <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
+          <div class="mt-3">
             <ATag>عاشقانه</ATag>
             <ATag>عاشقانه</ATag>
             <ATag>عاشقانه</ATag>
@@ -47,16 +47,58 @@
         </div>
       </div>
       <div>
-        <span class="block">قیمت پایه</span>
-        <a-radio-group v-model:value="value1">
-          <a-radio-button value="a">Hangzhou</a-radio-button>
-          <a-radio-button value="b">Shanghai</a-radio-button>
-          <a-radio-button value="c">Beijing</a-radio-button>
-          <a-radio-button value="d">Chengdu</a-radio-button>
+        <span class="block mt-5 mb-5">قیمت پایه</span>
+        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
+          <a-radio-button value="a">15،000 تومان</a-radio-button>
+          <a-radio-button value="b">25،00 تومان</a-radio-button>
+          <a-radio-button value="c">45،000 تومان</a-radio-button>
+          <a-radio-button value="d">80،000 تومان</a-radio-button>
         </a-radio-group>
       </div>
       <div>
-        <span class="block">افزودنی ها</span>
+        <span class="block mt-5">افزودنی ها</span>
+        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
+          <a-radio-button value="a">15،000 تومان</a-radio-button>
+        </a-radio-group>
+        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
+          <a-radio-button value="a">15،000 تومان</a-radio-button>
+        </a-radio-group>
+        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
+          <a-radio-button value="a">15،000 تومان</a-radio-button>
+        </a-radio-group>
+      </div>
+      <ADivider />
+      <div class="flex flex-col">
+        <div class="w-3/6 mb-5">
+          <AInput placeholder="مبلغ دلخواه" />
+        </div>
+        <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
+      </div>
+    </AModal>
+
+    <AModal :visible="false" cancelText="بستن" okText="ثبت وضعیت" title="ثبت وضعیت طرح" width="40%">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-3">
+          <img class="rounded" src="https://picsum.photos/200/120" />
+        </div>
+        <div class="col-span-9 flex flex-col">
+          <div class="text-gray-300">1255525550</div>
+          <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
+          <div class="mt-3">
+            <ATag>عاشقانه</ATag>
+            <ATag>عاشقانه</ATag>
+            <ATag>عاشقانه</ATag>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5">
+        <ACard v-for="(item, index) in status" :key="index" style="margin-bottom: 20px">
+          <ARadio>{{ item.title }}</ARadio>
+        </ACard>
+      </div>
+      <ADivider />
+      <div>
+        <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
     </AModal>
   </div>
@@ -65,8 +107,27 @@
 <script lang="ts" setup>
   import Tabs from '../../../components/Tabs/index.vue'
   import { usePageInfo } from '../../../utils/usePageInfo'
-  import RegisterDesignItem from '../../../components/Register-Design/register-design-item.vue'
+  import { useDesign } from '../../../utils/useDesign'
+  import { status } from '../../../components/Register-Design/status'
+  import RegisterDesignItem from '../../../components/Register-Design/Register-design-item.vue'
+  import { ref } from 'vue'
   const pageInfo = usePageInfo('register-design')
+  const { prefixCls } = useDesign('register-design')
+  const { prefixVar } = useDesign('')
+  const price = ref('a')
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+  @pre: ~'@{prefix}-register-design';
+
+  .@{pre}-price{
+    &> .ant-radio-button-wrapper{
+      margin: 15px;
+    }
+
+    &> .ant-radio-button-wrapper:first-child , .ant-radio-button-wrapper:last-child {
+      border-radius: unset;
+    }
+
+  }
+</style>

@@ -10,7 +10,7 @@
         style="display: grid; grid-template-rows: auto 4vw; height: 100%"
       >
         <div class="px-2 pt-2 overflow-auto">
-          <transition :css="false">
+          <Transition :css="false">
             <div>
               <ImageStyle
                 v-if="uiStore.isActive('ui.right_sidebar.children.image')"
@@ -62,7 +62,7 @@
                 <a-button class="mt-5" @click="save"> ذخیره فایل </a-button>
               </div>
             </div>
-          </transition>
+          </Transition>
         </div>
         <div class="price">قیمت کل : 25000</div>
       </div>
@@ -123,7 +123,7 @@
         id="board-left-side"
         class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300"
       >
-        <transition :css="false">
+        <Transition :css="false">
           <TextOptions
             v-if="uiStore.isVisible('ui.text_option')"
             v-motion="'cube'"
@@ -131,7 +131,7 @@
             :initial="{ x: -400, opacity: 0 }"
             :leave="{ x: 400, opacity: 0 }"
           />
-        </transition>
+        </Transition>
       </div>
       <!--   overflow-auto   -->
     </div>

@@ -77,14 +77,17 @@
           </div>
         </div>
       </div>
-      <div class="border-r"></div>
+      <div class="border-r p-5">
+        <Ticket />
+      </div>
     </div>
   </ACard>
 </template>
 
 <script lang="ts" setup>
   import { useDesign } from '../../../utils/useDesign'
-  import ItemDetail from '../../../components/Order/ItemDetail.vue'
+  import ItemDetail from '../../../components/Order/OrderItemDetail.vue'
+  import Ticket from '../../../components/Ticket/Ticket.vue'
   const { prefixCls } = useDesign('order-detail')
   const { prefixVar } = useDesign('')
 </script>

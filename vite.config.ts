@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 import { defineConfig } from 'vite'
 import ViteComponents, {
   AntDesignVueResolver,
@@ -6,15 +7,14 @@ import ViteComponents, {
 } from 'vite-plugin-components'
 import { initLessVars } from './build/initLessVars'
 
-// @ts-ignore
 export default defineConfig({
   resolve: {
     extensions: ['*', '.js', '.vue', '.json', '.ts'],
     alias: {
       '/^~/': '',
-      //'.': path.resolve(__dirname, '/node_modules'),
-      /* '@': resolve(__dirname, './src'),*/
-      //'~': path.resolve(__dirname, '/node_modules'),
+      //'.': path.resolve(__dirname, './src/'),
+      '@': path.resolve(__dirname, './src'),
+      '~': path.resolve(__dirname, '/node_modules'),
     },
   },
   server: {

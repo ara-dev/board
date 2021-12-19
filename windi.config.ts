@@ -44,7 +44,7 @@ function createEnterPlugin(maxOutput = 8) {
       },
     }
   }
-  const handler = ({ addBase }) => {
+  const handler = ({ addBase }: any) => {
     const addRawCss = {}
     for (let index = 1; index < maxOutput; index++) {
       Object.assign(addRawCss, {
