@@ -68,6 +68,10 @@ const routes = [
             path: 'bookmark',
             component: () => import('./views/Profile/pages/bookmark'),
           },
+          {
+            path: 'register-design',
+            component: () => import('./views/Profile/pages/register-design'),
+          },
         ],
       },
     ],

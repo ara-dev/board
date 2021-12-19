@@ -5,7 +5,7 @@
         <ControlPLogo />
       </div>
       <div>
-        <AButton :class="['ml-4', `${prefixVar}-button`]">ذخیره طرح</AButton>
+        <AButton class="ml-4" type="primary" ghost>ذخیره طرح</AButton>
         <AButton type="primary">سبد سفارش</AButton>
       </div>
     </div>

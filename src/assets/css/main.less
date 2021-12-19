@@ -30,28 +30,30 @@ body{
   color:@primary-color
 }
 
-.@{prefix}-button{
-  border-color:@primary-color;
-  color:@primary-color;
-}
+/*.@{prefix}-button{
+  border-color:@primary-color !important;
+  color:@primary-color !important;
+}*/
 
-.@{prefix}-button-secendry{
-  border-color:@secendry-color;
-  color:@secendry-color;
+.@{prefix}-button-secondary{
+  border-color:@secondary-color !important;
+  color:@secondary-color !important;
 
   &:focus{
-    border-color:@secendry-color;
-    color:@secendry-color;
+    border-color:@secondary-color !important;
+    color:@secondary-color !important;
   }
 
   &:hover{
-    border-color:@secendry-color;
-    color:@secendry-color;
+    border-color:@secondary-color !important;
+    color:@secondary-color !important;
   }
 
 }
 
-
+.@{prefix}-background-primary{
+  background-color: @primary-color;
+}
 
 .ant-pagination-item a{
   font-family:@base-font-family ;

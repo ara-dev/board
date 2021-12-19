@@ -54,6 +54,12 @@ const menus: ProfileMenus[] = [
     icon: 'ion:bookmark-outline',
     path: '/profile/bookmark',
   },
+  {
+    id: 'register-design',
+    title: 'ثبت طرح',
+    icon: 'ion:images-outline',
+    path: '/profile/register-design',
+  },
 ]
 
 export default menus

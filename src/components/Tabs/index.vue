@@ -27,13 +27,7 @@
             </AInput>
           </div>
           <a-tabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
-            <a-tab-pane key="4" tab="درآمد">Content of Tab Pane 1</a-tab-pane>
-            <a-tab-pane key="3" force-render tab="ناموفق">Content of Tab Pane 2</a-tab-pane>
-            <a-tab-pane key="2" tab="انجام شده">Content of Tab Pane 3</a-tab-pane>
-            <a-tab-pane key="1" class="p-2" tab="همگی">
-              <ListItem />
-            </a-tab-pane>
-
+            <slot></slot>
             <template #renderTabBar="{ DefaultTabBar, ...props }">
               <component
                 :is="DefaultTabBar"
@@ -60,7 +54,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { useDesign } from '../../utils/useDesign'
-  import ListItem from '../Transaction/listItem.vue'
   const { prefixCls } = useDesign('tabs')
   const { prefixVar } = useDesign('')
   const showSearchBox = ref(false)

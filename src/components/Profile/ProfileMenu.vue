@@ -15,7 +15,7 @@
           </div>
         </div>
         <div>
-          <AButton :class="[`${prefixVar}-button`]">125 امتیاز</AButton>
+          <AButton type="primary" ghost>125 امتیاز</AButton>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@
           >
         </div>
         <div>
-          <AButton :class="[`${prefixVar}-button`]" size="large">انتقال به سفارش مشتریان</AButton>
+          <AButton type="primary" ghost size="large">انتقال به سفارش مشتریان</AButton>
         </div>
       </div>
     </div>
@@ -29,11 +29,18 @@
           >
         </div>
         <div>
-          <AButton :class="[`${prefixVar}-button-secendry`]" size="large">مشاهده سبد خرید</AButton>
+          <AButton :class="[`${prefixVar}-button-secondary`]" size="large">مشاهده سبد خرید</AButton>
         </div>
       </div>
     </div>
-    <Tabs />
+    <Tabs>
+      <a-tab-pane key="4" tab="درآمد">Content of Tab Pane 1</a-tab-pane>
+      <a-tab-pane key="3" force-render tab="ناموفق">Content of Tab Pane 2</a-tab-pane>
+      <a-tab-pane key="2" tab="انجام شده">Content of Tab Pane 3</a-tab-pane>
+      <a-tab-pane key="1" class="p-2" tab="همگی">
+        <ListItem />
+      </a-tab-pane>
+    </Tabs>
   </div>
 </template>
 

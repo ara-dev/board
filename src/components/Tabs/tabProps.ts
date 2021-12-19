@@ -1,3 +1,0 @@
-interface tabProps {
-  showSearch?: boolean
-}
