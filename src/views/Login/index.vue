@@ -2,8 +2,8 @@
   <div :class="[`${prefixCls}`]">
     <div :class="['absolute', `${prefixCls}-shape-right`]"></div>
     <img
-      src="../../assets/img/login/left-bottom.svg"
       class="absolute left-0"
+      src="../../assets/img/login/left-bottom.svg"
       style="bottom: -100px"
     />
     <div :class="['absolute', `${prefixCls}-shape-left-bottom`]"> </div>
@@ -21,10 +21,10 @@
                 <a-form-item>
                   <a-input-password placeholder="رمز عبور" />
                 </a-form-item>
-                <a href="" class="block float-left">رمز عبور را فراموش کردم</a>
+                <a class="block float-left" href="">رمز عبور را فراموش کردم</a>
                 <br />
-                <a-button size="large" class="block mt-3 float-left" type="primary"
-                  >ورود به سیستم</a-button
+                <AButton class="block mt-3 float-left" size="large" type="primary"
+                  >ورود به سیستم</AButton
                 >
               </AForm>
             </div>
@@ -42,8 +42,8 @@
                 >به ویزاین خوش آمدید در صورتی که هنوز ثبت نام نکرده اید با ما در لینک زیر همراه
                 باشید.</p
               >
-              <a-button :class="[`${prefixCls}-btn-register`]" size="large" ghost
-                >ثبت نام در وب دیزاین</a-button
+              <AButton :class="[`${prefixCls}-btn-register`]" ghost size="large"
+                >ثبت نام در وب دیزاین</AButton
               >
             </div>
           </div>

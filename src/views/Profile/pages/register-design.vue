@@ -109,7 +109,7 @@
   import { usePageInfo } from '../../../utils/usePageInfo'
   import { useDesign } from '../../../utils/useDesign'
   import { status } from '../../../components/Register-Design/status'
-  import RegisterDesignItem from '../../../components/Register-Design/Register-design-item.vue'
+  import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { ref } from 'vue'
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')

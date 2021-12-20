@@ -10,11 +10,11 @@
   <div id="mydiv" ref="mydiv">
     <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
     <div id="mydivheader">Click here to move</div>
-    <a-card style="width: 300px">
+    <ACard style="width: 300px">
       <p>Card content</p>
       <p>Card content</p>
       <p>Card content</p>
-    </a-card>
+    </ACard>
   </div>
 </template>
 

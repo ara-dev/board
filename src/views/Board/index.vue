@@ -41,25 +41,25 @@
                 :leave="{ x: -400, opacity: 0 }"
               />
               <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
-                <a-upload
+                <AUpload
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
                   :showUploadList="false"
                   @change="handleChangeSvg"
                 >
-                  <a-button class="mt-5"> بارگذاری فایل svg </a-button>
-                </a-upload>
+                  <AButton class="mt-5"> بارگذاری فایل svg </AButton>
+                </AUpload>
 
-                <a-upload
+                <AUpload
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
                   :showUploadList="false"
                   @change="handleChangeJson"
                 >
-                  <a-button class="mt-5"> بارگذاری فایل json </a-button>
-                </a-upload>
+                  <AButton class="mt-5"> بارگذاری فایل json </AButton>
+                </AUpload>
 
-                <a-button class="mt-5" @click="save"> ذخیره فایل </a-button>
+                <AButton class="mt-5" @click="save"> ذخیره فایل </AButton>
               </div>
             </div>
           </Transition>

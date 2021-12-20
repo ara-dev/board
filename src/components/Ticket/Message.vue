@@ -41,13 +41,15 @@
 
     &.message{
       background: rgba(169, 170, 170, 0.05);
-      color: #71717a
+      color: #71717a;
+      border: 1px solid rgba(196, 196, 196, 0.25);
     }
 
     &.reply{
       /*background:fade(@primary-color,25%);*/
       background: rgba(45, 167, 113, 0.05);
       color: @primary-color;
+      border: 1px solid rgba(45, 167, 113, 0.25);
     }
   }
 </style>

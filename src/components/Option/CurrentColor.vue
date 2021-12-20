@@ -1,5 +1,5 @@
 <template>
-  <a-input
+  <AInput
     v-model:value="stageStore.currentColor.hex"
     placeholder="Basic usage"
     style="width: 30%; display: inline"

@@ -1,17 +1,17 @@
 <template>
   <div class="text-center">
-    <!--    <a-button :type="buttonType('justify')" class="mr-3 py-0 px-1" @click="changeAlign('justify')">
+    <!--<a-button :type="buttonType('justify')" class="mr-3 py-0 px-1" @click="changeAlign('justify')">
       <icon-align-text-both :size="20"/>
     </a-button>-->
-    <a-button :type="buttonType('left')" class="mr-3 py-0 px-1" @click="changeAlign('left')">
+    <AButton :type="buttonType('left')" class="mr-3 py-0 px-1" @click="changeAlign('left')">
       <Icon icon="akar-icons:text-align-left" size="20" />
-    </a-button>
-    <a-button :type="buttonType('center')" class="mr-3 py-0 px-1" @click="changeAlign('center')">
+    </AButton>
+    <AButton :type="buttonType('center')" class="mr-3 py-0 px-1" @click="changeAlign('center')">
       <Icon icon="akar-icons:text-align-center" size="20" />
-    </a-button>
-    <a-button :type="buttonType('right')" class="mr-3 py-0 px-1" @click="changeAlign('right')">
+    </AButton>
+    <AButton :type="buttonType('right')" class="mr-3 py-0 px-1" @click="changeAlign('right')">
       <Icon icon="akar-icons:text-align-right" size="20" />
-    </a-button>
+    </AButton>
   </div>
 </template>
 

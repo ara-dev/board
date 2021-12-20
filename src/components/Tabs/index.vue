@@ -1,6 +1,6 @@
 <template>
   <!--  , 'h-full'-->
-  <ACard :class="[`${prefixCls}`]">
+  <ACard :class="[`${prefixCls}-main-card`]">
     <div :class="[`${prefixCls}-search-icon`]">
       <AButton shape="circle" type="text" @click="showSearchBox = true">
         <template #icon>
@@ -26,7 +26,7 @@
               </template>
             </AInput>
           </div>
-          <a-tabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
+          <ATabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
             <slot></slot>
             <template #renderTabBar="{ DefaultTabBar, ...props }">
               <component
@@ -35,12 +35,12 @@
                 v-bind="props"
               />
             </template>
-          </a-tabs>
+          </ATabs>
         </div>
       </div>
       <div>
         <ADivider />
-        <div class="flex justify-between">
+        <div class="flex justify-between pb-4 px-3">
           <div> تعداد رکورد یافت شده: 100 رکورد </div>
           <div>
             <APagination v-model:current="current" :total="50" show-less-items />
@@ -70,10 +70,18 @@
       direction: rtl;
     }
 
+    &-main-card{
+
+      & > .ant-card-body{
+        padding: 0;
+      }
+
+    }
+
     &-search-icon{
       position: absolute;
-      left: 5px;
-      top: 15px;
+      left: 15px;
+      top: 8px;
       z-index: 1;
     }
 
@@ -101,5 +109,11 @@
     .ant-pagination-next{
       margin-right:8px;
     }
+  }
+
+  .ant-pagination-item-link{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
   }
 </style>

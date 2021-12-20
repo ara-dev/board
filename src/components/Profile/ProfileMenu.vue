@@ -15,7 +15,7 @@
           </div>
         </div>
         <div>
-          <AButton type="primary" ghost>125 امتیاز</AButton>
+          <AButton ghost type="primary">125 امتیاز</AButton>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
           </AMenuItem>
         </AMenu>
       </div>
-      <div>
+      <!--      <div>
         <AButton
           :id="`${prefixCls}-design-adv`"
           class="border-2 text-center text-gray-300 border-dashed w-full h-20 flex items-center justify-center"
@@ -49,7 +49,7 @@
             و برای خود درآمد زایی کنید
           </p>
         </AButton>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>

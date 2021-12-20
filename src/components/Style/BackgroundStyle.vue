@@ -1,6 +1,6 @@
 <template>
   <div style="direction: ltr">
-    <a-tabs v-model:activeKey="active">
+    <ATabs v-model:activeKey="active">
       <a-tab-pane :key="4" tab="تصویر">
         <multi-upload />
       </a-tab-pane>
@@ -16,7 +16,7 @@
           v-bind="props"
         />
       </template>
-    </a-tabs>
+    </ATabs>
   </div>
 </template>
 

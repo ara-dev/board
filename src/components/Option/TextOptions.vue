@@ -1,11 +1,11 @@
 <template>
   <div>
     <p class="text-gray-500 mb-2 mt-3 text-xs font-semibold">فونت</p>
-    <a-select class="w-full">
+    <ASelect class="w-full">
       <a-select-option value="jack">Jack</a-select-option>
       <a-select-option value="lucy">Lucy</a-select-option>
       <a-select-option value="Yiminghe">yiminghe</a-select-option>
-    </a-select>
+    </ASelect>
     <a-divider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">سایز فونت</p>
     <div class="text-center">
@@ -16,12 +16,12 @@
       />
     </div>
 
-    <a-divider />
+    <ADivider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">ترازبندی</p>
 
     <AlignButton />
 
-    <a-divider />
+    <ADivider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">رنگ</p>
 
     <!--    <swatches :value="stageStore.currentColor.hex" @change="(val)=> stageStore.currentColor=val" />
@@ -30,7 +30,7 @@
     <!--    v-model:value="stageStore.currentColor"-->
 
     <!--    <div class="mx-auto">-->
-    <a-popover arrow-point-at-center>
+    <APopover arrow-point-at-center>
       <template #content>
         <sketch
           :value="stageStore.currentColor.hex"
@@ -51,7 +51,7 @@
           </template >
         </a-input>-->
 
-      <a-input
+      <AInput
         v-model:value="stageStore.currentColor.hex"
         placeholder="Basic usage"
         style="width: 30%; display: inline"
@@ -91,7 +91,7 @@
             <div :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`"></div>
           </template>
         </a-input-search>-->
-    </a-popover>
+    </APopover>
     <!--    </div>-->
   </div>
 </template>

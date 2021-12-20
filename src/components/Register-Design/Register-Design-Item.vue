@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12 gap-4 p-3">
       <div class="col-span-2">
         <img class="rounded" src="https://picsum.photos/200/120" />
-        <div class="text-center text-gray-400 mt-1">
+        <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
           <span>svg name</span>
           <span :class="[`${prefixVar}-text-color-primary`]"> (120kB)</span>
         </div>

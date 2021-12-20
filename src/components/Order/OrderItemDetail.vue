@@ -1,5 +1,5 @@
 <template>
-  <a-collapse :bordered="false" :class="[`${prefixCls}`]">
+  <ACollapse :bordered="false" :class="[`${prefixCls}`]">
     <template #expandIcon="{ isActive }">
       <div>
         <Icon color="#a1a1a1" icon="ion:chevron-down-outline" size="20" />
@@ -57,7 +57,7 @@
         </div>
       </div>
     </a-collapse-panel>
-  </a-collapse>
+  </ACollapse>
 </template>
 
 <script lang="ts" setup>
