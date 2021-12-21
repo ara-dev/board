@@ -79,7 +79,8 @@
       </div>
       <div class="border-r p-5">
         <!--        <Ticket />-->
-        <RegisterDesignTicket />
+        <!--        <RegisterDesignTicket />-->
+        <InputSendMessage />
       </div>
     </div>
   </ACard>
@@ -88,7 +89,7 @@
 <script lang="ts" setup>
   import { useDesign } from '../../../utils/useDesign'
   import ItemDetail from '../../../components/Order/OrderItemDetail.vue'
-  import RegisterDesignTicket from '../../../components/Register-Design/Register-Design-Ticket.vue'
+  import InputSendMessage from '../../../components/Ticket/InputSendMessage.vue'
   const { prefixCls } = useDesign('order-detail')
   const { prefixVar } = useDesign('')
 </script>

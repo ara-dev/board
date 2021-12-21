@@ -1,7 +1,12 @@
 <template>
-  <div ref="mainboard" class="overflow-auto" style="width: 100%; height: 90%; position: absolute">
-    <div class="relative h-full">
-      <div id="container"></div>
+  <!-- -->
+  <!--  -->
+
+  <div ref="mainboard" class="h-full w-full" style="position: relative">
+    <div class="overflow-auto" style="position: absolute; width: 100%; height: 90%">
+      <div class="relative h-full">
+        <div id="container"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +20,7 @@
   const { width, height } = useElementSize(mainboard)
 
   watch([width, height], () => {
+    //console.log('sdfsdfsdf', width, height)
     stageStore.resizePage(width.value, height.value)
   })
 

@@ -1,50 +1,25 @@
 <template>
   <div>
-    <!--    progress-dot-->
-    <ASteps
-      :class="['right-step', `${prefixCls}-step`]"
-      :current="3"
-      direction="vertical"
-      progress-dot
-    >
-      <AStep description="This is a description. This is a description.">
-        <template #title>sdfsdfsdf</template>
+    <ASteps :class="['right-step', `${prefixCls}-step`]" :current="2" direction="vertical">
+      <template #progressDot="{ index, status }">
+        <div :class="[`${prefixCls}-progress-dot`]"></div>
+      </template>
+
+      <AStep v-for="i in 4" :key="i">
+        <template #title>
+          <span :class="['text-xs block ', `${prefixVar}-text-color-primary`]"
+            >1400/12 15 شنبه 10:15</span
+          >
+          <span class="text-gray-500">ثبت طرح در پلتفرم</span>
+        </template>
         <template #description>
-          <span>This is a description.</span>
+          <div class="py-2 px-3 my-3 text-justify description mx-4"
+            >توسط احمد رضا عزیزان طرح مورد نظر در سایت بارگذاری شد توسط احمد رضا عزیزان طرح مورد نظر
+            در سایت بارگذاری شد توسط احمد رضا عزیزان طرح مورد نظر در سایت بارگذاری شد توسط احمد رضا
+            عزیزان طرح مورد نظر در سایت بارگذاری شد
+          </div>
         </template>
       </AStep>
-      <AStep description="This is a description. This is a description." title="Finished" />
-      <AStep description="This is a description. This is a description." title="In Progress" />
-      <AStep description="This is a description." title="Waiting" />
-      <AStep description="This is a description." title="Waiting" />
-      <!--      prefixCls-->
-      <!--      <template #progressDot="{ index, status }">
-        <span
-          style="
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: block;
-            border: 4.84615px solid #2da771;
-          "
-        ></span>
-        &lt;!&ndash;        <APopover>
-          <template #content>
-            <span>step {{ index }} status: {{ status }}</span>
-          </template>
-          &lt;!&ndash;:class="`${prefixCls}-icon-dot`"&ndash;&gt;
-          &lt;!&ndash;          <span
-            style="
-              border-radius: 50%;
-              width: 18px;
-              height: 18px;
-              display: block;
-              border: 4.84615px solid #2da771;
-            "
-          ></span>&ndash;&gt;
-          <span>1</span>
-        </APopover>&ndash;&gt;
-      </template>-->
     </ASteps>
   </div>
 </template>
@@ -58,22 +33,52 @@
 <style lang="less">
   @pre: ~'@{prefix}-register-design-events';
 
-   .@{pre}-step{
-        //background: red;
-   }
-
-  .right-step{
-      direction: rtl;
-    & .ant-steps-item-icon{
-      float: right;
+    .@{pre}-progress-dot{
+      width: 18px;
+      height: 18px;
+      border: 5px solid @primary-color;
+      border-radius: 50%;
+      display: block;
+      background: #fff;
     }
 
-     &  .ant-steps-item-tail {
-       right: 20px;
+   .@{pre}-step{
+
+     & .ant-steps-item-tail{
+        padding: 0 !important;
      }
 
-    & .ant-steps-item-process .ant-steps-icon-dot{
-      right: 0 ;
-    }
-  }
+     & .ant-steps-item-icon{
+       margin-top: 0 !important;
+
+     }
+
+     & .ant-steps-icon{
+       right: -5px;
+     }
+
+     & .ant-steps-item-content {
+       width: 100%;
+       margin-right: 25px;
+     }
+
+     & .ant-steps-item-description{
+       margin-left: 25px;
+     }
+
+     & .description{
+       background: rgba(169, 170, 170, 0.05);
+       border: 1px solid rgba(196, 196, 196, 0.25);
+       box-sizing: border-box;
+       border-radius: 4px;
+     }
+
+     & .ant-steps-item-wait .ant-steps-item-tail::after , & .ant-steps-item-process .ant-steps-item-tail::after{
+       border: 1px dashed gray;
+       background: none;
+       border-inline-start-style: none;
+       border-right: none;
+     }
+
+   }
 </style>

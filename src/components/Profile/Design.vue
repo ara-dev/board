@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
   import { useDesign } from '../../utils/useDesign'
+  import { defineProps } from 'vue'
 
   const { prefixCls } = useDesign('design')
 

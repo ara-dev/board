@@ -90,10 +90,10 @@
             <TopLeftButtons />
           </div>
         </div>
-        <div class="h-full w-full" style="position: relative">
-          <Stage />
-          <!--            <div style="height: 1500px; width: 2000px">5555555</div>-->
-        </div>
+        <!--        <div class="h-full w-full" style="position: relative">-->
+        <Stage />
+        <!--            <div style="height: 1500px; width: 2000px">5555555</div>-->
+        <!--        </div>-->
         <div>
           <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
             <BottomLeftButtons />
@@ -141,7 +141,7 @@
 
 <script lang="ts" setup>
   import TextOptions from '../../components/Option/TextOptions.vue'
-  import { stageStore, uiStore } from '../../core'
+  import { uiStore, stageStore } from '../../core'
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
   import { useDesign } from '../../utils/useDesign'

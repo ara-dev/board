@@ -163,12 +163,16 @@ export default class StageOptionStore {
   }
 
   resizePage(newWidth: number, newHeight: number): void {
-    // alert('sdfsdfsf')
-    /*  setTimeout(function () {
-      alert('Hello')
-    }, 3600)*/
     //return
+    /*if (this.inZoom) {
+      return
+    }*/
     console.log('new width height', newWidth, newHeight)
+    console.log(
+      'new last width height',
+      this.lastWidthHeightMainBoard.width,
+      this.lastWidthHeightMainBoard.height,
+    )
     this.lastWidthHeightMainBoard.width = newWidth
     this.lastWidthHeightMainBoard.height = newHeight
     const page = this.getCurrentPage()
@@ -200,7 +204,7 @@ export default class StageOptionStore {
   changeScale(scale: number) {
     const page: Page = this.getCurrentPage()
     const group: Group = this.getMainGroup()
-    console.log('this is %', scale)
+    //console.log('this is %', scale)
     //console.log('this page width , height', page.docWidth * scale, page.docHeight * scale)
     const a =
       page.docWidth * scale > this.lastWidthHeightMainBoard.width
