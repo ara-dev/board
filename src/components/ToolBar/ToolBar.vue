@@ -20,6 +20,7 @@
   import Icon from '../Icon/Icon.vue'
   import { computed } from 'vue'
   import { useDesign } from '../../utils/useDesign'
+  import { Toolbar } from './toolbar.ts'
 
   const changeMenu = (activeMenuId: string): void => {
     const prefix = 'ui.right_sidebar.children.'
@@ -43,7 +44,7 @@
   )
 
   const getVisibleTools = computed(() => {
-    return Tools.filter((item) => uiStore.isVisible(item.id))
+    return Tools.filter((item: Toolbar) => uiStore.isVisible(item.id))
   })
 </script>
 

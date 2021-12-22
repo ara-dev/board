@@ -3,7 +3,7 @@ import colors from 'windicss/colors'
 import { primaryColor } from './themeConfig'
 
 export default defineConfig({
-  darkMode: 'class',
+  //darkMode: 'class',
   plugins: [createEnterPlugin()],
   theme: {
     extend: {

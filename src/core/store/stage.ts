@@ -204,7 +204,7 @@ export default class StageOptionStore {
   changeScale(scale: number) {
     const page: Page = this.getCurrentPage()
     const group: Group = this.getMainGroup()
-    //console.log('this is %', scale)
+    console.log('this is %', scale * 100)
     //console.log('this page width , height', page.docWidth * scale, page.docHeight * scale)
     const a =
       page.docWidth * scale > this.lastWidthHeightMainBoard.width
@@ -214,7 +214,7 @@ export default class StageOptionStore {
       page.docHeight * scale > this.lastWidthHeightMainBoard.height
         ? page.docHeight * scale + 100
         : this.lastWidthHeightMainBoard.height
-    console.log('this is a b', a, b)
+    //console.log('this is a b', a, b)
     page.stage.width(a)
     page.stage.height(b)
     group.scale({
@@ -589,7 +589,8 @@ export default class StageOptionStore {
   }
 
   applyFitScreen() {
-    this.changeScale(1)
+    this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
+    //this.changeScale(1)
     /* //const stage: Stage = this.getCurrentPage().stage
     const group:Group=this.getMainGroup();
     //console.log("this is scale",stage.scale())

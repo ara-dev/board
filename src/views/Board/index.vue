@@ -83,18 +83,25 @@
         </div>
       </div>-->
 
-      <div class="relative board-main h-full w-full">
+      <div
+        class="relative board-main h-full w-full"
+        style="display: grid; grid-template-rows: 50px auto 50px"
+      >
         <div class="z-50 p-3 w-full" style="background: #fff">
           <div class="flex justify-between">
             <TopRightButtons />
             <TopLeftButtons />
           </div>
         </div>
-        <!--        <div class="h-full w-full" style="position: relative">-->
+        <!--        <div>
+
+        </div>-->
         <Stage />
+        <!--        <div class="h-full w-full" style="position: relative">-->
+
         <!--            <div style="height: 1500px; width: 2000px">5555555</div>-->
         <!--        </div>-->
-        <div>
+        <div class="z-50 p-3 w-full" style="position: relative">
           <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
             <BottomLeftButtons />
           </div>

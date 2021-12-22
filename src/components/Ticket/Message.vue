@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineProps, withDefaults } from 'vue'
+  import { withDefaults } from 'vue'
   import { useDesign } from '../../utils/useDesign'
   interface Props {
     type?: 'message' | 'reply'

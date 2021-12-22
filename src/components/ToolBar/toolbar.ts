@@ -1,4 +1,4 @@
-interface Toolbar {
+export interface Toolbar {
   title: string
   id: string
   icon: string
@@ -40,7 +40,6 @@ const tools: Toolbar[] = [
     id: 'ui.right_sidebar.children.resize',
     icon: 'ion:resize-outline',
   },
-
 ]
 
 export default tools

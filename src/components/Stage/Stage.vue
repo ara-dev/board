@@ -1,12 +1,13 @@
 <template>
   <!-- -->
   <!--  -->
-
-  <div ref="mainboard" class="h-full w-full" style="position: relative">
-    <div class="overflow-auto" style="position: absolute; width: 100%; height: 90%">
-      <div class="relative h-full">
-        <div id="container"></div>
-      </div>
+  <!--  height: 90%-->
+  <!--  width: 100%-->
+  <div ref="mainboard" class="relative w-full h-full">
+    <div class="overflow-auto absolute h-full w-full">
+      <!--      <div class="relative h-full">-->
+      <div id="container"></div>
+      <!--      </div>-->
     </div>
   </div>
 </template>
