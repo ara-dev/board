@@ -39,7 +39,7 @@
         elmnt.onmousedown = dragMouseDown
       }
 
-      function dragMouseDown(e) {
+      function dragMouseDown(e: any) {
         e = e || window.event
         e.preventDefault()
         // get the mouse cursor position at startup:

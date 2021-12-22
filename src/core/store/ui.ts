@@ -11,11 +11,11 @@ interface UiElement {
 }
 
 export default class UiElementStore {
-  private _state!: UnwrapNestedRefs<UiElement>
-
   constructor(state: {}) {
     this._state = reactive(state)
   }
+
+  private _state!: UnwrapNestedRefs<UiElement>
 
   get state(): DeepReadonly<UiElement> {
     return readonly(this._state)
@@ -37,11 +37,12 @@ export default class UiElementStore {
     }
   }
 
-  isActive(id: string): boolean | void {
+  isActive(id: string): boolean {
     const obj: UiElement = this.query(id)
     if (obj) {
-      return obj.active
+      return <boolean>obj?.active
     }
+    return false
   }
 
   toggleVisible(id: string): void {

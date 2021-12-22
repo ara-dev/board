@@ -31,7 +31,7 @@
   }
 
   const props = defineProps<Props>()
-  const elRef = ref<ElRef>(null)
+  const elRef = ref(null)
 
   const isSvgIcon = computed(() => props.icon?.endsWith(SVG_END_WITH_FLAG))
   const getSvgIcon = computed(() => props.icon.replace(SVG_END_WITH_FLAG, ''))

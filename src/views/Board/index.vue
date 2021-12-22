@@ -93,37 +93,14 @@
             <TopLeftButtons />
           </div>
         </div>
-        <!--        <div>
 
-        </div>-->
         <Stage />
-        <!--        <div class="h-full w-full" style="position: relative">-->
 
-        <!--            <div style="height: 1500px; width: 2000px">5555555</div>-->
-        <!--        </div>-->
         <div class="z-50 p-3 w-full" style="position: relative">
           <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
             <BottomLeftButtons />
           </div>
         </div>
-        <!--        <div class="overflow-auto" style="height: 2000px; width: 2000px">dsfsdf</div>-->
-        <!--
-
-        <div class="stages p-5 overflow-auto" style="position: relative">
-          <Stage />
-        </div>-->
-        <!-- <div class="absolute z-50 p-3 w-full" style="background: #fff">
-          <div class="flex justify-between">
-            <TopRightButtons />
-            <TopLeftButtons />
-          </div>
-        </div>
-
-        <pages v-if="false" />
-
-        <div class="stages overflow-auto">
-
-        </div>-->
       </div>
 
       <div
@@ -140,7 +117,6 @@
           />
         </Transition>
       </div>
-      <!--   overflow-auto   -->
     </div>
     <!-- end main -->
   </div>
@@ -219,7 +195,7 @@
   }
 
   function handleChangeJson({ file, fileList }) {
-    console.log(file)
+    //console.log(file)
     /* const isSvg = file.type == 'image/svg+xml'
     if (!isSvg) {
       alert('فایل نامتعبر')

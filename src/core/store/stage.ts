@@ -54,14 +54,14 @@ export default class StageOptionStore {
   private lastWidthHeightMainBoard: { width: number; height: number }
   private scale: number
   private scaleFactor: number
-  private inZoom: boolean
+  //private inZoom: boolean
 
   constructor() {
     this._init()
     this.lastPointerPosition = { x: 0, y: 0 }
     this.lastWidthHeightMainBoard = { width: 0, height: 0 }
     this.scale = 1
-    this.inZoom = false
+    //this.inZoom = false
     this.scaleFactor = 1.2
     this._state = reactive(this._state)
   }
@@ -95,6 +95,10 @@ export default class StageOptionStore {
 
   /*get pages(): UnwrapRef<StageOption['pages']> {
     return this._state.pages
+  }*/
+
+  /* get selectedElements(): UnwrapRef<StageOption['selectedElements']> {
+    return this._state.selectedElements
   }*/
 
   set selectedElements(shapes: Shape[]) {
@@ -167,17 +171,17 @@ export default class StageOptionStore {
     /*if (this.inZoom) {
       return
     }*/
-    console.log('new width height', newWidth, newHeight)
-    console.log(
+    //console.log('new width height', newWidth, newHeight)
+    /*console.log(
       'new last width height',
       this.lastWidthHeightMainBoard.width,
       this.lastWidthHeightMainBoard.height,
-    )
+    )*/
     this.lastWidthHeightMainBoard.width = newWidth
     this.lastWidthHeightMainBoard.height = newHeight
     const page = this.getCurrentPage()
     const w = newWidth / page.docWidth //
-    const h = (newHeight - 150) / page.docHeight //
+    const h = (newHeight - 25) / page.docHeight //
     const min = Math.min(w, h)
     this.scale = min
     this.changeScale(min)
@@ -204,7 +208,7 @@ export default class StageOptionStore {
   changeScale(scale: number) {
     const page: Page = this.getCurrentPage()
     const group: Group = this.getMainGroup()
-    console.log('this is %', scale * 100)
+    //console.log('this is %', scale * 100)
     //console.log('this page width , height', page.docWidth * scale, page.docHeight * scale)
     const a =
       page.docWidth * scale > this.lastWidthHeightMainBoard.width
@@ -268,8 +272,8 @@ export default class StageOptionStore {
     const tempShape: Shape[] = []
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       const copy = item.clone({
-        x: item.x() + 10,
-        y: item.y() + 10,
+        x: item.x() + 20,
+        y: item.y() + 20,
       })
       group.add(copy)
       tempShape.push(copy)
@@ -577,10 +581,8 @@ export default class StageOptionStore {
   }
 
   applyZoomIn() {
-    this.inZoom = true
     this.scale *= this.scaleFactor
     this.changeScale(this.scale)
-    //this.inZoom = false
   }
 
   applyZoomOut() {
@@ -590,23 +592,14 @@ export default class StageOptionStore {
 
   applyFitScreen() {
     this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
-    //this.changeScale(1)
-    /* //const stage: Stage = this.getCurrentPage().stage
-    const group:Group=this.getMainGroup();
-    //console.log("this is scale",stage.scale())
-    group.scale({
-      x:1,
-      y: 1,
-    })
-    this.setCenter();*/
   }
 
-  setCenter() {
+  /* setCenter() {
     const page: Page = this.getCurrentPage()
     const group: Group = this.getMainGroup(page.stage)
     group.x(page.stage.width() / 2 - page.docWidth / 2)
     group.y(page.stage.height() / 2 - page.docHeight / 2)
-  }
+  }*/
 
   private _init() {
     this._state = {
@@ -862,6 +855,7 @@ export default class StageOptionStore {
     this.setSnapping(page.stage, layer, group)
     this.setContextMenu(page.stage, group)
     this.setEditableText(page.stage)
+    this.hoyKey()
 
     /* const path2 = new Konva.Path({
       name: 'element',
@@ -1598,6 +1592,77 @@ export default class StageOptionStore {
         })
       }
     })
+  }
+
+  private hoyKey() {
+    const page = this.getCurrentPage()
+    const container = page.stage.container()
+    const delta = 4
+    container.tabIndex = 1
+    container.focus()
+    container.addEventListener('keydown', (e) => {
+      console.log(e.key)
+      if (e.key == 'ArrowDown') {
+        this._state.selectedElements.forEach((item) => {
+          item.y(item.y() + delta)
+        })
+      }
+
+      if (e.key == 'ArrowUp') {
+        this._state.selectedElements.forEach((item) => {
+          item.y(item.y() - delta)
+        })
+      }
+
+      if (e.key == 'ArrowLeft') {
+        this._state.selectedElements.forEach((item) => {
+          item.x(item.x() - delta)
+        })
+      }
+
+      if (e.key == 'ArrowRight') {
+        this._state.selectedElements.forEach((item) => {
+          item.x(item.x() + delta)
+        })
+      }
+
+      if (e.key == 'Delete') {
+        this.applyDelete()
+      }
+
+      if (e.ctrlKey && e.key == 'a') {
+        this.applySelectAll()
+        e.preventDefault()
+      }
+
+      if (e.ctrlKey && e.key == 'c') {
+        this.applyCopy()
+      }
+
+      if (e.ctrlKey && e.key == 'v') {
+        this.applyDuplicate()
+      }
+    })
+
+    //console.log('this is container', page.stage.container())
+    //console.log('active element', document.activeElement)
+    /*page.stage.addEventListener('click', () => {
+      console.log('active', document.activeElement)
+      //console.log('key board')
+      //alert('asdasdsad')
+    })*/
+    //page.stage.container().focus()
+    //return
+    /* window.addEventListener('click', (e) => {
+      //console.log(e.target.focus())
+      //  document.getElementById('container').tabIndex = 1
+      //document.getElementById('container').focus()
+      // console.log('active', document.activeElement)
+      // const name = event.key
+      // const code = event.code
+      //console.log('key board', name, code)
+      //alert('dsfsdfdsfsd')
+    })*/
   }
 }
 

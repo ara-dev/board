@@ -1,8 +1,8 @@
 <template>
   <div class="h-full">
     <div class="flex mb-3">
-      <Icon :icon="pageInfo.icon" size="23" />
-      <span class="mr-2 font-bold">{{ pageInfo.title }}</span>
+      <Icon :icon="pageInfo?.icon" size="23" />
+      <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
     </div>
     <div :class="[`${prefixCls}-alert`, `${prefixCls}-alert-success`]" class="mb-3">
       <div class="flex justify-between items-center">
@@ -15,7 +15,7 @@
           >
         </div>
         <div>
-          <AButton type="primary" ghost size="large">انتقال به سفارش مشتریان</AButton>
+          <AButton ghost size="large" type="primary">انتقال به سفارش مشتریان</AButton>
         </div>
       </div>
     </div>
