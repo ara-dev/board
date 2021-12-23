@@ -102,6 +102,7 @@ export default class StageOptionStore {
   }*/
 
   set selectedElements(shapes: Shape[]) {
+    console.log('this is selected elements', shapes)
     if (shapes.length == 0) {
       uiStore.deActiveElementWhenNoneSelected()
       return
@@ -489,6 +490,7 @@ export default class StageOptionStore {
       this.setSnapping(stage, layer, group)
       this.setContextMenu(stage, group)
       this.setEditableText(stage)
+      this.hoyKey()
       //load images
       const images = stage.find((node: any) => {
         return node.name().startsWith('element_image')
@@ -538,24 +540,54 @@ export default class StageOptionStore {
           })
         }
 
-        if (shape.className == 'Path') {
-          //console.log('this is shape for clip path', shape)
+        /* if (shape.className == 'Path') {
           item.clipFunc(function (ctx) {
             //method 1
             const path = new Konva.Path({
               data: shape.attrs.data,
             })
+            // @ts-ignore
             path.sceneFunc().call(path, ctx, path)
             //method 2
-            /* ctx.rect(0, 0, 4000, 2000)
-                      const path2D = new Path2D(shape.attrs.data)
-                      //path2D.rect(70, 70, 120, 80);
-                      ctx._context.clip(path2D)*/
+            //ctx.rect(0, 0, 4000, 2000)
+            //const path2D = new Path2D(shape.attrs.data)
+            //path2D.rect(70, 70, 120, 80);
+            //ctx._context.clip(path2D)
+          })
+        }*/
+
+        if (shape.className == 'Path') {
+          //console.log('this is shape for clip path', shape)
+          item.clipFunc(function (ctx) {
+            //method 1
+            /* const path = new Konva.Path({
+              data: shape.attrs.data,
+            })
+            path.sceneFunc().call(path, ctx, path)*/
+            //method 2
+            ctx.rect(0, 0, page.docWidth, page.docHeight)
+            const path2D = new Path2D(shape.attrs.data)
+            //path2D.rect(70, 70, 120, 80);
+            // @ts-ignore
+            ctx._context.clip(path2D)
           })
         }
       })
       //end render clip
+
+      const groups: Group[] = stage.find((node: any) => {
+        return node.name().startsWith('element_group')
+      })
+
+      groups.forEach((item) => {
+        item.children?.forEach((child) => {
+          child.draggable(false)
+          //item.setAttr('draggable', false)
+        })
+      })
+      console.log('this is groups', groups)
     })
+
     this._state.currentPage = 1
     this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
   }
@@ -1164,6 +1196,7 @@ export default class StageOptionStore {
     }
 
     const mouseUp = (e: MouseEvent | TouchEvent) => {
+      //console.log(e, 'this is mouse up')
       // do nothing if we didn't start selection
       if (!selectionRectangle.visible()) {
         return
@@ -1187,6 +1220,7 @@ export default class StageOptionStore {
     }
 
     stage.on('mousedown touchstart', (e) => {
+      console.log('this is mouse down', e.target.parent)
       // do nothing if we mousedown on any shape
       if (e.target !== stage && e.target.name() !== 'background') {
         return
@@ -1249,6 +1283,7 @@ export default class StageOptionStore {
 
     // clicks should select/deselect shapes or //click tap
     stage.on('mousedown touchstart', (e) => {
+      //console.log('this is selected', e)
       // if we are selecting with rect, do nothing
       if (selectionRectangle.visible()) {
         return
@@ -1273,14 +1308,21 @@ export default class StageOptionStore {
       //const isSelected = transformer.nodes().indexOf(e.target) >= 0
       //new method
       const isSelected = transformer.nodes().findIndex((item) => item._id == e.target._id) > -1
-
       if (!metaPressed && !isSelected) {
         // if no key pressed and the node is not selected
         // select just one
-        transformer.nodes([e.target])
+        if (e.target.parent?.name().startsWith('element_group')) {
+          //alert('sadasd')
+          transformer.nodes([e.target.parent])
+          this.changeResizeRotateEnableTransformer(e.target.parent.draggable(), transformer)
+          this.selectedElements = [e.target.parent as Shape]
+        } else {
+          transformer.nodes([e.target])
+          this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
+          this.selectedElements = [e.target as Shape]
+        }
+        console.log('')
         //deselect shape that draggable is false (locked)
-        this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
-        this.selectedElements = [e.target as Shape]
       } else if (metaPressed && isSelected) {
         // if we pressed keys and node was selected
         // we need to remove it from selection:
@@ -1310,6 +1352,17 @@ export default class StageOptionStore {
       }
     })
   }
+
+  /*private getBaseParent(group: Group): Group {
+    let parent = group
+    parent.children?.forEach((child)=>{
+      if()
+    })
+    return parent
+    //parent.chil
+    //parent.getParent()
+    //shape.children
+  }*/
 
   private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
@@ -1575,7 +1628,9 @@ export default class StageOptionStore {
             removeTextarea()
           }*/
           // on esc do not set value back to node
-          if (e.keyCode === 27) {
+          //console.log(e.key)
+          //console.log(e.keyCode)
+          if (e.key == 'Escape') {
             removeTextarea()
           }
         })
@@ -1643,6 +1698,56 @@ export default class StageOptionStore {
         this.applyDuplicate()
       }
     })
+
+    container.addEventListener(
+      'mousewheel',
+      (event) => {
+        // console.log(event as WheelEvent)
+        const mouseEvent = event as WheelEvent
+        //e.ctrlKey
+        //console.log(e.ctrlKey)
+        if (mouseEvent.ctrlKey == true) {
+          event.preventDefault()
+          if (mouseEvent.deltaY > 0) {
+            //console.log('Down')
+            this.applyZoomOut()
+          } else {
+            this.applyZoomIn()
+            //console.log('Up')
+          }
+        }
+      },
+      { passive: false },
+    )
+
+    /*window.addEventListener(
+      'mousewheel',
+      (e) => {
+        const mouse = e as MouseEvent
+        //e.ctrlKey
+        console.log(e.ctrlKey)
+        if (mouse.ctrlKey == true) {
+          e.preventDefault()
+        }
+      },
+      { passive: false },
+    )*/
+
+    /* document.addEventListener(
+      'mousewheel',
+      (event) => {
+        console.log(`wheel`)
+        if (event.ctrlKey == true) {
+          event.preventDefault()
+          if (event.deltaY > 0) {
+            console.log('Down')
+          } else {
+            console.log('Up')
+          }
+        }
+      },
+      { passive: false },
+    )*/
 
     //console.log('this is container', page.stage.container())
     //console.log('active element', document.activeElement)

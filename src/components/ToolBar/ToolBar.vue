@@ -16,11 +16,11 @@
 <script lang="ts" setup>
   import { uiStore } from '../../core'
   import ToolBarItem from './ToolBarItem.vue'
-  import Tools from './toolbar.js'
+  import Tools from './toolbar.ts'
   import Icon from '../Icon/Icon.vue'
   import { computed } from 'vue'
   import { useDesign } from '../../utils/useDesign'
-  import { Toolbar } from './toolbar.js'
+  import { Toolbar } from './toolbar.ts'
 
   const changeMenu = (activeMenuId: string): void => {
     const prefix = 'ui.right_sidebar.children.'

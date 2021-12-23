@@ -64,7 +64,7 @@ export function ImportSvg(svg: string): Object {
     const gItem = generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
   })
-  //console.log(temp, 'this is temp')
+  console.log(temp, 'this is temp')
   //console.log(JSON.stringify(temp), 'this is temp json')
   return temp
   //return JSON.stringify(temp)
@@ -459,6 +459,7 @@ function group(group: SVGXMLElement): KonvaFormat {
       svgID: _.get(group, 'attributes.id', ''),
       name: generateName('group'),
       opacity: parseFloat(_.get(group, 'attributes.opacity', 1)),
+      draggable: true,
     },
     className: 'Group',
   }
