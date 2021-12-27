@@ -194,10 +194,8 @@ export default class StageOptionStore {
     } else {
       //this.inZoom = false
     }*/
-
     /*page.stage.width(2000)
     page.stage.height(800)*/
-
     /*group.x(page.stage.width() / 2 - (page.docWidth * min) / 2)
     group.y(page.stage.height() / 2 - (page.docHeight * min) / 2)
     group.scale({
@@ -581,8 +579,9 @@ export default class StageOptionStore {
 
       groups.forEach((item) => {
         item.children?.forEach((child) => {
-          child.draggable(false)
-          //item.setAttr('draggable', false)
+          if (!child.name().startsWith('element_group')) {
+            child.draggable(false)
+          }
         })
       })
       console.log('this is groups', groups)
@@ -1220,7 +1219,7 @@ export default class StageOptionStore {
     }
 
     stage.on('mousedown touchstart', (e) => {
-      console.log('this is mouse down', e.target.parent)
+      //console.log('this is mouse down', e.target.parent)
       // do nothing if we mousedown on any shape
       if (e.target !== stage && e.target.name() !== 'background') {
         return
@@ -1283,7 +1282,7 @@ export default class StageOptionStore {
 
     // clicks should select/deselect shapes or //click tap
     stage.on('mousedown touchstart', (e) => {
-      //console.log('this is selected', e)
+      console.log('this is target', e.target)
       // if we are selecting with rect, do nothing
       if (selectionRectangle.visible()) {
         return
@@ -1312,11 +1311,14 @@ export default class StageOptionStore {
         // if no key pressed and the node is not selected
         // select just one
         if (e.target.parent?.name().startsWith('element_group')) {
-          //alert('sadasd')
-          transformer.nodes([e.target.parent])
+          //const parentGroup = this.getBaseGroup(e.target)
+          //console.log(e.target)
+          //console.log(e.target.parent?.getChildren())
+          transformer.nodes([e.target])
           this.changeResizeRotateEnableTransformer(e.target.parent.draggable(), transformer)
-          this.selectedElements = [e.target.parent as Shape]
+          this.selectedElements = [e.target as Shape]
         } else {
+          // debugger
           transformer.nodes([e.target])
           this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
           this.selectedElements = [e.target as Shape]
@@ -1324,6 +1326,7 @@ export default class StageOptionStore {
         console.log('')
         //deselect shape that draggable is false (locked)
       } else if (metaPressed && isSelected) {
+        //debugger
         // if we pressed keys and node was selected
         // we need to remove it from selection:
         this.changeResizeRotateEnableTransformer(true, transformer)
@@ -1336,6 +1339,7 @@ export default class StageOptionStore {
         transformer.nodes(nodes)
         this.selectedElements = nodes as Shape[]
       } else if (metaPressed && !isSelected) {
+        debugger
         this.changeResizeRotateEnableTransformer(true, transformer)
         // add the node into selection
         //filter shape that is draggable is false (locked)
@@ -1353,16 +1357,30 @@ export default class StageOptionStore {
     })
   }
 
-  /*private getBaseParent(group: Group): Group {
-    let parent = group
-    parent.children?.forEach((child)=>{
+  private getBaseGroup(shape: Shape | Group): any {
+    //debugger
+    //console.log()
+    const parent = shape.getParent()
+    if (
+      parent.parent?.name() == 'main_group' ||
+      !parent.parent?.name().startsWith('element_group')
+    ) {
+      return parent
+    } else {
+      return this.getBaseGroup(parent)
+    }
+    /*if(parent.parent?.name()=='main_group'){
+      return
+    }*/
+
+    /*parent.children?.forEach((child)=>{
       if()
-    })
-    return parent
+    })*/
+    //return parent
     //parent.chil
     //parent.getParent()
     //shape.children
-  }*/
+  }
 
   private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
