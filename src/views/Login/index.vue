@@ -12,21 +12,27 @@
         <div class="grid grid-cols-12 h-full">
           <div class="col-span-8 flex p-5 items-center justify-center">
             <div class="w-4/12">
-              <AForm>
-                <span class="mb-1 block"> نام کاربری</span>
-                <a-form-item>
-                  <AInput placeholder="نام کاربری" />
-                </a-form-item>
-                <span class="mb-1 block">رمز عبور</span>
-                <a-form-item>
-                  <a-input-password placeholder="رمز عبور" />
-                </a-form-item>
-                <a class="block float-left" href="">رمز عبور را فراموش کردم</a>
-                <br />
-                <AButton class="block mt-3 float-left" size="large" type="primary"
-                  >ورود به سیستم</AButton
-                >
-              </AForm>
+              <a-spin :spinning="spinning">
+                <AForm ref="formLogin" :model="formState" :rules="rules">
+                  <span class="mb-1 block"> نام کاربری</span>
+                  <a-form-item name="mobile">
+                    <AInput v-model:value="formState.mobile" placeholder="نام کاربری" />
+                  </a-form-item>
+                  <span class="mb-1 block">رمز عبور</span>
+                  <a-form-item name="password">
+                    <a-input-password v-model:value="formState.password" placeholder="رمز عبور" />
+                  </a-form-item>
+                  <a class="block float-left" href="">رمز عبور را فراموش کردم</a>
+                  <br />
+                  <AButton
+                    class="block mt-3 float-left"
+                    size="large"
+                    type="primary"
+                    @click="onSubmit"
+                    >ورود به سیستم</AButton
+                  >
+                </AForm>
+              </a-spin>
             </div>
           </div>
           <div
@@ -55,8 +61,58 @@
 
 <script lang="ts" setup>
   import { useDesign } from '../../utils/useDesign'
+  import { reactive, ref, UnwrapRef } from 'vue'
+  import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
+  import { userStore } from '../../model/user'
+  import { notification } from 'ant-design-vue'
+  import { message } from 'ant-design-vue'
+  import router from '../../router'
+
   const { prefixCls } = useDesign('login')
   const { prefixVar } = useDesign('')
+  const spinning = ref<boolean>(false)
+
+  interface FormLogin {
+    mobile: string
+    password: string
+  }
+  const formLogin = ref()
+  const formState: UnwrapRef<FormLogin> = reactive({
+    mobile: '',
+    password: '',
+  })
+  const rules = {
+    mobile: [{ required: true, message: 'نام کاربری را وارد نمایید', trigger: 'blur' }],
+    password: [{ required: true, message: 'رمز عبور را وارد نمایید', trigger: 'change' }],
+  }
+
+  const onSubmit = () => {
+    formLogin.value
+      .validate()
+      .then(async () => {
+        try {
+          spinning.value = true
+          await userStore.login(formState.mobile, formState.password)
+          await router.push({ name: 'profile' })
+          //console.log('values', formState, toRaw(formState))
+        } catch (e) {
+          // console.log('this error in page login', e)
+          message.info('This is a normal message')
+          notification.open({
+            message: 'خطا در ورود',
+            description: 'نام کاربری یا رمز عبور اشتباه است',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+        } finally {
+          spinning.value = false
+        }
+      })
+      .catch((error: ValidateErrorEntity<FormLogin>) => {
+        console.log('error', error)
+      })
+  }
 </script>
 
 <style lang="less">

@@ -1,5 +1,6 @@
 <template>
-  <div class="h-screen relative w-full">
+  <!--  class="h-screen relative w-full"-->
+  <div>
     <RouterView v-slot="{ Component, route }">
       <Transition :name="route.meta.transitionName || 'scale'">
         <component :is="Component" />

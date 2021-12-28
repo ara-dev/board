@@ -1,6 +1,6 @@
 export const primaryColor = '#2DA771'
 export const namespace = 'cp'
-export const baseURL = 'http://'
+export const baseURL = 'http://localhost:3002/'
 
 export const lessVars = {
   'success-color': '#55D187', //  Success color

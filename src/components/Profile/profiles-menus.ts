@@ -56,7 +56,7 @@ const menus: ProfileMenus[] = [
   },
   {
     id: 'register-design',
-    title: 'ثبت طرح',
+    title: 'خانه طراحان',
     icon: 'ion:images-outline',
     path: '/profile/register-design',
   },

@@ -19,12 +19,6 @@ const routes = [
         meta: { transition: 'scale' },
       },
       {
-        path: '/test',
-        name: 'test',
-        component: () => import('./views/Test/index.vue'),
-        meta: { transition: 'scale' },
-      },
-      {
         path: '/profile',
         name: 'profile',
         redirect: '/profile/dashboard',
@@ -83,6 +77,12 @@ const routes = [
     meta: { transition: 'scale' },
   },
   {
+    path: '/test',
+    name: 'test',
+    component: () => import('./views/Test/index.vue'),
+    meta: { transition: 'scale' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('./views/404.vue'),
@@ -102,9 +102,23 @@ const router = createRouter({
   },
 })
 
+const routeWithoutAuth: string[] = ['/login']
+
 router.beforeEach((to, from, next) => {
-  //console.log(`Navigating to: ${to.name}`)
-  next()
+  const token = localStorage.getItem('token')
+  if (token) {
+    if (to.path == '/login') {
+      router.push({ name: 'profile' })
+    }
+    next()
+    return
+  } else {
+    if (routeWithoutAuth.includes(to.path)) {
+      next()
+    } else {
+      router.push({ name: 'login' })
+    }
+  }
 })
 
 router.afterEach((to, from, failure) => {})

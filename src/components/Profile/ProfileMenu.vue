@@ -8,9 +8,9 @@
               <img class="rounded-lg inline-block" src="../../assets/img/temp/profile-img.png" />
             </div>
             <div class="pr-5">
-              <span>علی قسامی</span>
+              <span>{{ userStore.state.name }}</span>
               <br />
-              <span>09135517425</span>
+              <span>{{ userStore.state.mobile }}</span>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
   import { useDesign } from '../../utils/useDesign'
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-
+  import { userStore } from '../../model/user'
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')
   const currentMenu = ref<string[]>([])
@@ -71,7 +71,7 @@
     currentMenu.value = [route.path]
   })
 
-  function selectMenu(menu) {
+  function selectMenu(menu: any) {
     //console.log('menu ===>', menu.key)
     router.push(`${menu.key}`)
     //console.log('currentMenu ===>', toRaw(unref(currentMenu)))
