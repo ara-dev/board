@@ -15,7 +15,6 @@
 
 <script lang="ts" setup>
   import { useDesign } from '../../utils/useDesign'
-  //import { defineProps } from 'vue'
 
   const { prefixCls } = useDesign('design')
 
@@ -26,21 +25,16 @@
   const props = withDefaults(defineProps<Props>(), {
     hoverable: false,
   })
-
-  /*interface Props {
-    hoverable?: boolean
-  }
-
-  const props = defineProps<Props>()*/
 </script>
 
 <style lang="less">
   @pre: ~'@{prefix}-design';
 
   .@{pre}{
+    aspect-ratio: 1.5;
     border: 1px solid #eeee;
     border-radius:@border-radius-base ;
-    height:220px;
+    /*height:220px;*/
 
     .@{pre}-details{
       position: absolute;

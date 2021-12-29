@@ -13,4 +13,12 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'yekan';
+    src: url("../fonts/yekan/iranyekanwebregularfanum.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 

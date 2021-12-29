@@ -5,8 +5,11 @@
         <ControlPLogo />
       </div>
       <div>
-        <AButton class="ml-4" type="primary" ghost>ذخیره طرح</AButton>
+        <AButton class="ml-4" ghost type="primary">ذخیره طرح</AButton>
         <AButton type="primary">سبد سفارش</AButton>
+        <AButton class="mr-4" type="primary" @click="userStore.logout()"
+          >خروج از حساب کاربری</AButton
+        >
       </div>
     </div>
     <ADivider />
@@ -27,6 +30,7 @@
   import ControlPLogo from '../../components/ControlPLogo.vue'
   import { useDesign } from '../../utils/useDesign'
   import ProfileMenu from '../../components/Profile/ProfileMenu.vue'
+  import { userStore } from '../../model/user'
 
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')

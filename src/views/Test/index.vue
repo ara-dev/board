@@ -8,7 +8,8 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { notification } from 'ant-design-vue'
-  import 'ant-design-vue/lib/notification/style/css'
+
+  //import 'ant-design-vue/lib/notification/style/css'
 
   // import { useElementSize } from '@vueuse/core'
   //const mainboard = ref(null)

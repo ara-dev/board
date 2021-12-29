@@ -65,7 +65,6 @@
   import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface'
   import { userStore } from '../../model/user'
   import { notification } from 'ant-design-vue'
-  import { message } from 'ant-design-vue'
   import router from '../../router'
 
   const { prefixCls } = useDesign('login')
@@ -94,16 +93,10 @@
           spinning.value = true
           await userStore.login(formState.mobile, formState.password)
           await router.push({ name: 'profile' })
-          //console.log('values', formState, toRaw(formState))
         } catch (e) {
-          // console.log('this error in page login', e)
-          message.info('This is a normal message')
-          notification.open({
+          notification.error({
             message: 'خطا در ورود',
             description: 'نام کاربری یا رمز عبور اشتباه است',
-            onClick: () => {
-              console.log('Notification Clicked!')
-            },
           })
         } finally {
           spinning.value = false

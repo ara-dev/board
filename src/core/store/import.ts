@@ -3,6 +3,7 @@ import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 // @ts-ignore
 import { optimize } from 'svgo/lib/svgo'
+import { fileStore } from '../../model/file'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import './xml'
 interface KonvaFormat {
@@ -417,7 +418,18 @@ function image(image: SVGXMLElement): KonvaFormat {
   const href: string = image.attributes['xlink:href']
   if (href) {
     if (href.startsWith('data')) {
-      Object.assign(commonAttr.attrs, { dataSrc: href })
+      const file = DataURIToBlob(href)
+      fileStore.upload(file)
+      /*try {
+      } catch (e) {}*/
+      /*const formData = new FormData()
+      formData.append('file', file, 'image.jpg')*/
+      //formData.append('profile_id', this.profile_id) //other param
+      //formData.append('path', 'temp/') //other param
+      //Object.assign(commonAttr.attrs, { dataSrc: href })
+      //upload file
+      //const formData = new FormData()
+      //formData.console.log(href)
     } else {
       Object.assign(commonAttr.attrs, { href: href })
     }
@@ -756,3 +768,14 @@ function decomposeMatrix2(matrix: string) {
     rotation: skewX, // rotation is the same as skew x
   }
 }*/
+
+function DataURIToBlob(dataURI: string): Blob {
+  //debugger
+  const splitDataURI = dataURI.split(',')
+  const byteString =
+    splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+  const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+  const ia = new Uint8Array(byteString.length)
+  for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
+  return new Blob([ia], { type: mimeString })
+}
