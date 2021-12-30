@@ -453,7 +453,7 @@ export default class StageOptionStore {
     })
   }
 
-  importFromSvg(svg: string, container: HTMLDivElement | string) {
+  async importFromSvg(svg: string, container: HTMLDivElement | string) {
     const _model: Model = {
       fonts: [],
       pageSize: [],
@@ -461,8 +461,9 @@ export default class StageOptionStore {
       price: 0,
       pageCount: 0,
     }
-    const stage = ImportSvg(svg)
-    //console.log('this is stage', stage)
+    const stage = await ImportSvg(svg)
+    console.log('this is stage', stage)
+    console.log('JSON.stringify(stage) ====> ', JSON.stringify(stage))
     _model.pages.push({
       stage,
       docWidth: _.get(stage, 'attrs.docWidth', 0),
@@ -491,12 +492,15 @@ export default class StageOptionStore {
       this.hoyKey()
       //load images
       const images = stage.find((node: any) => {
+        console.log('node.name() ====> ', node.name())
         return node.name().startsWith('element_image')
       })
+      console.log('dsafdsfsdf', images)
       images.forEach((item) => {
         const attr = item.attrs
         const data = attr.href ? attr.href : attr.dataSrc
         const parent = item.getParent()
+        console.log('asdasdas', data)
         Konva.Image.fromURL(data, function (image: any) {
           image.setAttrs(attr)
           parent.add(image)
@@ -1339,7 +1343,7 @@ export default class StageOptionStore {
         transformer.nodes(nodes)
         this.selectedElements = nodes as Shape[]
       } else if (metaPressed && !isSelected) {
-        debugger
+        //debugger
         this.changeResizeRotateEnableTransformer(true, transformer)
         // add the node into selection
         //filter shape that is draggable is false (locked)

@@ -2,7 +2,7 @@ import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
 import { reactive, readonly } from 'vue'
 import axios from '../utils/axios'
 
-interface File {
+export interface FileModel {
   name: string
   storage: string
   type: string
@@ -19,7 +19,7 @@ export default class FileStore {
     this._state = reactive(this._state)
   }
 
-  private _state!: UnwrapNestedRefs<File>
+  private _state!: UnwrapNestedRefs<FileModel>
 
   get state(): DeepReadonly<File> {
     return readonly(this._state)
@@ -28,7 +28,7 @@ export default class FileStore {
   async upload(file: Blob) {
     const formData = new FormData()
     formData.append('file', file, file.type)
-    await axios.post('file', formData)
+    return await axios.post('file', formData)
   }
 
   private _init() {

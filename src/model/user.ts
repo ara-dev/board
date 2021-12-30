@@ -42,7 +42,7 @@ export default class UserStore {
     if (token) {
       const { data } = await axios.get('auth/me')
       Object.assign(userStore._state, data.data)
-      console.log('me data', userStore._state)
+      //console.log('me data', userStore._state)
     }
   }
 

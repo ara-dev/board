@@ -31,14 +31,14 @@ _axios.interceptors.request.use(
       })
       return false
     }
-    console.log('this is ful filled on interceptors.request', config)
+    //console.log('this is ful filled on interceptors.request', config)
     if (config.headers) {
       config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token')
     }
     return config
   },
   (error) => {
-    console.log('this is error on interceptors.request', error)
+    //console.log('this is error on interceptors.request', error)
     Promise.reject(error)
   },
 )
@@ -47,13 +47,13 @@ _axios.interceptors.response.use(
   (response) => {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log('this is ful filled on interceptors.response', response)
+    //console.log('this is ful filled on interceptors.response', response)
     return response
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    console.log('this is error on interceptors.response', error.response)
+    //console.log('this is error on interceptors.response', error.response)
     const { response, code, message, config } = error || {}
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none'
     const msg: string = response?.data?.error?.message ?? ''
