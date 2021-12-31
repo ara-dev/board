@@ -138,23 +138,25 @@
               <AMenu :selectable="false">
                 <AMenuItemGroup key="position_group">
                   <template #title>چرخش</template>
-                  <AMenuItem key="rotate_90" @click="stageStore.applyRotateDegrees(90)">
+                  <AMenuItem key="rotate_90" @click="stageStore.applyRotateDegrees(-90)">
                     چرخش
                     <span> &#176; 90</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
                   </AMenuItem>
-                  <AMenuItem key="rotate_minus_90">
-                    - چرخش
+                  <AMenuItem key="rotate_minus_90" @click="stageStore.applyRotateDegrees(90)">
+                    چرخش
                     <span> &#176; 90</span>
+                    -
                   </AMenuItem>
-                  <AMenuItem key="rotate_180">
+                  <AMenuItem key="rotate_180" @click="stageStore.applyRotateDegrees(-180)">
                     چرخش
                     <span> &#176; 180</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
                   </AMenuItem>
-                  <AMenuItem key="rotate_minus_180">
-                    - چرخش
+                  <AMenuItem key="rotate_minus_180" @click="stageStore.applyRotateDegrees(180)">
+                     چرخش
                     <span> &#176; 180</span>
+                    -
                   </AMenuItem>
                 </AMenuItemGroup>
               </AMenu>

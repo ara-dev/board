@@ -102,7 +102,7 @@ export default class StageOptionStore {
   }*/
 
   set selectedElements(shapes: Shape[]) {
-    console.log('this is selected elements', shapes)
+    //console.log('this is selected elements', shapes)
     if (shapes.length == 0) {
       uiStore.deActiveElementWhenNoneSelected()
       return
@@ -249,10 +249,100 @@ export default class StageOptionStore {
 
   applyRotateDegrees(degrees: number): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
-      // item.rotation(item.rotation()+degrees);
+      const clientRect=item.getClientRect({ skipTransform: true})
+      console.log("this is client rect with skip",clientRect)
+      console.log("this is client rect with skip",item.getClientRect())
+      console.log("this is width",item.width())
+      console.log("this is height",item.height())
+      console.log("this is x",item.x())
+      console.log("this is y",item.y())
+      console.log("this is absoult postion",item.getAbsolutePosition())
+      console.log("this is self rect",item.getSelfRect())
+
+      const box = item.getClientRect();
+      const x = box.x + box.width / 2;
+      const y = box.y + box.height / 2;
+
+      const main=this.getMainGroup()
+      const circle = new Konva.Circle({
+        x: x,
+        y: y,
+        radius: 5,
+        fill: 'yellow',
+        stroke: 'black',
+        strokeWidth: 4,
+      });
+
+      main.add(circle)
+
+      /*let angleRadians = degrees * Math.PI / 180; // sin + cos require radians
+
+      console.log(clientRect)
+      const center=this.getCenter(item);
+      console.log(center)
+      //const _x=clientRect.width /2;
+      //const _y=clientRect.height /2
+
+     */
+
+    /*  const x =
+          _x +
+          (item.x() - _x) * Math.cos(angleRadians) -
+          (item.y() - _y) * Math.sin(angleRadians);
+      const y =
+          _y +
+          (item.x() - _x) * Math.sin(angleRadians) +
+          (item.y() - _y) * Math.cos(angleRadians);*/
+
+      //item.position({x: x, y: y});  // move the rotated shape in relation to the rotation point.
+      //item.rotation(item.rotation() + degrees); // rotate the shape in place around its natural rotation point
+     /* const shapeX = item.x();
+      const shapeY = item.y();
+      const shapeRotation = item.rotation
+      const x =
+          point.x +
+          (shapeX - point.x) * Math.cos(angleRadians) -
+          (shapeY - point.y) * Math.sin(angleRadians)
+      const y =
+          point.y +
+          (shapeX - point.x) * Math.sin(angleRadians) +
+          (shapeY - point.y) * Math.cos(angleRadians)
+      //shape.position({x: x, y: y});  // move the rotated shape in relation to the rotation point.
+      //shape.rotation(shape.rotation()+angleDegrees); // rotate the shape in place around its natural rotation point
+      //shape.moveToTop()
+      return { position: { x, y }, rotation: shapeRotation + angleDegrees }*/
+      //item.rotation(item.rotation()+degrees);
+      //item.setAttr('rotation',item.rotation()+degrees)
+      /*item.setAttrs({
+        offset: {
+          x: item.width()/2,
+          y: item.height()/2,
+        },
+      })*/
+
+
+       //console.log("this is client rect",)
+      //console.log("this is width",item.width())
+      //console.log("this is heigth",item.height())
+
+      //item.offsetX(clientRect.width /2);
+      //item.offsetY(clientRect.height/2);
       //item.rotate(degrees);
     })
   }
+
+  /*getCenter(shape : any) {
+    return {
+      x:
+          shape.x() +
+          (shape.width() / 2) * Math.cos(shape.rotation()) +
+          (shape.height() / 2) * Math.sin(-shape.rotation()),
+      y:
+          shape.y() +
+          (shape.height() / 2) * Math.cos(shape.rotation()) +
+          (shape.width() / 2) * Math.sin(shape.rotation())
+    };
+  }*/
 
   applyFontSize(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
@@ -282,6 +372,14 @@ export default class StageOptionStore {
 
   applyToggleLockUnlock(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+      //debugger
+      const locked=item.getAttr('locked');
+      if(locked!=undefined){
+        item.setAttr('locked',!locked)
+      }
+      else{
+        item.setAttr('locked',true)
+      }
       item.draggable(!item.draggable())
     })
     this._state.layerLock = !this._state.layerLock
@@ -803,8 +901,8 @@ export default class StageOptionStore {
       fill: 'green',
       name: 'element_rectangle_858693',
       draggable: true,
-      offsetX: 150 / 2,
-      offsetY: 90 / 2,
+      //offsetX: 150 / 2,
+      //offsetY: 90 / 2,
     })
 
     group.add(rect2)
@@ -832,8 +930,8 @@ export default class StageOptionStore {
       stroke: 'black',
       strokeWidth: 4,
       draggable: true,
-      offsetX: 80 / 2,
-      offsetY: 120 / 2,
+     // offsetX: 80 / 2,
+     // offsetY: 120 / 2,
     })
 
     group.add(triangle)
@@ -1286,7 +1384,7 @@ export default class StageOptionStore {
 
     // clicks should select/deselect shapes or //click tap
     stage.on('mousedown touchstart', (e) => {
-      console.log('this is target', e.target)
+      //console.log('this is target', e.target)
       // if we are selecting with rect, do nothing
       if (selectionRectangle.visible()) {
         return
@@ -1314,20 +1412,22 @@ export default class StageOptionStore {
       if (!metaPressed && !isSelected) {
         // if no key pressed and the node is not selected
         // select just one
+        const locked : boolean=e.target.getAttr('locked')!=undefined ? !e.target.getAttr('locked') : true
+       // debugger
         if (e.target.parent?.name().startsWith('element_group')) {
           //const parentGroup = this.getBaseGroup(e.target)
           //console.log(e.target)
           //console.log(e.target.parent?.getChildren())
           transformer.nodes([e.target])
-          this.changeResizeRotateEnableTransformer(e.target.parent.draggable(), transformer)
+          this.changeResizeRotateEnableTransformer(locked, transformer)
           this.selectedElements = [e.target as Shape]
         } else {
           // debugger
           transformer.nodes([e.target])
-          this.changeResizeRotateEnableTransformer(e.target.draggable(), transformer)
+          this.changeResizeRotateEnableTransformer(locked, transformer)
           this.selectedElements = [e.target as Shape]
         }
-        console.log('')
+        //console.log('')
         //deselect shape that draggable is false (locked)
       } else if (metaPressed && isSelected) {
         //debugger
@@ -1361,7 +1461,7 @@ export default class StageOptionStore {
     })
   }
 
-  private getBaseGroup(shape: Shape | Group): any {
+  /*private getBaseGroup(shape: Shape | Group): any {
     //debugger
     //console.log()
     const parent = shape.getParent()
@@ -1373,18 +1473,18 @@ export default class StageOptionStore {
     } else {
       return this.getBaseGroup(parent)
     }
-    /*if(parent.parent?.name()=='main_group'){
+    /!*if(parent.parent?.name()=='main_group'){
       return
-    }*/
+    }*!/
 
-    /*parent.children?.forEach((child)=>{
+    /!*parent.children?.forEach((child)=>{
       if()
-    })*/
+    })*!/
     //return parent
     //parent.chil
     //parent.getParent()
     //shape.children
-  }
+  }*/
 
   private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
