@@ -1,11 +1,32 @@
 <template>
-  <ATag :class="[`${prefixVar}-tag`, 'wating-for-accept']">تایید کار</ATag>
+  <ATag :class="[`${prefixVar}-tag`, currentStatus.className]">{{ currentStatus.title }}</ATag>
 </template>
 
 <script lang="ts" setup>
   import { useDesign } from '../../utils/useDesign'
+  import { status, StatusItem } from './status'
+  import { computed } from 'vue'
   const { prefixCls } = useDesign('register-design-status')
   const { prefixVar } = useDesign('')
+
+  interface Props {
+    sts: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    sts: 1,
+  })
+
+  const currentStatus = computed((): StatusItem => {
+    const _sts = status.find((item) => item.id == props.sts)
+    if (_sts) {
+      return _sts
+    }
+    return {
+      className: '',
+      title: '',
+    }
+  })
 </script>
 
 <style lang="less">

@@ -249,21 +249,21 @@ export default class StageOptionStore {
 
   applyRotateDegrees(degrees: number): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
-      const clientRect=item.getClientRect({ skipTransform: true})
-      console.log("this is client rect with skip",clientRect)
+      const clientRect = item.getClientRect({ skipTransform: true })
+      /*console.log("this is client rect with skip",clientRect)
       console.log("this is client rect with skip",item.getClientRect())
       console.log("this is width",item.width())
       console.log("this is height",item.height())
       console.log("this is x",item.x())
       console.log("this is y",item.y())
       console.log("this is absoult postion",item.getAbsolutePosition())
-      console.log("this is self rect",item.getSelfRect())
+      console.log("this is self rect",item.getSelfRect())*/
 
-      const box = item.getClientRect();
-      const x = box.x + box.width / 2;
-      const y = box.y + box.height / 2;
+      const box = item.getClientRect()
+      const x = box.x + box.width / 2
+      const y = box.y + box.height / 2
 
-      const main=this.getMainGroup()
+      const main = this.getMainGroup()
       const circle = new Konva.Circle({
         x: x,
         y: y,
@@ -271,7 +271,7 @@ export default class StageOptionStore {
         fill: 'yellow',
         stroke: 'black',
         strokeWidth: 4,
-      });
+      })
 
       main.add(circle)
 
@@ -285,7 +285,7 @@ export default class StageOptionStore {
 
      */
 
-    /*  const x =
+      /*  const x =
           _x +
           (item.x() - _x) * Math.cos(angleRadians) -
           (item.y() - _y) * Math.sin(angleRadians);
@@ -296,7 +296,7 @@ export default class StageOptionStore {
 
       //item.position({x: x, y: y});  // move the rotated shape in relation to the rotation point.
       //item.rotation(item.rotation() + degrees); // rotate the shape in place around its natural rotation point
-     /* const shapeX = item.x();
+      /* const shapeX = item.x();
       const shapeY = item.y();
       const shapeRotation = item.rotation
       const x =
@@ -320,8 +320,7 @@ export default class StageOptionStore {
         },
       })*/
 
-
-       //console.log("this is client rect",)
+      //console.log("this is client rect",)
       //console.log("this is width",item.width())
       //console.log("this is heigth",item.height())
 
@@ -373,12 +372,11 @@ export default class StageOptionStore {
   applyToggleLockUnlock(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       //debugger
-      const locked=item.getAttr('locked');
-      if(locked!=undefined){
-        item.setAttr('locked',!locked)
-      }
-      else{
-        item.setAttr('locked',true)
+      const locked = item.getAttr('locked')
+      if (locked != undefined) {
+        item.setAttr('locked', !locked)
+      } else {
+        item.setAttr('locked', true)
       }
       item.draggable(!item.draggable())
     })
@@ -560,8 +558,8 @@ export default class StageOptionStore {
       pageCount: 0,
     }
     const stage = await ImportSvg(svg)
-    console.log('this is stage', stage)
-    console.log('JSON.stringify(stage) ====> ', JSON.stringify(stage))
+    //console.log('this is stage', stage)
+    //console.log('JSON.stringify(stage) ====> ', JSON.stringify(stage))
     _model.pages.push({
       stage,
       docWidth: _.get(stage, 'attrs.docWidth', 0),
@@ -590,15 +588,15 @@ export default class StageOptionStore {
       this.hoyKey()
       //load images
       const images = stage.find((node: any) => {
-        console.log('node.name() ====> ', node.name())
+        //console.log('node.name() ====> ', node.name())
         return node.name().startsWith('element_image')
       })
-      console.log('dsafdsfsdf', images)
+      //console.log('dsafdsfsdf', images)
       images.forEach((item) => {
         const attr = item.attrs
         const data = attr.href ? attr.href : attr.dataSrc
         const parent = item.getParent()
-        console.log('asdasdas', data)
+        //console.log('asdasdas', data)
         Konva.Image.fromURL(data, function (image: any) {
           image.setAttrs(attr)
           parent.add(image)
@@ -615,7 +613,7 @@ export default class StageOptionStore {
         const shape = item.attrs.attr_clip
 
         if (shape.className == 'circle') {
-          console.log('this is clip path circle')
+          //console.log('this is clip path circle')
         }
 
         if (shape.className == 'Rect') {
@@ -686,7 +684,7 @@ export default class StageOptionStore {
           }
         })
       })
-      console.log('this is groups', groups)
+      //console.log('this is groups', groups)
     })
 
     this._state.currentPage = 1
@@ -930,8 +928,8 @@ export default class StageOptionStore {
       stroke: 'black',
       strokeWidth: 4,
       draggable: true,
-     // offsetX: 80 / 2,
-     // offsetY: 120 / 2,
+      // offsetX: 80 / 2,
+      // offsetY: 120 / 2,
     })
 
     group.add(triangle)
@@ -1412,8 +1410,9 @@ export default class StageOptionStore {
       if (!metaPressed && !isSelected) {
         // if no key pressed and the node is not selected
         // select just one
-        const locked : boolean=e.target.getAttr('locked')!=undefined ? !e.target.getAttr('locked') : true
-       // debugger
+        const locked: boolean =
+          e.target.getAttr('locked') != undefined ? !e.target.getAttr('locked') : true
+        // debugger
         if (e.target.parent?.name().startsWith('element_group')) {
           //const parentGroup = this.getBaseGroup(e.target)
           //console.log(e.target)
@@ -1778,7 +1777,7 @@ export default class StageOptionStore {
     container.tabIndex = 1
     container.focus()
     container.addEventListener('keydown', (e) => {
-      console.log(e.key)
+      //console.log(e.key)
       if (e.key == 'ArrowDown') {
         this._state.selectedElements.forEach((item) => {
           item.y(item.y() + delta)

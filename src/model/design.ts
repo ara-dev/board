@@ -1,20 +1,22 @@
-import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
+import { UnwrapNestedRefs } from '@vue/reactivity'
 import { reactive, readonly } from 'vue'
 
-interface Design {
+export interface Design {
   title: string
+  code: string
+  type: number
+  price: object
+  creator: string
+  owners: string[]
+  tags: string[]
+  size: string
+  id: string
   owner: string
   status: number
-  data: {
-    type: Object
-    default: {}
-  }
-  files: {
-    default: []
-  }
-  updated_at: string
-  created_at: string
-  deleted_at: string
+  data: object
+  files: string[]
+  updated_at?: string
+  created_at?: string
 }
 
 export default class DesignStore {
@@ -23,14 +25,26 @@ export default class DesignStore {
     this._state = reactive(this._state)
   }
 
-  private _state!: UnwrapNestedRefs<Design>
+  private _state!: UnwrapNestedRefs<Design[]>
 
-  get state(): DeepReadonly<Design> {
+  get state() {
     return readonly(this._state)
   }
 
+  list() {
+    return this._state
+  }
+
+  addDesign(design: Design) {
+    this._state.push(design)
+  }
+
+  uploadDesign() {
+    console.log('this is desing', this._state)
+  }
+
   private _init() {
-    // this._state = {}
+    this._state = []
   }
 }
 

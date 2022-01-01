@@ -45,6 +45,7 @@
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
                   :showUploadList="false"
+                  accept=".svg"
                   @change="handleChangeSvg"
                 >
                   <AButton class="mt-5"> بارگذاری فایل svg </AButton>
@@ -141,7 +142,7 @@
 
   function save() {
     const data = stageStore.exportToJson()
-    console.log(data)
+    //console.log(data)
 
     // Get the data from each element on the form.
     /*const name = document.getElementById('txtName');

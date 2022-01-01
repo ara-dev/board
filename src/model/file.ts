@@ -21,7 +21,7 @@ export default class FileStore {
 
   private _state!: UnwrapNestedRefs<FileModel>
 
-  get state(): DeepReadonly<File> {
+  get state(): DeepReadonly<UnwrapNestedRefs<UnwrapNestedRefs<FileModel>>> {
     return readonly(this._state)
   }
 

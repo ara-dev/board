@@ -67,7 +67,7 @@ export async function ImportSvg(svg: string): Promise<Object> {
     const gItem = await generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
   }
-  console.log(temp, 'this is temp')
+  //console.log(temp, 'this is temp')
   //console.log(JSON.stringify(temp), 'this is temp json')
   return temp
   //return JSON.stringify(temp)

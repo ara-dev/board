@@ -4,6 +4,7 @@ import router from '../router'
 import axios from '../utils/axios'
 
 interface User {
+  _id: string
   name: string
   password: string
   mobile: string
@@ -53,6 +54,7 @@ export default class UserStore {
 
   private _init() {
     this._state = {
+      _id: '',
       name: '',
       password: '',
       mobile: '',

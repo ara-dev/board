@@ -7,7 +7,7 @@
           <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
         </div>
         <div>
-          <AButton>بارگذاری طرح</AButton>
+          <AButton @click="designStore.uploadDesign()">بارگذاری طرح</AButton>
         </div>
       </div>
       <Tabs>
@@ -17,9 +17,21 @@
         >
         <a-tab-pane key="2" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>
         <a-tab-pane key="1" class="p-2" dir="rtl" tab="همگی">
-          <RegisterDesignItem />
+          <RegisterDesignItem
+            v-for="(item, index) in designStore.list()"
+            :key="index"
+            :item="item"
+          />
           <div class="mt-5">
-            <AUploadDragger :multiple="true" action="" name="file">
+            <AUploadDragger
+              :beforeUpload="handleBeforeUpload"
+              :multiple="true"
+              :showUploadList="false"
+              accept=".svg"
+              action=""
+              name="file"
+              @change="handleChangeSvg"
+            >
               <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
               <p class="ant-upload-text">افزودن طرح جدید </p>
               <p class="ant-upload-hint">
@@ -47,7 +59,15 @@
         </div>
       </div>
       <div>
-        <span class="block mt-5 mb-5">قیمت پایه</span>
+        <span class="block my-3">عنوان طرح</span>
+        <a-input placeholder="" />
+        <span class="block my-3">قیمت طرح</span>
+        <a-input placeholder="6000" />
+        <span class="block my-3">هزینه چاپ</span>
+        <a-input placeholder="25000" />
+      </div>
+      <div>
+        <span class="block my-3">قیمت پایه</span>
         <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
           <a-radio-button value="b">25،00 تومان</a-radio-button>
@@ -56,7 +76,7 @@
         </a-radio-group>
       </div>
       <div>
-        <span class="block mt-5">افزودنی ها</span>
+        <span class="block my-3">افزودنی ها</span>
         <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
         </a-radio-group>
@@ -110,11 +130,66 @@
   import { useDesign } from '../../../utils/useDesign'
   import { status } from '../../../components/Register-Design/status'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
+  import { Design, designStore } from '../../../model/design'
+  import { ImportSvg } from '../../../core/store/import'
+  import { tagsStore } from '../../../model/tags'
+  import { userStore } from '../../../model/user'
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const { prefixVar } = useDesign('')
   const price = ref('a')
+
+  interface FileItem {
+    uid: string
+    name?: string
+    status?: string
+    response?: string
+    url?: string
+    type?: string
+    size: number
+    originFileObj: any
+  }
+
+  function handleBeforeUpload(file: FileItem) {
+    //console.log('before upload', file)
+    const design: Design = {
+      title: file.name || '',
+      code: file.name || '',
+      size: `${Math.ceil(file.size / 1024)} KB`,
+      creator: userStore.state._id,
+      owners: [],
+      tags: [],
+      type: 1,
+      id: '',
+      data: {},
+      files: [],
+      owner: '',
+      status: 1,
+      price: {},
+    }
+
+    const fileReader = new FileReader()
+    fileReader.addEventListener('load', async (event) => {
+      const data = event.target?.result
+      design.data = await ImportSvg(data as string)
+      designStore.addDesign(design)
+    })
+    fileReader.readAsText(file)
+    return false
+  }
+
+  function handleChangeSvg({ file }) {
+    const isSvg = file.type == 'image/svg+xml'
+    if (!isSvg) {
+      alert('فایل نامتعبر')
+      return
+    }
+  }
+
+  onMounted(async () => {
+    await tagsStore.getTag()
+  })
 </script>
 
 <style lang="less">
@@ -122,7 +197,7 @@
 
   .@{pre}-price{
     &> .ant-radio-button-wrapper{
-      margin: 15px;
+      margin-left: 15px;
     }
 
     &> .ant-radio-button-wrapper:first-child , .ant-radio-button-wrapper:last-child {
