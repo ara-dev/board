@@ -47,7 +47,7 @@
             </ASelect>
           </div>
           <div class="col-span-2">
-            <AButton v-if="false" class="w-full" size="large" type="primary">اصلاح طرح</AButton>
+            <AButton v-if="true" class="w-full" size="large" type="primary" @click="designEdit">اصلاح طرح</AButton>
             <AButton v-else class="w-full" size="large" type="primary" @click="changeStatus()"
               >تعیین وضعیت طرح</AButton
             >
@@ -63,6 +63,11 @@
   import { usePrice } from '../../utils/usePrice'
   import { tagsStore } from '../../model/tags'
   import { Design } from '../../model/design'
+  import {stageStore} from "../../core";
+  import {Model} from "../../core/store/stage";
+  import router from "../../router";
+  import {UnwrapNestedRefs} from "@vue/reactivity";
+  import {toRaw, unref} from "vue";
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
@@ -84,6 +89,19 @@
   function definePrice() {
     emit('definePrice', props.item)
   }
+
+  function designEdit(){
+    //console.log(toRaw(props.item.data) )
+    //console.log(unref(props.item.data) )
+    //console.log
+   // return
+    router.push({name:'board'}).then(()=>{
+      console.log("this is thene");
+      stageStore.importFromJson(toRaw(props.item.data) as Model,'container')
+    });
+
+  }
+
 </script>
 
 <style lang="less">

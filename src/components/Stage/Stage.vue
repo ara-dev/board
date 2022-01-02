@@ -19,7 +19,7 @@
   })
 
   onMounted(() => {
-    stageStore.addPage(1080, 1080, width.value, height.value, 'container')
+    //stageStore.addPage(1080, 1080, width.value, height.value, 'container')
   })
 </script>
 

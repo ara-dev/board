@@ -20,7 +20,7 @@ interface ModelPage {
   stage: Object
 }
 
-interface Model {
+export interface Model {
   pages: ModelPage[]
   fonts: number[]
   price: number
@@ -181,11 +181,13 @@ export default class StageOptionStore {
     this.lastWidthHeightMainBoard.width = newWidth
     this.lastWidthHeightMainBoard.height = newHeight
     const page = this.getCurrentPage()
-    const w = newWidth / page.docWidth //
-    const h = (newHeight - 25) / page.docHeight //
-    const min = Math.min(w, h)
-    this.scale = min
-    this.changeScale(min)
+    if(page){
+      const w = newWidth / page.docWidth //
+      const h = (newHeight - 25) / page.docHeight //
+      const min = Math.min(w, h)
+      this.scale = min
+      this.changeScale(min)
+    }
     //page.stage.width(newWidth)
     //page.stage.height(newHeight)
     //const group: Group = this.getMainGroup(page.stage)
@@ -549,6 +551,23 @@ export default class StageOptionStore {
     })
   }
 
+  async convertSvgToStageModel(svg: string) : Promise<Model> {
+    const _model: Model = {
+      fonts: [],
+      pageSize: [],
+      pages: [],
+      price: 0,
+      pageCount: 0,
+    }
+    const stage = await ImportSvg(svg)
+    _model.pages.push({
+      stage,
+      docWidth: _.get(stage, 'attrs.docWidth', 0),
+      docHeight: _.get(stage, 'attrs.docHeight', 0),
+    })
+    return _model
+  }
+
   async importFromSvg(svg: string, container: HTMLDivElement | string) {
     const _model: Model = {
       fonts: [],
@@ -570,8 +589,12 @@ export default class StageOptionStore {
 
   importFromJson(model: Model, container: HTMLDivElement | string) {
     this._state.pages = []
+    const _container=document.getElementById('container')
+    console.log('dddddddd',_container)
+    console.log('this is model',model)
+    debugger
     model.pages.forEach((item) => {
-      const stage: Stage = Konva.Node.create(item.stage, container)
+      const stage: Stage = Konva.Node.create(item.stage,_container)
       const page: Page = {
         stage,
         docWidth: item.docWidth,
@@ -585,7 +608,7 @@ export default class StageOptionStore {
       this.setSnapping(stage, layer, group)
       this.setContextMenu(stage, group)
       this.setEditableText(stage)
-      this.hoyKey()
+      //this.hoyKey()
       //load images
       const images = stage.find((node: any) => {
         //console.log('node.name() ====> ', node.name())

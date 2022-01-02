@@ -110,7 +110,7 @@
       cancelText="بستن"
       okText="ثبت وضعیت"
       title="ثبت وضعیت طرح"
-      width="40%"
+      width="60%"
       @cancel="showModalStatus = false"
       @ok="showModalStatus = false"
     >
@@ -164,6 +164,7 @@
   import { ImportSvg } from '../../../core/store/import'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
+  import {stageStore} from "../../../core";
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const { prefixVar } = useDesign('')
@@ -207,7 +208,7 @@
     const fileReader = new FileReader()
     fileReader.addEventListener('load', async (event) => {
       const data = event.target?.result
-      design.data = await ImportSvg(data as string)
+      design.data = await stageStore.convertSvgToStageModel(data as string)
       designStore.addDesign(design)
     })
     fileReader.readAsText(file)
