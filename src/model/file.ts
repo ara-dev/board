@@ -3,14 +3,14 @@ import { reactive, readonly } from 'vue'
 import axios from '../utils/axios'
 
 export interface FileModel {
-  name: string
-  storage: string
-  type: string
-  owner: string
-  size: number
-  color: string
-  updated_at: string
-  created_at: string
+  name?: string
+  storage?: string
+  type?: string
+  owner?: string
+  size?: number
+  color?: string
+  updated_at?: string
+  created_at?: string
 }
 
 export default class FileStore {
@@ -32,7 +32,7 @@ export default class FileStore {
   }
 
   private _init() {
-    // this._state = {}
+    this._state = {}
   }
 }
 

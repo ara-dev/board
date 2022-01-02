@@ -16,11 +16,13 @@
           >Content of Tab Pane 2</a-tab-pane
         >
         <a-tab-pane key="2" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>
-        <a-tab-pane key="1" class="p-2" dir="rtl" tab="همگی">
+        <a-tab-pane key="1" class="p-2" dir="rtl" force-render tab="همگی">
           <RegisterDesignItem
-            v-for="(item, index) in designStore.list()"
+            v-for="(item, index) in designStore.state"
             :key="index"
             :item="item"
+            @changeStatus="changeStatus"
+            @definePrice="definePrice"
           />
           <div class="mt-5">
             <AUploadDragger
@@ -43,13 +45,21 @@
         </a-tab-pane>
       </Tabs>
     </div>
-    <AModal :visible="false" cancelText="بستن" okText="ثبت دستمزد" title="ثبت دستمزد" width="40%">
+    <!--    <AModal
+      :visible="showModalPrice"
+      cancelText="بستن"
+      okText="ثبت دستمزد"
+      title="ثبت دستمزد"
+      width="40%"
+      @cancel="showModalPrice = false"
+      @ok="showModalPrice = false"
+    >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
           <img class="rounded" src="https://picsum.photos/200/120" />
         </div>
         <div class="col-span-9 flex flex-col">
-          <div class="text-gray-300">1255525550</div>
+          <div class="text-gray-300">{{ currentDesign.title }}</div>
           <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
           <div class="mt-3">
             <ATag>عاشقانه</ATag>
@@ -60,11 +70,11 @@
       </div>
       <div>
         <span class="block my-3">عنوان طرح</span>
-        <a-input placeholder="" />
+        <a-input v-model:value="currentDesign.title" placeholder="" />
         <span class="block my-3">قیمت طرح</span>
-        <a-input placeholder="6000" />
+        <a-input v-model:value="currentDesign.price.design" placeholder="6000" />
         <span class="block my-3">هزینه چاپ</span>
-        <a-input placeholder="25000" />
+        <a-input v-model:value="currentDesign.price.print" placeholder="25000" />
       </div>
       <div>
         <span class="block my-3">قیمت پایه</span>
@@ -94,17 +104,27 @@
         </div>
         <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
-    </AModal>
-
-    <AModal :visible="false" cancelText="بستن" okText="ثبت وضعیت" title="ثبت وضعیت طرح" width="40%">
+    </AModal>-->
+    <AModal
+      :visible="showModalStatus"
+      cancelText="بستن"
+      okText="ثبت وضعیت"
+      title="ثبت وضعیت طرح"
+      width="40%"
+      @cancel="showModalStatus = false"
+      @ok="showModalStatus = false"
+    >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
           <img class="rounded" src="https://picsum.photos/200/120" />
         </div>
         <div class="col-span-9 flex flex-col">
-          <div class="text-gray-300">1255525550</div>
-          <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
+          <div class="text-gray-300">{{ currentDesign.title }}</div>
+          <div class="text-lg font-bold">{{ currentDesign.code }}</div>
           <div class="mt-3">
+            <!--            <ATag v-for="item in tagsStore.getTagsByID(currentDesign.tags)" color="#f50">
+              {{ item.title }}</ATag
+            >-->
             <ATag>عاشقانه</ATag>
             <ATag>عاشقانه</ATag>
             <ATag>عاشقانه</ATag>
@@ -112,9 +132,18 @@
         </div>
       </div>
       <div class="mt-5">
-        <ACard v-for="(item, index) in status" :key="index" style="margin-bottom: 20px">
-          <ARadio>{{ item.title }}</ARadio>
-        </ACard>
+        <a-radio-group v-model:value="currentDesign.status" class="w-full">
+          <div class="grid grid-cols-4 gap-2">
+            <ACard
+              v-for="(item, index) in status"
+              :key="index"
+              :class="{ 'border-green': item.id == currentDesign.status }"
+              style="['margin-bottom: 20px']"
+            >
+              <ARadio :value="item.id">{{ item.title }}</ARadio>
+            </ACard>
+          </div>
+        </a-radio-group>
       </div>
       <ADivider />
       <div>
@@ -126,9 +155,9 @@
 
 <script lang="ts" setup>
   import Tabs from '../../../components/Tabs/index.vue'
+  import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
   import { useDesign } from '../../../utils/useDesign'
-  import { status } from '../../../components/Register-Design/status'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { ref, onMounted } from 'vue'
   import { Design, designStore } from '../../../model/design'
@@ -138,6 +167,9 @@
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const { prefixVar } = useDesign('')
+  const showModalStatus = ref(false)
+  const showModalPrice = ref(false)
+  let currentDesign = ref({})
   const price = ref('a')
 
   interface FileItem {
@@ -152,8 +184,8 @@
   }
 
   function handleBeforeUpload(file: FileItem) {
-    //console.log('before upload', file)
     const design: Design = {
+      _id: null,
       title: file.name || '',
       code: file.name || '',
       size: `${Math.ceil(file.size / 1024)} KB`,
@@ -161,12 +193,15 @@
       owners: [],
       tags: [],
       type: 1,
-      id: '',
+      //id: '',
       data: {},
       files: [],
       owner: '',
       status: 1,
-      price: {},
+      price: {
+        design: 0,
+        print: 0,
+      },
     }
 
     const fileReader = new FileReader()
@@ -187,8 +222,21 @@
     }
   }
 
+  function changeStatus(item: Design) {
+    showModalStatus.value = true
+    currentDesign.value = item
+    //console.log(currentDesign)
+  }
+
+  function definePrice(item: Design) {
+    showModalPrice.value = true
+    currentDesign.value = item
+    //console.log(currentDesign)
+  }
+
   onMounted(async () => {
     await tagsStore.getTag()
+    await designStore.getDesign()
   })
 </script>
 
@@ -203,6 +251,9 @@
     &> .ant-radio-button-wrapper:first-child , .ant-radio-button-wrapper:last-child {
       border-radius: unset;
     }
+  }
 
+  .border-green{
+    border-color: @primary-color;
   }
 </style>

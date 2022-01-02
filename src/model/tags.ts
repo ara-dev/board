@@ -34,6 +34,24 @@ export default class TagsStore {
     this._state = data.data as Tag[]
   }
 
+  /*async getTagsByID(ids: string[]): Promise<Tag[]> {
+    const notfound: string[] = []
+    const result: Tag[] = []
+    debugger
+    ids.forEach((id) => {
+      const tag = this._state.find((_tag) => _tag._id == id)
+      if (tag) result.push(tag)
+      else notfound.push(id)
+    })
+
+    if (notfound.length > 0) {
+      const { data } = await axios.post('tag', notfound)
+      this._state.push(...data.data)
+      result.push(...data.data)
+    }
+    return result
+  }*/
+
   private _init() {
     this._state = []
   }

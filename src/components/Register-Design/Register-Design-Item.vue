@@ -19,7 +19,7 @@
             </AButton>
             <AButton class="mr-5" ghost size="large" type="primary">
               <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
-              <span v-if="false" class="align-top">ثبت دستمزد اصلاح</span>
+              <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
               <span v-else class="align-top">{{ usePrice(15000) }}</span>
             </AButton>
           </div>
@@ -41,9 +41,9 @@
               placeholder="دسته های طرح"
               size="large"
             >
-              <a-select-option v-for="item in tagsStore.list()" :key="item._id">{{
-                item.title
-              }}</a-select-option>
+              <a-select-option v-for="item in tagsStore.list()" :key="item._id">
+                {{ item.title }}
+              </a-select-option>
             </ASelect>
           </div>
           <div class="col-span-2">
@@ -72,8 +72,17 @@
 
   const props = withDefaults(defineProps<Props>(), {})
 
+  const emit = defineEmits<{
+    (e: 'changeStatus', item: Design): void
+    (e: 'definePrice', item: Design): void
+  }>()
+
   function changeStatus() {
-    alert('asdfsafsdfsdf')
+    emit('changeStatus', props.item)
+  }
+
+  function definePrice() {
+    emit('definePrice', props.item)
   }
 </script>
 

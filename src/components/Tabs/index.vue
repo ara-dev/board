@@ -26,6 +26,7 @@
               </template>
             </AInput>
           </div>
+          <!--         -->
           <ATabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
             <slot></slot>
             <template #renderTabBar="{ DefaultTabBar, ...props }">
@@ -52,13 +53,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useDesign } from '../../utils/useDesign'
   const { prefixCls } = useDesign('tabs')
   const { prefixVar } = useDesign('')
   const showSearchBox = ref(false)
   const current = ref(2)
   const activeKey = ref('1')
+
+  onMounted(() => {
+    //activeKey.value = '1'
+  })
 </script>
 
 <style lang="less">
