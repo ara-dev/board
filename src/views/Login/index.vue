@@ -146,7 +146,7 @@
     }
 
     &-box{
-      margin: 0 auto;
+      margin: 0 auto !important;
       & .ant-card-body{
         padding: 0;
         height: 100%;

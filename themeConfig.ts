@@ -1,6 +1,6 @@
 export const primaryColor = '#2DA771'
 export const namespace = 'cp'
-export const baseURL = 'http://localhost:3002/'
+export const baseURL = 'http://api.feep.ir/'
 //export const baseURLFile = `${baseURL}/uploads/`
 
 export const lessVars = {
