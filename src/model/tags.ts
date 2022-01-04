@@ -1,5 +1,5 @@
 import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
-import { reactive, readonly } from 'vue'
+import { reactive, readonly, Ref, ref } from 'vue'
 import axios from '../utils/axios'
 
 interface Tag {
@@ -13,25 +13,35 @@ interface Tag {
   deleted_at: string
 }
 
+interface TagState {
+  page: number
+  limit: number
+  total: number
+}
+
 export default class TagsStore {
   constructor() {
     this._init()
+    this._rows = ref([])
     this._state = reactive(this._state)
   }
 
-  private _state!: UnwrapNestedRefs<Tag[]>
+  private _rows!: Ref<Tag[]>
 
-  get state(): DeepReadonly<Tag[]> {
-    return readonly(this._state)
+  get rows(): Tag[] {
+    return this._rows.value
   }
 
-  list(): Tag[] {
-    return this._state
+  private _state!: UnwrapNestedRefs<TagState>
+
+  get state(): DeepReadonly<UnwrapNestedRefs<UnwrapNestedRefs<TagState>>> {
+    return readonly(this._state)
   }
 
   async getTag(page = 0, limit = 20) {
     const { data } = await axios.get('tag')
-    this._state = data.data as Tag[]
+    console.log('this is data', data)
+    this._rows.value = data.data as Tag[]
   }
 
   /*async getTagsByID(ids: string[]): Promise<Tag[]> {
@@ -53,7 +63,11 @@ export default class TagsStore {
   }*/
 
   private _init() {
-    this._state = []
+    this._state = {
+      page: 0,
+      total: 0,
+      limit: 10,
+    }
   }
 }
 

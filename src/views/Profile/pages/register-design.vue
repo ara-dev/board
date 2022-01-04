@@ -7,24 +7,31 @@
           <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
         </div>
         <div>
-          <AButton @click="designStore.uploadDesign()">بارگذاری طرح</AButton>
+          <AButton @click="uploadDesign">بارگذاری طرح</AButton>
         </div>
       </div>
-      <Tabs>
+      <Tabs
+        :page="designStore.page"
+        :pageSize="designStore.state.limit"
+        :total="designStore.state.total"
+        @changePage="changePage"
+      >
         <a-tab-pane key="4" tab="نیاز به اصلاح">Content of Tab Pane 1</a-tab-pane>
         <a-tab-pane key="3" force-render tab="در انتظار تایید کار"
           >Content of Tab Pane 2</a-tab-pane
         >
         <a-tab-pane key="2" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>
-        <a-tab-pane key="1" class="p-2" dir="rtl" force-render tab="همگی">
-          <RegisterDesignItem
-            v-for="(item, index) in designStore.state"
-            :key="index"
-            :item="item"
-            @changeStatus="changeStatus"
-            @definePrice="definePrice"
-          />
+        <a-tab-pane key="1" class="p-2" dir="rtl" tab="همگی">
           <div class="mt-5">
+            <RegisterDesignItem
+              v-for="(item, index) in designStore.rows"
+              :key="index"
+              :item="item"
+              @changeStatus="showChangeStatus"
+              @definePrice="definePrice"
+              @deleteDesign="deleteDesign(index)"
+            />
+
             <AUploadDragger
               :beforeUpload="handleBeforeUpload"
               :multiple="true"
@@ -112,14 +119,16 @@
       title="ثبت وضعیت طرح"
       width="60%"
       @cancel="showModalStatus = false"
-      @ok="showModalStatus = false"
+      @ok="changeStatus"
     >
-      <div class="grid grid-cols-12 gap-4">
+      <div v-if="currentDesign != null" class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
           <img class="rounded" src="https://picsum.photos/200/120" />
         </div>
         <div class="col-span-9 flex flex-col">
-          <div class="text-gray-300">{{ currentDesign.title }}</div>
+          <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
+            {{ currentDesign.title[0] }}
+          </div>
           <div class="text-lg font-bold">{{ currentDesign.code }}</div>
           <div class="mt-3">
             <!--            <ATag v-for="item in tagsStore.getTagsByID(currentDesign.tags)" color="#f50">
@@ -135,12 +144,13 @@
         <a-radio-group v-model:value="currentDesign.status" class="w-full">
           <div class="grid grid-cols-4 gap-2">
             <ACard
-              v-for="(item, index) in status"
+              v-for="(item, index) in status.filter((item) => item.show)"
               :key="index"
               :class="{ 'border-green': item.id == currentDesign.status }"
+              class="cursor-pointer"
               style="['margin-bottom: 20px']"
             >
-              <ARadio :value="item.id">{{ item.title }}</ARadio>
+              <ARadio :value="item.id" class="w-full">{{ item.title }}</ARadio>
             </ACard>
           </div>
         </a-radio-group>
@@ -154,20 +164,17 @@
 </template>
 
 <script lang="ts" setup>
-  import Tabs from '../../../components/Tabs/index.vue'
   import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
-  import { useDesign } from '../../../utils/useDesign'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { Design, designStore } from '../../../model/design'
-  import { ImportSvg } from '../../../core/store/import'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
-  import {stageStore} from "../../../core";
+  import { stageStore } from '../../../core'
   const pageInfo = usePageInfo('register-design')
-  const { prefixCls } = useDesign('register-design')
-  const { prefixVar } = useDesign('')
+  // const { prefixCls } = useDesign('register-design')
+  //const { prefixVar } = useDesign('')
   const showModalStatus = ref(false)
   const showModalPrice = ref(false)
   let currentDesign = ref({})
@@ -184,10 +191,15 @@
     originFileObj: any
   }
 
+  const design = computed(() => {
+    console.log('computed for design')
+    return designStore.state
+  })
+
   function handleBeforeUpload(file: FileItem) {
+    console.log('wwwwwwwww', userStore.state._id)
     const design: Design = {
-      _id: null,
-      title: file.name || '',
+      title: [file.name || ''],
       code: file.name || '',
       size: `${Math.ceil(file.size / 1024)} KB`,
       creator: userStore.state._id,
@@ -215,6 +227,20 @@
     return false
   }
 
+  function changePage(page: number, pageSize: number) {
+    designStore.page = page
+    //console.log('page', page, 'pagesize', pageSize)
+  }
+
+  async function deleteDesign(index: number) {
+    try {
+      await designStore.deleteDesign(index)
+    } catch (e) {
+      console.log(e)
+    } finally {
+    }
+  }
+
   function handleChangeSvg({ file }) {
     const isSvg = file.type == 'image/svg+xml'
     if (!isSvg) {
@@ -223,9 +249,31 @@
     }
   }
 
-  function changeStatus(item: Design) {
+  async function uploadDesign() {
+    try {
+      await designStore.uploadDesign()
+      await designStore.getDesign()
+    } catch (e) {
+      console.log(e)
+    } finally {
+    }
+  }
+
+  function showChangeStatus(item: Design) {
     showModalStatus.value = true
     currentDesign.value = item
+    //console.log(currentDesign)
+  }
+
+  async function changeStatus() {
+    try {
+      await designStore.updateDesign(currentDesign.value._id as string)
+      showModalStatus.value = false
+    } catch (e) {
+    } finally {
+    }
+    //showModalStatus.value = true
+    // currentDesign.value = item
     //console.log(currentDesign)
   }
 

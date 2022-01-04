@@ -1,7 +1,7 @@
 import { useOnline } from '@vueuse/core'
 import { notification } from 'ant-design-vue'
 import axios from 'axios'
-import { baseURL } from '../../themeConfig'
+import { baseURLApi as baseURL } from '../../themeConfig'
 import { userStore } from '../model/user'
 
 export enum ErrorMessageMode {

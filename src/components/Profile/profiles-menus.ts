@@ -7,6 +7,12 @@ export interface ProfileMenus {
 
 const menus: ProfileMenus[] = [
   {
+    id: 'register-design',
+    title: 'خانه طراحان',
+    icon: 'ion:images-outline',
+    path: '/profile/register-design',
+  },
+  {
     id: 'dashboard',
     title: 'طراحی های اخیر',
     icon: 'ion:alarm-outline',
@@ -53,12 +59,6 @@ const menus: ProfileMenus[] = [
     title: 'علاقه مندی ها',
     icon: 'ion:bookmark-outline',
     path: '/profile/bookmark',
-  },
-  {
-    id: 'register-design',
-    title: 'خانه طراحان',
-    icon: 'ion:images-outline',
-    path: '/profile/register-design',
   },
 ]
 

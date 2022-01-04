@@ -42,9 +42,15 @@
       <div>
         <ADivider />
         <div class="flex justify-between pb-4 px-3">
-          <div> تعداد رکورد یافت شده: 100 رکورد </div>
+          <div> تعداد رکورد یافت شده: {{ props.total }} رکورد </div>
           <div>
-            <APagination v-model:current="current" :total="50" show-less-items />
+            <APagination
+              :current="props.page"
+              :pageSize="props.pageSize"
+              :total="props.total"
+              show-less-items
+              @change="changePage"
+            />
           </div>
         </div>
       </div>
@@ -56,13 +62,33 @@
   import { ref, onMounted } from 'vue'
   import { useDesign } from '../../utils/useDesign'
   const { prefixCls } = useDesign('tabs')
-  const { prefixVar } = useDesign('')
+  //const { prefixVar } = useDesign('')
   const showSearchBox = ref(false)
-  const current = ref(2)
+  //const current = ref(2)
   const activeKey = ref('1')
 
+  interface Props {
+    page: number
+    total: number
+    pageSize: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    page: 1,
+    pageSize: 10,
+    total: 50,
+  })
+
+  const emit = defineEmits<{
+    (e: 'changePage', page: number, pageSize: number): void
+  }>()
+
+  function changePage(page: number, pageSize: number) {
+    emit('changePage', page, pageSize)
+  }
+
   onMounted(() => {
-    //activeKey.value = '1'
+    // activeKey.value = '1'
   })
 </script>
 

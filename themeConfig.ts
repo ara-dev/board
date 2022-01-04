@@ -1,7 +1,7 @@
 export const primaryColor = '#2DA771'
 export const namespace = 'cp'
-export const baseURL = 'http://api.feep.ir/'
-//export const baseURLFile = `${baseURL}/uploads/`
+export const baseURL = import.meta.env.DEV ? 'http://localhost:3002/' : 'http://feep.ir/'
+export const baseURLApi = import.meta.env.DEV ? 'http://localhost:3002/' : 'http://api.feep.ir/'
 
 export const lessVars = {
   'success-color': '#55D187', //  Success color

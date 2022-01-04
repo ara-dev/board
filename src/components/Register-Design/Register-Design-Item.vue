@@ -4,14 +4,19 @@
       <div class="col-span-2">
         <img class="rounded" src="https://picsum.photos/200/120" />
         <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
-          <span>{{ props.item.title }}</span>
-          <span :class="[`${prefixVar}-text-color-primary`]"> ({{ props.item.size }})</span>
+          <span>{{ props.item.title[0] }}</span>
+          <!--          <span :class="[`${prefixVar}-text-color-primary`]"> ({{ props.item.size }})</span>-->
         </div>
       </div>
       <div class="col-span-10">
         <div class="flex justify-between items-baseline">
           <div class="mb-5 flex">
-            <AInput v-model:value="props.item.code" placeholder="شماره شناسایی" size="large" />
+            <AInput
+              v-model:value="props.item.code"
+              :disabled="props.item.status != 1"
+              placeholder="شماره شناسایی"
+              size="large"
+            />
             <AButton class="mr-5" size="large">
               <div>
                 <Icon :size="30" color="#A1A1AA" icon="ion:chatbubbles-outline" />
@@ -19,15 +24,21 @@
             </AButton>
             <AButton class="mr-5" ghost size="large" type="primary">
               <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
-              <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
+              <span v-if="false" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
               <span v-else class="align-top">{{ usePrice(15000) }}</span>
             </AButton>
           </div>
-          <div>
+          <div class="flex">
             <RegisterDesignStatus :sts="props.item.status" />
             <div class="inline mr-3 cursor-pointer">
-              <Icon color="red" icon="ion:trash-outline" size="18" />
-              <!-- <Icon color="red" icon="ion:remove-circle-outline" size="25" />-->
+              <AButton type="link" @click="deleteDesign">
+                <div v-if="props.item.status == 1" class="inline">
+                  <Icon color="red" icon="ion:remove-circle-outline" size="20" />
+                </div>
+                <div v-else class="inline">
+                  <Icon color="red" icon="ion:trash-outline" size="18" />
+                </div>
+              </AButton>
             </div>
           </div>
         </div>
@@ -41,14 +52,21 @@
               placeholder="دسته های طرح"
               size="large"
             >
-              <a-select-option v-for="item in tagsStore.list()" :key="item._id">
+              <a-select-option v-for="item in tagsStore.rows" :key="item._id">
                 {{ item.title }}
               </a-select-option>
             </ASelect>
           </div>
           <div class="col-span-2">
-            <AButton v-if="true" class="w-full" size="large" type="primary" @click="designEdit">اصلاح طرح</AButton>
-            <AButton v-else class="w-full" size="large" type="primary" @click="changeStatus()"
+            <AButton v-if="false" class="w-full" size="large" type="primary" @click="designEdit"
+              >اصلاح طرح</AButton
+            >
+            <AButton
+              v-if="props.item.status != 1"
+              class="w-full"
+              size="large"
+              type="primary"
+              @click="changeStatus()"
               >تعیین وضعیت طرح</AButton
             >
           </div>
@@ -63,11 +81,10 @@
   import { usePrice } from '../../utils/usePrice'
   import { tagsStore } from '../../model/tags'
   import { Design } from '../../model/design'
-  import {stageStore} from "../../core";
-  import {Model} from "../../core/store/stage";
-  import router from "../../router";
-  import {UnwrapNestedRefs} from "@vue/reactivity";
-  import {toRaw, unref} from "vue";
+  import { stageStore } from '../../core'
+  import { Model } from '../../core/store/stage'
+  import router from '../../router'
+  import { toRaw } from 'vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
@@ -80,6 +97,7 @@
   const emit = defineEmits<{
     (e: 'changeStatus', item: Design): void
     (e: 'definePrice', item: Design): void
+    (e: 'deleteDesign'): void
   }>()
 
   function changeStatus() {
@@ -90,18 +108,26 @@
     emit('definePrice', props.item)
   }
 
-  function designEdit(){
+  function deleteDesign() {
+    emit('deleteDesign')
+    /* try {
+      await designStore.deleteDesign(props)
+    } catch (e) {
+    } finally {
+    }*/
+    //alert('dasdasdasdas')
+  }
+
+  function designEdit() {
     //console.log(toRaw(props.item.data) )
     //console.log(unref(props.item.data) )
     //console.log
-   // return
-    router.push({name:'board'}).then(()=>{
-      console.log("this is thene");
-      stageStore.importFromJson(toRaw(props.item.data) as Model,'container')
-    });
-
+    // return
+    router.push({ name: 'board' }).then(() => {
+      console.log('this is thene')
+      stageStore.importFromJson(toRaw(props.item.data) as Model, 'container')
+    })
   }
-
 </script>
 
 <style lang="less">
