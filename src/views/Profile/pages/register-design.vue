@@ -78,7 +78,12 @@
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
             {{ currentDesign.title[0] }}
           </div>
-          <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
+          <div
+            v-if="currentDesign.title && currentDesign.title.length > 0"
+            class="text-lg font-bold"
+          >
+            {{ currentDesign.title[0] }}
+          </div>
           <div class="mt-3">
             <ATag>عاشقانه</ATag>
             <ATag>عاشقانه</ATag>
