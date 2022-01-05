@@ -96,7 +96,7 @@
     }
 
     .ant-menu-item-selected:hover {
-      color: #fff;
+      color: #fff !important;
     }
 
     .ant-menu-item:not(.ant-menu-item-selected):hover {

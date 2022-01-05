@@ -25,6 +25,7 @@
     return {
       className: '',
       title: '',
+      show: true,
     }
   })
 </script>
@@ -33,10 +34,10 @@
   @pre: ~'@{prefix}-register-design-status';
 
   .@{prefix}-tag{
-    font-size: 15px;
-    padding:5px 10px;
-    background: #fff;
-    color: #fff;
+    font-size: 15px !important;
+    padding:5px 10px !important;
+    background: #fff !important;
+    //color: #fff !important;
 
     &.success-job{
        background: @primary-color;

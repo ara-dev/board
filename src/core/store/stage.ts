@@ -181,7 +181,7 @@ export default class StageOptionStore {
     this.lastWidthHeightMainBoard.width = newWidth
     this.lastWidthHeightMainBoard.height = newHeight
     const page = this.getCurrentPage()
-    if(page){
+    if (page) {
       const w = newWidth / page.docWidth //
       const h = (newHeight - 25) / page.docHeight //
       const min = Math.min(w, h)
@@ -551,7 +551,7 @@ export default class StageOptionStore {
     })
   }
 
-  async convertSvgToStageModel(svg: string) : Promise<Model> {
+  async convertSvgToStageModel(svg: string): Promise<Model> {
     const _model: Model = {
       fonts: [],
       pageSize: [],
@@ -589,12 +589,12 @@ export default class StageOptionStore {
 
   importFromJson(model: Model, container: HTMLDivElement | string) {
     this._state.pages = []
-    const _container=document.getElementById('container')
-    console.log('dddddddd',_container)
-    console.log('this is model',model)
-    debugger
+    const _container = document.getElementById('container')
+    console.log('dddddddd', _container)
+    console.log('this is model', model)
+    //debugger
     model.pages.forEach((item) => {
-      const stage: Stage = Konva.Node.create(item.stage,_container)
+      const stage: Stage = Konva.Node.create(item.stage, _container)
       const page: Page = {
         stage,
         docWidth: item.docWidth,

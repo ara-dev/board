@@ -1,5 +1,5 @@
 import { UnwrapNestedRefs } from '@vue/reactivity'
-import { reactive, readonly, ref, Ref, unref } from 'vue'
+import { reactive, readonly, ref, Ref, toRaw, unref } from 'vue'
 import axios from '../utils/axios'
 
 export interface Design {
@@ -16,6 +16,7 @@ export interface Design {
   status: number
   data: object
   files: string[]
+  show: boolean
   updated_at?: string
   created_at?: string
 }
@@ -73,13 +74,22 @@ export default class DesignStore {
     }*/
   }
 
-  async updateDesign(id: string) {
-    //debugger
-    const design = this._rows.value.find((item) => item._id == id)
-    if (design) {
-      await axios.put(`/design/${id}`, design)
+  async updateDesign(design: Design) {
+    const designIndex = this._rows.value.findIndex((item) => item._id == design._id)
+    const { data } = await axios.put(`/design/${design._id}`, design)
+    if (designIndex > -1) {
+      Object.assign(this._rows.value[designIndex], data.data)
     }
   }
+
+  /* async updateDesign(id: string) {
+    //debugger
+    const designIndex = this._rows.value.findIndex((item) => item._id == id)
+    if (designIndex > -1) {
+      const { data } = await axios.put(`/design/${id}`, this._rows.value[designIndex])
+      Object.assign(this._rows.value[designIndex], data.data)
+    }
+  }*/
 
   async uploadDesign() {
     const uploads = this._rows.value.filter((item) => {
@@ -87,10 +97,11 @@ export default class DesignStore {
         return unref(item)
       }
     })
-    debugger
+    //debugger
     for (const item of uploads) {
-      item.status = 8
-      const { data } = await axios.post('/design', item)
+      const body: Design = Object.assign({}, toRaw(item))
+      body.status = 8
+      const { data } = await axios.post('/design', body)
     }
   }
 

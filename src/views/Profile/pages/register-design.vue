@@ -16,22 +16,31 @@
         :total="designStore.state.total"
         @changePage="changePage"
       >
-        <a-tab-pane key="4" tab="نیاز به اصلاح">Content of Tab Pane 1</a-tab-pane>
-        <a-tab-pane key="3" force-render tab="در انتظار تایید کار"
+        <!--        <a-tab-pane key="5" tab="نیاز به اصلاح">Content of Tab Pane 1</a-tab-pane>
+        <a-tab-pane key="4" force-render tab="در انتظار تایید کار"
           >Content of Tab Pane 2</a-tab-pane
         >
-        <a-tab-pane key="2" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>
-        <a-tab-pane key="1" class="p-2" dir="rtl" tab="همگی">
+        <a-tab-pane key="3" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>-->
+        <a-tab-pane
+          v-for="(item, index) in status"
+          :key="index + 2"
+          :tab="item.title"
+          class="p-2"
+          dir="rtl"
+          >{{ item.title }}</a-tab-pane
+        >
+        <a-tab-pane key="1" class="p-2" dir="rtl" tab="بارگذاری">
           <div class="mt-5">
-            <RegisterDesignItem
-              v-for="(item, index) in designStore.rows"
-              :key="index"
-              :item="item"
-              @changeStatus="showChangeStatus"
-              @definePrice="definePrice"
-              @deleteDesign="deleteDesign(index)"
-            />
-
+            <div class="overflow-scroll">
+              <RegisterDesignItem
+                v-for="(item, index) in designStore.rows"
+                :key="index"
+                :item="item"
+                @changeStatus="showChangeStatus"
+                @definePrice="definePrice"
+                @deleteDesign="deleteDesign(index)"
+              />
+            </div>
             <AUploadDragger
               :beforeUpload="handleBeforeUpload"
               :multiple="true"
@@ -52,21 +61,23 @@
         </a-tab-pane>
       </Tabs>
     </div>
-    <!--    <AModal
+    <AModal
       :visible="showModalPrice"
       cancelText="بستن"
       okText="ثبت دستمزد"
       title="ثبت دستمزد"
       width="40%"
       @cancel="showModalPrice = false"
-      @ok="showModalPrice = false"
+      @ok="changePrice"
     >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
           <img class="rounded" src="https://picsum.photos/200/120" />
         </div>
         <div class="col-span-9 flex flex-col">
-          <div class="text-gray-300">{{ currentDesign.title }}</div>
+          <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
+            {{ currentDesign.title[0] }}
+          </div>
           <div class="text-lg font-bold">سید مهدی بنی لوحی</div>
           <div class="mt-3">
             <ATag>عاشقانه</ATag>
@@ -75,34 +86,60 @@
           </div>
         </div>
       </div>
-      <div>
-        <span class="block my-3">عنوان طرح</span>
-        <a-input v-model:value="currentDesign.title" placeholder="" />
-        <span class="block my-3">قیمت طرح</span>
-        <a-input v-model:value="currentDesign.price.design" placeholder="6000" />
-        <span class="block my-3">هزینه چاپ</span>
-        <a-input v-model:value="currentDesign.price.print" placeholder="25000" />
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <span class="block my-3">عنوان طرح</span>
+          <AInput
+            v-if="currentDesign.title && currentDesign.title.length > 0"
+            v-model:value="currentDesign.title[0]"
+          />
+        </div>
+        <div>
+          <span class="block my-3">قیمت طرح</span>
+          <!--          <AInput
+            v-if="currentDesign.price.design"
+            v-model:value="currentDesign.price.design"
+            placeholder="6000"
+          />-->
+        </div>
+        <div>
+          <span class="block my-3">هزینه چاپ</span>
+          <AInput
+            v-if="currentDesign?.price?.print"
+            v-model:value="currentDesign.price.print"
+            placeholder="25000"
+          />
+        </div>
       </div>
       <div>
         <span class="block my-3">قیمت پایه</span>
-        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
-          <a-radio-button value="a">15،000 تومان</a-radio-button>
-          <a-radio-button value="b">25،00 تومان</a-radio-button>
+        <a-radio-group
+          v-for="(item, index) in priceList"
+          :key="index"
+          v-model:value="price"
+          :class="[`${prefixCls}-price`]"
+        >
+          <a-radio-button :value="item">{{ usePrice(item) }}</a-radio-button>
+          <!--          <a-radio-button value="b">25،00 تومان</a-radio-button>
           <a-radio-button value="c">45،000 تومان</a-radio-button>
-          <a-radio-button value="d">80،000 تومان</a-radio-button>
+          <a-radio-button value="d">80،000 تومان</a-radio-button>-->
         </a-radio-group>
       </div>
       <div>
         <span class="block my-3">افزودنی ها</span>
-        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
+        <a-radio-group
+          v-for="(item, index) in additionalList"
+          :key="index"
+          :class="[`${prefixCls}-price`]"
+        >
+          <a-radio-button :value="item.price">{{ item.title }}</a-radio-button>
+        </a-radio-group>
+        <!--        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
         </a-radio-group>
         <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
-        </a-radio-group>
-        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
-          <a-radio-button value="a">15،000 تومان</a-radio-button>
-        </a-radio-group>
+        </a-radio-group>-->
       </div>
       <ADivider />
       <div class="flex flex-col">
@@ -111,7 +148,7 @@
         </div>
         <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
-    </AModal>-->
+    </AModal>
     <AModal
       :visible="showModalStatus"
       cancelText="بستن"
@@ -146,7 +183,10 @@
             <ACard
               v-for="(item, index) in status.filter((item) => item.show)"
               :key="index"
-              :class="{ 'border-green': item.id == currentDesign.status }"
+              :class="[
+                { 'border-green': item.id == currentDesign.status },
+                `${prefixCls}-hover-border-green`,
+              ]"
               class="cursor-pointer"
               style="['margin-bottom: 20px']"
             >
@@ -167,13 +207,17 @@
   import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
-  import { ref, onMounted, computed } from 'vue'
+  import { priceList, additionalList } from '../../../components/Register-Design/price'
+  import { ref, onMounted, computed, toRaw } from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
   import { stageStore } from '../../../core'
+  import { useDesign } from '../../../utils/useDesign'
+  import { usePrice } from '../../../utils/usePrice'
+  import { message } from 'ant-design-vue'
   const pageInfo = usePageInfo('register-design')
-  // const { prefixCls } = useDesign('register-design')
+  const { prefixCls } = useDesign('register-design')
   //const { prefixVar } = useDesign('')
   const showModalStatus = ref(false)
   const showModalPrice = ref(false)
@@ -197,7 +241,7 @@
   })
 
   function handleBeforeUpload(file: FileItem) {
-    console.log('wwwwwwwww', userStore.state._id)
+    //console.log('wwwwwwwww', userStore.state._id)
     const design: Design = {
       title: [file.name || ''],
       code: file.name || '',
@@ -215,6 +259,7 @@
         design: 0,
         print: 0,
       },
+      show: true,
     }
 
     const fileReader = new FileReader()
@@ -254,6 +299,7 @@
       await designStore.uploadDesign()
       await designStore.getDesign()
     } catch (e) {
+      message.error('شناسه فایل تکراری است ')
       console.log(e)
     } finally {
     }
@@ -261,26 +307,31 @@
 
   function showChangeStatus(item: Design) {
     showModalStatus.value = true
-    currentDesign.value = item
-    //console.log(currentDesign)
+    currentDesign.value = Object.assign({}, toRaw(item))
+  }
+
+  async function changePrice() {
+    try {
+      await designStore.updateDesign(currentDesign.value as Design)
+      showModalStatus.value = false
+    } catch (e) {
+      console.log(e)
+    } finally {
+    }
   }
 
   async function changeStatus() {
     try {
-      await designStore.updateDesign(currentDesign.value._id as string)
+      await designStore.updateDesign(currentDesign.value as Design)
       showModalStatus.value = false
     } catch (e) {
     } finally {
     }
-    //showModalStatus.value = true
-    // currentDesign.value = item
-    //console.log(currentDesign)
   }
 
   function definePrice(item: Design) {
     showModalPrice.value = true
-    currentDesign.value = item
-    //console.log(currentDesign)
+    currentDesign.value = Object.assign({}, toRaw(item))
   }
 
   onMounted(async () => {
@@ -291,6 +342,10 @@
 
 <style lang="less">
   @pre: ~'@{prefix}-register-design';
+
+  .@{pre}-hover-border-green:hover{
+    border-color: @primary-color;
+  }
 
   .@{pre}-price{
     &> .ant-radio-button-wrapper{
