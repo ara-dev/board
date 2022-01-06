@@ -6,6 +6,12 @@ export interface StatusItem {
 }
 export const status: StatusItem[] = [
     {
+        id: 8,
+        title: 'یتیم',
+        className: 'no-upload',
+        show: true,
+    },
+    {
         id: 1,
         title: 'بارگذاری نشده',
         className: 'no-upload',
@@ -45,12 +51,6 @@ export const status: StatusItem[] = [
         id: 7,
         title: 'رد شده',
         className: 'rejected',
-        show: true,
-    },
-    {
-        id: 8,
-        title: 'یتیم',
-        className: 'no-upload',
         show: true,
     },
 ]

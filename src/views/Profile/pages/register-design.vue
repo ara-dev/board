@@ -16,39 +16,46 @@
         :total="designStore.state.total"
         @changePage="changePage"
       >
-        <!--        <a-tab-pane key="5" tab="نیاز به اصلاح">Content of Tab Pane 1</a-tab-pane>
-        <a-tab-pane key="4" force-render tab="در انتظار تایید کار"
-          >Content of Tab Pane 2</a-tab-pane
-        >
-        <a-tab-pane key="3" tab="اصلاح طرح">Content of Tab Pane 3</a-tab-pane>-->
         <a-tab-pane
-          v-for="(item, index) in status"
+          v-for="(item, index) in status.filter((item)=> item.show).reverse()"
           :key="index + 2"
           :tab="item.title"
           class="p-2"
           dir="rtl"
-          >{{ item.title }}</a-tab-pane
-        >
+          >
+          <div class="mt-5">
+            <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
+              <RegisterDesignItem
+                  v-for="(item, index) in designStore.rows"
+                  :key="index"
+                  :item="item"
+                  @changeStatus="showChangeStatus"
+                  @definePrice="showDefinePrice"
+                  @deleteDesign="deleteDesign(item._id)"
+              />
+            </div>
+          </div>
+        </a-tab-pane>
         <a-tab-pane key="1" class="p-2" dir="rtl" tab="بارگذاری">
           <div class="mt-5">
-            <div class="overflow-scroll">
+            <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
               <RegisterDesignItem
-                v-for="(item, index) in designStore.rows"
+                v-for="(item, index) in designStore.uploadList"
                 :key="index"
                 :item="item"
                 @changeStatus="showChangeStatus"
                 @definePrice="showDefinePrice"
-                @deleteDesign="deleteDesign(index)"
+                @deleteDesign="designStore.removeFromUploadList(index)"
               />
             </div>
             <AUploadDragger
-              :beforeUpload="handleBeforeUpload"
-              :multiple="true"
-              :showUploadList="false"
-              accept=".svg"
-              action=""
-              name="file"
-              @change="handleChangeSvg"
+                :beforeUpload="handleBeforeUpload"
+                :multiple="true"
+                :showUploadList="false"
+                accept=".svg"
+                action=""
+                name="file"
+                @change="handleChangeSvg"
             >
               <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
               <p class="ant-upload-text">افزودن طرح جدید </p>
@@ -58,6 +65,10 @@
               </p>
             </AUploadDragger>
           </div>
+<!--          <div class="mt-5">
+
+          </div>-->
+
         </a-tab-pane>
       </Tabs>
     </div>
@@ -246,30 +257,22 @@
   }
 
   function handleBeforeUpload(file: FileItem) {
-    const design: Design = {
-      title: [file.name || ''],
-      code: file.name || '',
-      size: `${Math.ceil(file.size / 1024)} KB`,
-      creator: userStore.state._id,
-      owners: [],
-      tags: [],
-      type: 1,
-      data: {},
-      files: [],
-      owner: '',
-      status: 1,
-      price: {
-        design: 0,
-        print: 0,
-        edit:0
-      },
-      show: true,
-    }
 
     const fileReader = new FileReader()
     fileReader.addEventListener('load', async (event) => {
       const data = event.target?.result
-      design.data = await stageStore.convertSvgToStageModel(data as string)
+      const design: Design = await stageStore.convertSvgToDesignModel(data as string)
+      design.title[0]=file.name || ''
+      design.code=file.name || ''
+      design.creator = userStore.state._id
+      design.status = 1
+      design.price = {
+        design: 0,
+        print: 0,
+        edit:0
+      }
+      design.show=true
+      //console.log("tttttttt",design)
       designStore.addDesign(design)
     })
     fileReader.readAsText(file)

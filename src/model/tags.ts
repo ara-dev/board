@@ -40,7 +40,7 @@ export default class TagsStore {
 
   async getTag(page = 0, limit = 20) {
     const { data } = await axios.get('tag')
-    console.log('this is data', data)
+    //console.log('this is data', data)
     this._rows.value = data.data as Tag[]
   }
 

@@ -20,9 +20,10 @@
       </div>
     </div>
     <ADivider />
-
-    <div class="h-full" style="display: grid; grid-template-rows: auto 15%">
-      <div class="overflow-auto" style="height: 85%">
+<!--    style="display: grid; grid-template-rows: auto 15%"-->
+    <div class="h-full" >
+<!--     -->
+      <div class="overflow-auto"  style="max-height:calc(100vh - 270px)" >
         <AMenu
           v-model:selectedKeys="currentMenu"
           :class="[`${prefixCls}-menu`]"

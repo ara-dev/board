@@ -14,6 +14,9 @@ import { reactive, readonly } from 'vue'
 import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+import {Design} from "../../model/design";
+import {userStore} from "../../model/user";
+import {baseURL, baseURLApi} from "../../../themeConfig";
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -23,7 +26,7 @@ interface ModelPage {
 export interface Model {
   pages: ModelPage[]
   fonts: number[]
-  price: number
+  //price: number
   pageSize: { width: number; height: number }[]
   pageCount: number
 }
@@ -41,6 +44,7 @@ interface StageOption {
   layerLock: boolean
   opacity: number
   //common Option
+  design?:Design
   selectedElements: Shape[]
   currentPage: number
   pages: Page[]
@@ -551,49 +555,60 @@ export default class StageOptionStore {
     })
   }
 
-  async convertSvgToStageModel(svg: string): Promise<Model> {
+  async convertSvgToDesignModel(svg: string): Promise<Design> {
+
+    const design: Design = {
+      title: [''],
+      code: '',
+      creator: '',
+      owners: [],
+      tags: [],
+      type: 1,
+      data: {},
+      files: [],
+      options:{},
+      status: 1,
+      price: {},
+      show: true,
+    }
+
     const _model: Model = {
       fonts: [],
       pageSize: [],
       pages: [],
-      price: 0,
-      pageCount: 0,
+      pageCount: 1,
     }
-    const stage = await ImportSvg(svg)
+    const stage :  {data:object,files:string[]}  = await ImportSvg(svg)
     _model.pages.push({
-      stage,
-      docWidth: _.get(stage, 'attrs.docWidth', 0),
-      docHeight: _.get(stage, 'attrs.docHeight', 0),
+      stage: stage.data ,
+      docWidth: _.get(stage.data, 'attrs.docWidth', 0),
+      docHeight: _.get(stage.data, 'attrs.docHeight', 0),
     })
-    return _model
+    _model.pageSize.push({
+      width:_.get(stage.data, 'attrs.docWidth', 0),
+      height: _.get(stage.data, 'attrs.docHeight', 0),
+    })
+
+    design.data = _model;
+    design.files=stage.files
+
+    return design;
+
+
   }
 
   async importFromSvg(svg: string, container: HTMLDivElement | string) {
-    const _model: Model = {
-      fonts: [],
-      pageSize: [],
-      pages: [],
-      price: 0,
-      pageCount: 0,
-    }
-    const stage = await ImportSvg(svg)
-    //console.log('this is stage', stage)
-    //console.log('JSON.stringify(stage) ====> ', JSON.stringify(stage))
-    _model.pages.push({
-      stage,
-      docWidth: _.get(stage, 'attrs.docWidth', 0),
-      docHeight: _.get(stage, 'attrs.docHeight', 0),
-    })
-    this.importFromJson(_model, container)
+    const _design= await this.convertSvgToDesignModel(svg)
+    this.importFromJson(_design, container)
   }
 
-  importFromJson(model: Model, container: HTMLDivElement | string) {
-    this._state.pages = []
-    const _container = document.getElementById('container')
-    console.log('dddddddd', _container)
-    console.log('this is model', model)
+  importFromJson(design: Design, container: HTMLDivElement | string) {
+   this._state.pages= []
+    const _container = document.getElementById('container');
+    //console.log('dddddddd', _container)
+    //console.log('this is model', model)
     //debugger
-    model.pages.forEach((item) => {
+    (design.data as Model).pages.forEach((item) => {
       const stage: Stage = Konva.Node.create(item.stage, _container)
       const page: Page = {
         stage,
@@ -615,9 +630,10 @@ export default class StageOptionStore {
         return node.name().startsWith('element_image')
       })
       //console.log('dsafdsfsdf', images)
+      //debugger
       images.forEach((item) => {
         const attr = item.attrs
-        const data = attr.href ? attr.href : attr.dataSrc
+        const data = attr.file_id ? baseURLApi+attr.file_storage+attr.file_name : attr.dataSrc
         const parent = item.getParent()
         //console.log('asdasdas', data)
         Konva.Image.fromURL(data, function (image: any) {
@@ -707,16 +723,37 @@ export default class StageOptionStore {
           }
         })
       })
+
+
+
+
+
+
       //console.log('this is groups', groups)
     })
-
     this._state.currentPage = 1
     this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
   }
 
+  /*exportToImage(){
+    const stage = this.exportToJson()
+    const dataURL = stage.toDataURL();
+    console.log("data url",dataURL)
+    this.downloadURI(dataURL, 'stage.png');
+  }*/
+
+  downloadURI(uri, name) {
+    let link = document.createElement('a');
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    //delete link;
+  }
+
   exportToJson(): string {
-    const _export: Model = {
-      price: 0,
+   /* const _export: Model = {
       pages: [],
       pageSize: [],
       fonts: [],
@@ -724,6 +761,9 @@ export default class StageOptionStore {
     }
     _export.pageCount = this._state.pages.length
     this._state.pages.forEach((item) => {
+     //const ctx = console.log("tttttth is is data url",item.stage.toCanvas())
+      //ctx.
+      //this.downloadURI(item.stage.toDataURL({ pixelRatio: 5 }),"sdd.png")
       _export.pages.push({
         docWidth: item.docWidth,
         docHeight: item.docHeight,
@@ -731,7 +771,8 @@ export default class StageOptionStore {
       })
       _export.pageSize.push({ width: item.docWidth, height: item.docHeight })
     })
-    return JSON.stringify(_export)
+    return JSON.stringify(_export)*/
+    return ''
   }
 
   applyZoomIn() {

@@ -65,7 +65,9 @@
             </div>
           </Transition>
         </div>
-        <div class="price">قیمت کل : 25000</div>
+        <div class="price">
+<!--          قیمت کل : 25000-->
+        </div>
       </div>
       <!--      <div class="h-screen relative h-screen board-main">
         <div class="absolute z-50 p-3 w-full" style="background: #fff">
@@ -190,6 +192,7 @@
     fileReader.addEventListener('load', (event) => {
       const data = event.target?.result
       //console.log()
+      //debugger
       stageStore.importFromSvg(data, 'container')
     })
     fileReader.readAsText(file)
@@ -212,6 +215,7 @@
     fileReader.addEventListener('load', (event) => {
       const data = event.target?.result
       //console.log()
+      //debugger
       stageStore.importFromJson(JSON.parse(data), 'container')
     })
     fileReader.readAsText(file)

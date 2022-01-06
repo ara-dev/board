@@ -11,8 +11,9 @@ export interface Design {
   creator: string
   owners: string[]
   tags: string[]
-  size: string
-  owner: string
+  options : object
+  //size: string
+  //owner: string
   status: number
   data: object
   files: string[]
@@ -32,12 +33,18 @@ export default class DesignStore {
     this._init()
     this._state = reactive(this._state)
     this._rows = ref([])
+    this._uploadList = ref([])
   }
 
   private _rows!: Ref<Design[]>
+  private _uploadList!: Ref<Design[]>
 
   get rows(): Design[] {
     return this._rows.value
+  }
+
+  get uploadList(){
+    return this._uploadList.value
   }
 
   get page() {
@@ -55,7 +62,8 @@ export default class DesignStore {
   }
 
   addDesign(design: Design) {
-    this._rows.value.push(design)
+    //this._rows.value.push(design)
+    this._uploadList.value.push(design)
   }
 
   async getDesign(page = 0, limit = 10) {
@@ -63,15 +71,21 @@ export default class DesignStore {
     this._rows.value = data.data
   }
 
-  async deleteDesign(index: number) {
-    const design: Design = this._rows.value[index]
-    if (design._id != null) {
-      const { data } = await axios.delete(`/design/${design._id}`)
-    }
-    this._rows.value.splice(index, 1)
-    /*else {
-      this._rows.value.splice()
+  async deleteDesign(id:string) {
+    //if (id) {
+      const { data } = await axios.delete(`/design/${id}`)
+      const index = this._rows.value.findIndex((item)=> item._id==id)
+      if(index>-1)
+      {
+        this._rows.value.splice(index, 1)
+      }
+    /*else{
+      this._uploadList.value.splice(index,1)
     }*/
+  }
+
+  removeFromUploadList(index : number){
+    this._uploadList.value.splice(index,1)
   }
 
   async updateDesign(design: Design) {
@@ -92,17 +106,12 @@ export default class DesignStore {
   }*/
 
   async uploadDesign() {
-    const uploads = this._rows.value.filter((item) => {
-      if (item._id == null) {
-        return unref(item)
-      }
-    })
-    //debugger
-    for (const item of uploads) {
+    for (const item of this._uploadList.value) {
       const body: Design = Object.assign({}, toRaw(item))
       body.status = 8
       const { data } = await axios.post('/design', body)
     }
+      this._uploadList.value=[]
   }
 
   private _init() {
