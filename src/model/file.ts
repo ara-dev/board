@@ -3,6 +3,7 @@ import { reactive, readonly } from 'vue'
 import axios from '../utils/axios'
 
 export interface FileModel {
+  _id?:string
   name?: string
   storage?: string
   type?: string

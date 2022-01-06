@@ -53,6 +53,7 @@ let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
 let data = null
+const files: string[]=[];
 
 export async function ImportSvg(svg: string): Promise<Object> {
   data = JSON.parse(xmlToJson(svgo(svg)))
@@ -69,7 +70,7 @@ export async function ImportSvg(svg: string): Promise<Object> {
   }
   //console.log(temp, 'this is temp')
   //console.log(JSON.stringify(temp), 'this is temp json')
-  return temp
+  return {data:temp,files}
   //return JSON.stringify(temp)
 }
 
@@ -423,8 +424,12 @@ async function image(image: SVGXMLElement): Promise<KonvaFormat> {
       const file = convertBase64ToFile(href)
       const { data } = await fileStore.upload(file)
       const fileModel: FileModel[] = data.data
+      files.push(fileModel[0]._id as string)
       Object.assign(commonAttr.attrs, {
-        href: baseURL + fileModel[0].storage + fileModel[0].name,
+        //href: baseURL + fileModel[0].storage + fileModel[0].name,
+        file_id:fileModel[0]._id,
+        name:fileModel[0].name,
+        storage:fileModel[0].storage
       })
       //console.log('commonAttr.attrs ====> ', commonAttr.attrs)
       //console.log('data', (data as FileModel).)

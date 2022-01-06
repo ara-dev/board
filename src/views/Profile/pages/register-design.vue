@@ -37,7 +37,7 @@
                 :key="index"
                 :item="item"
                 @changeStatus="showChangeStatus"
-                @definePrice="definePrice"
+                @definePrice="showDefinePrice"
                 @deleteDesign="deleteDesign(index)"
               />
             </div>
@@ -101,16 +101,16 @@
         </div>
         <div>
           <span class="block my-3">قیمت طرح</span>
-          <!--          <AInput
-            v-if="currentDesign.price.design"
+          <AInput
+            v-if="currentDesign.price"
             v-model:value="currentDesign.price.design"
             placeholder="6000"
-          />-->
+          />
         </div>
         <div>
           <span class="block my-3">هزینه چاپ</span>
           <AInput
-            v-if="currentDesign?.price?.print"
+            v-if="currentDesign.price"
             v-model:value="currentDesign.price.print"
             placeholder="25000"
           />
@@ -119,6 +119,7 @@
       <div>
         <span class="block my-3">قیمت پایه</span>
         <a-radio-group
+            @change="handleChangePrice"
           v-for="(item, index) in priceList"
           :key="index"
           v-model:value="price"
@@ -132,13 +133,16 @@
       </div>
       <div>
         <span class="block my-3">افزودنی ها</span>
-        <a-radio-group
-          v-for="(item, index) in additionalList"
+<!--        <a-radio-group
+
           :key="index"
           :class="[`${prefixCls}-price`]"
         >
-          <a-radio-button :value="item.price">{{ item.title }}</a-radio-button>
-        </a-radio-group>
+          <a-radio-button :value="">{{ item.title }}</a-radio-button>
+        </a-radio-group>-->
+        <a-checkbox-group @change="handleChangePrice" v-model:value="additional" :options="additionalList.map((item)=> { return {label:item.title,value:item.price} })"    />
+
+<!--        <ACheckbox v-for="(item, index) in additionalList" v-model:checked="checked">Checkbox</ACheckbox>-->
         <!--        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
         </a-radio-group>
@@ -149,7 +153,8 @@
       <ADivider />
       <div class="flex flex-col">
         <div class="w-3/6 mb-5">
-          <AInput placeholder="مبلغ دلخواه" />
+          <AInput  v-if="currentDesign.price"
+                   v-model:value="currentDesign.price.edit" placeholder="مبلغ دلخواه" />
         </div>
         <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
@@ -193,7 +198,7 @@
                 `${prefixCls}-hover-border-green`,
               ]"
               class="cursor-pointer"
-              style="['margin-bottom: 20px']"
+              style="margin-bottom: 20px"
             >
               <ARadio :value="item.id" class="w-full">{{ item.title }}</ARadio>
             </ACard>
@@ -213,7 +218,7 @@
   import { usePageInfo } from '../../../utils/usePageInfo'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import { ref, onMounted, computed, toRaw } from 'vue'
+  import {ref, onMounted, computed, toRaw, unref} from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
@@ -223,11 +228,11 @@
   import { message } from 'ant-design-vue'
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
-  //const { prefixVar } = useDesign('')
   const showModalStatus = ref(false)
   const showModalPrice = ref(false)
   let currentDesign = ref({})
-  const price = ref('a')
+  const price = ref(0)
+  const additional=ref([])
 
   interface FileItem {
     uid: string
@@ -240,13 +245,7 @@
     originFileObj: any
   }
 
-  const design = computed(() => {
-    console.log('computed for design')
-    return designStore.state
-  })
-
   function handleBeforeUpload(file: FileItem) {
-    //console.log('wwwwwwwww', userStore.state._id)
     const design: Design = {
       title: [file.name || ''],
       code: file.name || '',
@@ -255,7 +254,6 @@
       owners: [],
       tags: [],
       type: 1,
-      //id: '',
       data: {},
       files: [],
       owner: '',
@@ -263,6 +261,7 @@
       price: {
         design: 0,
         print: 0,
+        edit:0
       },
       show: true,
     }
@@ -277,14 +276,21 @@
     return false
   }
 
+  function handleChangePrice(){
+    let sum : number=0
+    additional.value.forEach((item)=> { sum+=item });
+    sum+=price.value;
+    Object.assign((currentDesign.value as Design).price,{edit:sum})
+  }
+
   function changePage(page: number, pageSize: number) {
     designStore.page = page
-    //console.log('page', page, 'pagesize', pageSize)
   }
 
   async function deleteDesign(index: number) {
     try {
       await designStore.deleteDesign(index)
+      message.success('اطلاعات با موفقیت حذف شد')
     } catch (e) {
       console.log(e)
     } finally {
@@ -303,6 +309,7 @@
     try {
       await designStore.uploadDesign()
       await designStore.getDesign()
+      message.success('اطلاعات با موفقیت بارگذاری شد')
     } catch (e) {
       message.error('شناسه فایل تکراری است ')
       console.log(e)
@@ -311,14 +318,17 @@
   }
 
   function showChangeStatus(item: Design) {
-    showModalStatus.value = true
     currentDesign.value = Object.assign({}, toRaw(item))
+    showModalStatus.value = true
   }
 
   async function changePrice() {
     try {
-      await designStore.updateDesign(currentDesign.value as Design)
-      showModalStatus.value = false
+      if((currentDesign.value as Design)._id){
+        await designStore.updateDesign(currentDesign.value as Design)
+      }
+      showModalPrice.value = false
+      message.success('اطلاعات با موفقیت ویرایش شد')
     } catch (e) {
       console.log(e)
     } finally {
@@ -329,14 +339,21 @@
     try {
       await designStore.updateDesign(currentDesign.value as Design)
       showModalStatus.value = false
+      message.success('اطلاعات با موفقیت ویرایش شد')
     } catch (e) {
+      console.log(e)
     } finally {
     }
   }
 
-  function definePrice(item: Design) {
+  function showDefinePrice(item: Design) {
+    //debugger
+    if(item._id){
+      currentDesign.value = Object.assign({}, toRaw(item))
+    }else{
+      currentDesign.value = item
+    }
     showModalPrice.value = true
-    currentDesign.value = Object.assign({}, toRaw(item))
   }
 
   onMounted(async () => {

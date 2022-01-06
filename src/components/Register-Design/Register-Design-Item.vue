@@ -12,7 +12,7 @@
         <div class="flex justify-between items-baseline">
           <div>
             <ACheckbox v-model:checked="props.item.show" @change="update">نمایش</ACheckbox>
-            <div class="mb-5 inline-flex mr-5">
+            <div class="mb-5 inline-flex mr-5 items-center	">
               <AInput
                 v-model:value="props.item.code"
                 :disabled="props.item.status != 1"
@@ -20,15 +20,18 @@
                 size="large"
               />
 
-              <AButton class="mr-5" size="large">
+              <AButton class="mr-5">
                 <div>
-                  <Icon :size="30" color="#A1A1AA" icon="ion:chatbubbles-outline" />
+                  <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
                 </div>
               </AButton>
-              <AButton class="mr-5" ghost size="large" type="primary">
+              <AButton class="mr-5" ghost  type="primary">
                 <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
-                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
-                <span v-else class="align-top">{{ usePrice(15000) }}</span>
+                <span class="align-top" @click="definePrice">
+                  {{ props.item.price && props.item.price.edit ?  usePrice(props.item.price.edit) : 'ثبت دستمزد اصلاح' }}
+                </span>
+<!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
+                <span v-else class="align-top">{{ usePrice(15000) }}</span>-->
               </AButton>
             </div>
           </div>
@@ -47,7 +50,7 @@
           </div>
         </div>
         <div class="grid grid-cols-12 gap-4">
-          <div class="col-span-10">
+          <div class="2xl:col-span-10 xl:col-span-9">
             <ASelect
               v-model:value="props.item.tags"
               class="w-full"
@@ -62,7 +65,7 @@
               </a-select-option>
             </ASelect>
           </div>
-          <div class="col-span-2">
+          <div class="2xl:col-span-2 xl:col-span-3">
             <AButton v-if="false" class="w-full" size="large" type="primary" @click="designEdit"
               >اصلاح طرح</AButton
             >
@@ -90,6 +93,7 @@
   import { Model } from '../../core/store/stage'
   import router from '../../router'
   import { toRaw } from 'vue'
+  import {message} from "ant-design-vue";
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
@@ -122,6 +126,7 @@
       if (props.item._id) {
         await designStore.updateDesign(props.item)
       }
+      message.success('اطلاعات با موفقیت ویرایش شد')
     } catch (e) {
       console.log(e)
     }
