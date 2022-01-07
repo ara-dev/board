@@ -14,7 +14,9 @@
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
+        :activeTab="1"
         @changePage="changePage"
+        @changeTab="changeTab"
       >
         <a-tab-pane
           v-for="(item, index) in status.filter((item)=> item.show).reverse()"
@@ -36,8 +38,9 @@
             </div>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="1" class="p-2" dir="rtl" tab="بارگذاری">
-          <div class="mt-5">
+        <a-tab-pane :key="1" class="p-2" dir="rtl" tab="بارگذاری">
+          <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
+            <div class="mt-5">
             <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
               <RegisterDesignItem
                 v-for="(item, index) in designStore.uploadList"
@@ -65,10 +68,7 @@
               </p>
             </AUploadDragger>
           </div>
-<!--          <div class="mt-5">
-
-          </div>-->
-
+          </ASpin>
         </a-tab-pane>
       </Tabs>
     </div>
@@ -83,7 +83,7 @@
     >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <img class="rounded" src="https://picsum.photos/200/120" />
+          <img v-if="currentDesign.image"  class="rounded" :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`" />
         </div>
         <div class="col-span-9 flex flex-col">
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
@@ -137,9 +137,6 @@
           :class="[`${prefixCls}-price`]"
         >
           <a-radio-button :value="item">{{ usePrice(item) }}</a-radio-button>
-          <!--          <a-radio-button value="b">25،00 تومان</a-radio-button>
-          <a-radio-button value="c">45،000 تومان</a-radio-button>
-          <a-radio-button value="d">80،000 تومان</a-radio-button>-->
         </a-radio-group>
       </div>
       <div>
@@ -181,7 +178,7 @@
     >
       <div v-if="currentDesign != null" class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <img class="rounded" src="https://picsum.photos/200/120" />
+          <img v-if="currentDesign.image"  class="rounded" :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`" />
         </div>
         <div class="col-span-9 flex flex-col">
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
@@ -229,7 +226,7 @@
   import { usePageInfo } from '../../../utils/usePageInfo'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import {ref, onMounted, computed, toRaw, unref} from 'vue'
+  import {ref, onMounted, toRaw} from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
@@ -237,6 +234,9 @@
   import { useDesign } from '../../../utils/useDesign'
   import { usePrice } from '../../../utils/usePrice'
   import { message } from 'ant-design-vue'
+  import {convertBase64ToFile} from "../../../core/store/import";
+  import {FileModel, fileStore} from "../../../model/file";
+  import {baseURLApi} from '../../../../themeConfig';
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const showModalStatus = ref(false)
@@ -244,6 +244,9 @@
   let currentDesign = ref({})
   const price = ref(0)
   const additional=ref([])
+  const spinning = ref<boolean>(false)
+  //const active=ref(3)
+  //const root = ref(null)
 
   interface FileItem {
     uid: string
@@ -257,11 +260,11 @@
   }
 
   function handleBeforeUpload(file: FileItem) {
-
+    spinning.value=true
     const fileReader = new FileReader()
     fileReader.addEventListener('load', async (event) => {
-      const data = event.target?.result
-      const design: Design = await stageStore.convertSvgToDesignModel(data as string)
+      const file_data = event.target?.result
+      const design: Design = await stageStore.convertSvgToDesignModel(file_data as string)
       design.title[0]=file.name || ''
       design.code=file.name || ''
       design.creator = userStore.state._id
@@ -272,11 +275,24 @@
         edit:0
       }
       design.show=true
-      //console.log("tttttttt",design)
+      const image=await stageStore.createImageFromSvg(file,design.data.pageSize[0].width,design.data.pageSize[0].height)
+      const _file=convertBase64ToFile(image);
+      const { data } = await fileStore.upload(_file)
+      const fileModel: FileModel[] = data.data
+      design.image={
+        file_id:fileModel[0]._id as string,
+        file_name:fileModel[0].name as string,
+        file_storage:fileModel[0].storage as string
+      }
       designStore.addDesign(design)
+      spinning.value=false
     })
     fileReader.readAsText(file)
     return false
+  }
+
+  function changeTab(activeKey){
+    console.log("change active key",activeKey)
   }
 
   function handleChangePrice(){
@@ -360,6 +376,8 @@
   }
 
   onMounted(async () => {
+    //console.log("this is root",root.value.activeKey=3)
+    //active.value=3;
     await tagsStore.getTag()
     await designStore.getDesign()
   })

@@ -69,7 +69,7 @@ export async function ImportSvg(svg: string): Promise<{ data:object,files:string
     if (gItem) temp = Object.assign(temp, gItem)
   }
   //console.log(temp, 'this is temp')
-  console.log(JSON.stringify(temp), 'this is temp json')
+ // console.log(JSON.stringify(temp), 'this is temp json')
   return {data:temp,files}
   //return JSON.stringify(temp)
 }
@@ -749,7 +749,7 @@ function xmlToJson(xml = '') {
   return xml2json(xml)
 }
 
-function convertBase64ToFile(dataURI: string): Blob {
+export function convertBase64ToFile(dataURI: string): Blob {
   const splitDataURI = dataURI.split(',')
   const byteString =
     splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])

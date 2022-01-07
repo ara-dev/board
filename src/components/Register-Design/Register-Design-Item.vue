@@ -2,7 +2,7 @@
   <ACard :class="[`${prefixCls}`]">
     <div class="grid grid-cols-12 gap-4 p-3">
       <div class="col-span-2">
-        <img class="rounded" src="https://picsum.photos/200/120" />
+        <img class="rounded" :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`" />
         <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
           <span>{{ props.item.title[0] }}</span>
           <!--<span :class="[`${prefixVar}-text-color-primary`]"> ({{ props.item.size }})</span>-->
@@ -90,7 +90,8 @@
   import { tagsStore } from '../../model/tags'
   import { Design, designStore } from '../../model/design'
   import { stageStore } from '../../core'
-  import { Model } from '../../core/store/stage'
+  import { StageModel } from '../../core/store/stage'
+  import {baseURLApi} from '../../../themeConfig';
   import router from '../../router'
   import { toRaw } from 'vue'
   import {message} from "ant-design-vue";
@@ -139,7 +140,7 @@
     // return
     router.push({ name: 'board' }).then(() => {
       console.log('this is thene')
-      stageStore.importFromJson(toRaw(props.item.data) as Model, 'container')
+      stageStore.importFromJson(toRaw(props.item.data) as StageModel, 'container')
     })
   }
 </script>

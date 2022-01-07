@@ -1,6 +1,7 @@
 import { UnwrapNestedRefs } from '@vue/reactivity'
 import { reactive, readonly, ref, Ref, toRaw, unref } from 'vue'
 import axios from '../utils/axios'
+import {StageModel} from "../core/store/stage";
 
 export interface Design {
   _id?: string | null
@@ -14,8 +15,13 @@ export interface Design {
   options : object
   //size: string
   //owner: string
+  image?: {
+    file_id:string,
+    file_name:string
+    file_storage:string
+  }
   status: number
-  data: object
+  data: StageModel
   files: string[]
   show: boolean
   updated_at?: string
@@ -63,6 +69,7 @@ export default class DesignStore {
 
   addDesign(design: Design) {
     //this._rows.value.push(design)
+    console.log(design)
     this._uploadList.value.push(design)
   }
 

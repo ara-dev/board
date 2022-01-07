@@ -26,8 +26,7 @@
               </template>
             </AInput>
           </div>
-          <!--         -->
-          <ATabs v-model:activeKey="activeKey" :class="[`${prefixCls}`]" :tabBarGutter="1">
+          <ATabs @change="changeTab" v-model:activeKey="activeTab" :class="[`${prefixCls}`]" :tabBarGutter="1">
             <slot></slot>
             <template #renderTabBar="{ DefaultTabBar, ...props }">
               <component
@@ -65,30 +64,37 @@
   //const { prefixVar } = useDesign('')
   const showSearchBox = ref(false)
   //const current = ref(2)
-  const activeKey = ref('1')
+  //const activeKey = ref('1')
 
   interface Props {
     page: number
     total: number
     pageSize: number
+    activeTab:number
   }
 
   const props = withDefaults(defineProps<Props>(), {
     page: 1,
     pageSize: 10,
     total: 50,
+    activeTab:1
   })
 
   const emit = defineEmits<{
     (e: 'changePage', page: number, pageSize: number): void
+    (e: 'changeTab', activeKey : any): void
   }>()
 
   function changePage(page: number, pageSize: number) {
     emit('changePage', page, pageSize)
   }
 
+  function changeTab(activeKey : any){
+    emit('changeTab',activeKey)
+  }
+
   onMounted(() => {
-    // activeKey.value = '1'
+     //activeKey.value = '1'
   })
 </script>
 

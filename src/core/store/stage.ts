@@ -23,7 +23,7 @@ interface ModelPage {
   stage: Object
 }
 
-export interface Model {
+export interface StageModel {
   pages: ModelPage[]
   fonts: number[]
   //price: number
@@ -572,7 +572,7 @@ export default class StageOptionStore {
       show: true,
     }
 
-    const _model: Model = {
+    const _model: StageModel = {
       fonts: [],
       pageSize: [],
       pages: [],
@@ -608,7 +608,7 @@ export default class StageOptionStore {
     //console.log('dddddddd', _container)
     //console.log('this is model', model)
     //debugger
-    (design.data as Model).pages.forEach((item) => {
+    (design.data as StageModel).pages.forEach((item) => {
       const stage: Stage = Konva.Node.create(item.stage, _container)
       const page: Page = {
         stage,
@@ -742,7 +742,7 @@ export default class StageOptionStore {
     this.downloadURI(dataURL, 'stage.png');
   }*/
 
-  downloadURI(uri, name) {
+  downloadURI(uri : string, name : string) {
     let link = document.createElement('a');
     link.download = name;
     link.href = uri;
@@ -750,6 +750,36 @@ export default class StageOptionStore {
     link.click();
     document.body.removeChild(link);
     //delete link;
+  }
+
+  async createImageFromSvg(file : File,width:number=256,height:number=256) : Promise<string>{
+    const container= document.createElement('div');
+    container.style.display='none';
+    document.body.appendChild(container)
+    const stage = new Konva.Stage({
+      container: container,
+      width,
+      height,
+    });
+    const layer = new Konva.Layer();
+    stage.add(layer);
+
+    const promise = new Promise((resolve, reject)  => {
+      Konva.Image.fromURL(URL.createObjectURL(file), (imageNode : any) => {
+        imageNode.setAttrs({
+          width,
+          height,
+        });
+        layer.add(imageNode);
+        //console.log(stage.toDataURL(),"data url")
+        //stageStore.downloadURI(stage.toDataURL({quality:1}),"this is dddddd.png")
+        const dataURl=stage.toDataURL({quality:1})
+        document.body.removeChild(container)
+        resolve(dataURl);
+      })
+      //reject(new Error('Failed Load File'));
+    })
+    return await promise  as string
   }
 
   exportToJson(): string {
