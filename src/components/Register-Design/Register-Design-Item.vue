@@ -2,7 +2,17 @@
   <ACard :class="[`${prefixCls}`]">
     <div class="grid grid-cols-12 gap-4 p-3">
       <div class="col-span-2">
-        <img class="rounded" :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`" />
+        <!--        <img class="rounded" :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`" />-->
+        <AImage
+          :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`"
+          class="rounded object-cover"
+          height="120px"
+          width="200px"
+        />
+        <!--        <a-image
+          :width="200"
+          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+        />-->
         <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
           <span>{{ props.item.title[0] }}</span>
           <!--<span :class="[`${prefixVar}-text-color-primary`]"> ({{ props.item.size }})</span>-->
@@ -12,7 +22,7 @@
         <div class="flex justify-between items-baseline">
           <div>
             <ACheckbox v-model:checked="props.item.show" @change="update">نمایش</ACheckbox>
-            <div class="mb-5 inline-flex mr-5 items-center	">
+            <div class="mb-5 inline-flex mr-5 items-center">
               <AInput
                 v-model:value="props.item.code"
                 :disabled="props.item.status != 1"
@@ -25,12 +35,16 @@
                   <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
                 </div>
               </AButton>
-              <AButton class="mr-5" ghost  type="primary">
+              <AButton class="mr-5" ghost type="primary">
                 <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
                 <span class="align-top" @click="definePrice">
-                  {{ props.item.price && props.item.price.edit ?  usePrice(props.item.price.edit) : 'ثبت دستمزد اصلاح' }}
+                  {{
+                    props.item.price && props.item.price.edit
+                      ? usePrice(props.item.price.edit)
+                      : 'ثبت دستمزد اصلاح'
+                  }}
                 </span>
-<!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
+                <!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
                 <span v-else class="align-top">{{ usePrice(15000) }}</span>-->
               </AButton>
             </div>
@@ -91,10 +105,10 @@
   import { Design, designStore } from '../../model/design'
   import { stageStore } from '../../core'
   import { StageModel } from '../../core/store/stage'
-  import {baseURLApi} from '../../../themeConfig';
   import router from '../../router'
   import { toRaw } from 'vue'
-  import {message} from "ant-design-vue";
+  import { baseURLApi } from '../../../themeConfig'
+  import { message } from 'ant-design-vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 

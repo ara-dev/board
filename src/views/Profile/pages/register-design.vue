@@ -11,29 +11,29 @@
         </div>
       </div>
       <Tabs
+        :activeTab="1"
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
-        :activeTab="1"
         @changePage="changePage"
         @changeTab="changeTab"
       >
         <a-tab-pane
-          v-for="(item, index) in status.filter((item)=> item.show).reverse()"
+          v-for="(item, index) in status.filter((item) => item.show).reverse()"
           :key="index + 2"
           :tab="item.title"
           class="p-2"
           dir="rtl"
-          >
+        >
           <div class="mt-5">
             <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
               <RegisterDesignItem
-                  v-for="(item, index) in designStore.rows"
-                  :key="index"
-                  :item="item"
-                  @changeStatus="showChangeStatus"
-                  @definePrice="showDefinePrice"
-                  @deleteDesign="deleteDesign(item._id)"
+                v-for="(item, index) in designStore.rows"
+                :key="index"
+                :item="item"
+                @changeStatus="showChangeStatus"
+                @definePrice="showDefinePrice"
+                @deleteDesign="deleteDesign(item._id)"
               />
             </div>
           </div>
@@ -41,17 +41,17 @@
         <a-tab-pane :key="1" class="p-2" dir="rtl" tab="بارگذاری">
           <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
             <div class="mt-5">
-            <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
-              <RegisterDesignItem
-                v-for="(item, index) in designStore.uploadList"
-                :key="index"
-                :item="item"
-                @changeStatus="showChangeStatus"
-                @definePrice="showDefinePrice"
-                @deleteDesign="designStore.removeFromUploadList(index)"
-              />
-            </div>
-            <AUploadDragger
+              <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
+                <RegisterDesignItem
+                  v-for="(item, index) in designStore.uploadList"
+                  :key="index"
+                  :item="item"
+                  @changeStatus="showChangeStatus"
+                  @definePrice="showDefinePrice"
+                  @deleteDesign="designStore.removeFromUploadList(index)"
+                />
+              </div>
+              <AUploadDragger
                 :beforeUpload="handleBeforeUpload"
                 :multiple="true"
                 :showUploadList="false"
@@ -59,15 +59,15 @@
                 action=""
                 name="file"
                 @change="handleChangeSvg"
-            >
-              <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
-              <p class="ant-upload-text">افزودن طرح جدید </p>
-              <p class="ant-upload-hint">
-                طرح خود را با پسوند svg انتخاب کنید و پس از اینکه شماره شناسایی و دسته آن را مشخص
-                کردید گزینه بارگذاری طرح را انتخاب کنید
-              </p>
-            </AUploadDragger>
-          </div>
+              >
+                <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
+                <p class="ant-upload-text">افزودن طرح جدید </p>
+                <p class="ant-upload-hint">
+                  طرح خود را با پسوند svg انتخاب کنید و پس از اینکه شماره شناسایی و دسته آن را مشخص
+                  کردید گزینه بارگذاری طرح را انتخاب کنید
+                </p>
+              </AUploadDragger>
+            </div>
           </ASpin>
         </a-tab-pane>
       </Tabs>
@@ -83,7 +83,13 @@
     >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <img v-if="currentDesign.image"  class="rounded" :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`" />
+          <AImage
+            v-if="currentDesign.image"
+            :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
+            class="rounded object-cover"
+            height="120px"
+            width="150px"
+          />
         </div>
         <div class="col-span-9 flex flex-col">
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
@@ -130,27 +136,35 @@
       <div>
         <span class="block my-3">قیمت پایه</span>
         <a-radio-group
-            @change="handleChangePrice"
           v-for="(item, index) in priceList"
           :key="index"
           v-model:value="price"
           :class="[`${prefixCls}-price`]"
+          @change="handleChangePrice"
         >
           <a-radio-button :value="item">{{ usePrice(item) }}</a-radio-button>
         </a-radio-group>
       </div>
       <div>
         <span class="block my-3">افزودنی ها</span>
-<!--        <a-radio-group
+        <!--        <a-radio-group
 
           :key="index"
           :class="[`${prefixCls}-price`]"
         >
           <a-radio-button :value="">{{ item.title }}</a-radio-button>
         </a-radio-group>-->
-        <a-checkbox-group @change="handleChangePrice" v-model:value="additional" :options="additionalList.map((item)=> { return {label:item.title,value:item.price} })"    />
+        <a-checkbox-group
+          v-model:value="additional"
+          :options="
+            additionalList.map((item) => {
+              return { label: item.title, value: item.price }
+            })
+          "
+          @change="handleChangePrice"
+        />
 
-<!--        <ACheckbox v-for="(item, index) in additionalList" v-model:checked="checked">Checkbox</ACheckbox>-->
+        <!--        <ACheckbox v-for="(item, index) in additionalList" v-model:checked="checked">Checkbox</ACheckbox>-->
         <!--        <a-radio-group v-model:value="price" :class="[`${prefixCls}-price`]">
           <a-radio-button value="a">15،000 تومان</a-radio-button>
         </a-radio-group>
@@ -161,8 +175,11 @@
       <ADivider />
       <div class="flex flex-col">
         <div class="w-3/6 mb-5">
-          <AInput  v-if="currentDesign.price"
-                   v-model:value="currentDesign.price.edit" placeholder="مبلغ دلخواه" />
+          <AInput
+            v-if="currentDesign.price"
+            v-model:value="currentDesign.price.edit"
+            placeholder="مبلغ دلخواه"
+          />
         </div>
         <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
@@ -178,7 +195,13 @@
     >
       <div v-if="currentDesign != null" class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <img v-if="currentDesign.image"  class="rounded" :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`" />
+          <AImage
+            v-if="currentDesign.image"
+            :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
+            class="rounded object-cover"
+            height="120px"
+            width="200px"
+          />
         </div>
         <div class="col-span-9 flex flex-col">
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
@@ -226,7 +249,7 @@
   import { usePageInfo } from '../../../utils/usePageInfo'
   import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import {ref, onMounted, toRaw} from 'vue'
+  import { ref, onMounted, toRaw } from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
@@ -234,19 +257,17 @@
   import { useDesign } from '../../../utils/useDesign'
   import { usePrice } from '../../../utils/usePrice'
   import { message } from 'ant-design-vue'
-  import {convertBase64ToFile} from "../../../core/store/import";
-  import {FileModel, fileStore} from "../../../model/file";
-  import {baseURLApi} from '../../../../themeConfig';
+  import { convertBase64ToFile } from '../../../core/store/import'
+  import { FileModel, fileStore } from '../../../model/file'
+  import { baseURLApi } from '../../../../themeConfig'
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const showModalStatus = ref(false)
   const showModalPrice = ref(false)
   let currentDesign = ref({})
   const price = ref(0)
-  const additional=ref([])
+  const additional = ref([])
   const spinning = ref<boolean>(false)
-  //const active=ref(3)
-  //const root = ref(null)
 
   interface FileItem {
     uid: string
@@ -260,46 +281,52 @@
   }
 
   function handleBeforeUpload(file: FileItem) {
-    spinning.value=true
+    spinning.value = true
     const fileReader = new FileReader()
     fileReader.addEventListener('load', async (event) => {
       const file_data = event.target?.result
       const design: Design = await stageStore.convertSvgToDesignModel(file_data as string)
-      design.title[0]=file.name || ''
-      design.code=file.name || ''
+      design.title[0] = file.name || ''
+      design.code = file.name || ''
       design.creator = userStore.state._id
       design.status = 1
       design.price = {
         design: 0,
         print: 0,
-        edit:0
+        edit: 0,
       }
-      design.show=true
-      const image=await stageStore.createImageFromSvg(file,design.data.pageSize[0].width,design.data.pageSize[0].height)
-      const _file=convertBase64ToFile(image);
+      design.show = true
+      const image = await stageStore.createImageFromSvg(
+        file,
+        design.data.pageSize[0].width,
+        design.data.pageSize[0].height,
+      )
+      const _file = convertBase64ToFile(image)
       const { data } = await fileStore.upload(_file)
       const fileModel: FileModel[] = data.data
-      design.image={
-        file_id:fileModel[0]._id as string,
-        file_name:fileModel[0].name as string,
-        file_storage:fileModel[0].storage as string
+      design.image = {
+        file_id: fileModel[0]._id as string,
+        file_name: fileModel[0].name as string,
+        file_storage: fileModel[0].storage as string,
       }
       designStore.addDesign(design)
-      spinning.value=false
+      spinning.value = false
     })
     fileReader.readAsText(file)
     return false
   }
 
-  function changeTab(activeKey){
-    console.log("change active key",activeKey)
+  function changeTab(activeKey) {
+    console.log('change active key', activeKey)
   }
 
-  function handleChangePrice(){
-    let sum : number=0
-    additional.value.forEach((item)=> { sum+=item });
-    sum+=price.value;
-    Object.assign((currentDesign.value as Design).price,{edit:sum})
+  function handleChangePrice() {
+    let sum = 0
+    additional.value.forEach((item) => {
+      sum += item
+    })
+    sum += price.value
+    Object.assign((currentDesign.value as Design).price, { edit: sum })
   }
 
   function changePage(page: number, pageSize: number) {
@@ -343,7 +370,7 @@
 
   async function changePrice() {
     try {
-      if((currentDesign.value as Design)._id){
+      if ((currentDesign.value as Design)._id) {
         await designStore.updateDesign(currentDesign.value as Design)
       }
       showModalPrice.value = false
@@ -366,18 +393,15 @@
   }
 
   function showDefinePrice(item: Design) {
-    //debugger
-    if(item._id){
+    if (item._id) {
       currentDesign.value = Object.assign({}, toRaw(item))
-    }else{
+    } else {
       currentDesign.value = item
     }
     showModalPrice.value = true
   }
 
   onMounted(async () => {
-    //console.log("this is root",root.value.activeKey=3)
-    //active.value=3;
     await tagsStore.getTag()
     await designStore.getDesign()
   })
