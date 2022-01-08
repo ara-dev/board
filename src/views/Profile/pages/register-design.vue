@@ -7,11 +7,11 @@
           <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
         </div>
         <div>
-          <AButton @click="uploadDesign">بارگذاری طرح</AButton>
+          <AButton v-if="userStore.isSuperAdmin()" @click="uploadDesign">بارگذاری طرح</AButton>
         </div>
       </div>
       <Tabs
-        :activeTab="1"
+        :activeTab="userStore.isSuperAdmin() ?  1 : 8"
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
@@ -38,7 +38,7 @@
             </div>
           </div>
         </a-tab-pane>
-        <a-tab-pane :key="1" class="p-2" dir="rtl" tab="بارگذاری">
+        <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
           <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
             <div class="mt-5">
               <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
@@ -280,6 +280,8 @@
     originFileObj: any
   }
 
+
+
   function handleBeforeUpload(file: FileItem) {
     spinning.value = true
     const fileReader = new FileReader()
@@ -402,6 +404,7 @@
   }
 
   onMounted(async () => {
+    //console.log("sdsdsdsdsdsd",userStore.isSuperAdmin())
     await tagsStore.getTag()
     await designStore.getDesign()
   })

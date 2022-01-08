@@ -2,26 +2,20 @@
   <ACard :class="[`${prefixCls}`]">
     <div class="grid grid-cols-12 gap-4 p-3">
       <div class="col-span-2">
-        <!--        <img class="rounded" :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`" />-->
         <AImage
           :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`"
           class="rounded object-cover"
-          height="120px"
-          width="200px"
+          height="90px"
+          width="100%"
         />
-        <!--        <a-image
-          :width="200"
-          src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-        />-->
         <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
           <span>{{ props.item.title[0] }}</span>
-          <!--<span :class="[`${prefixVar}-text-color-primary`]"> ({{ props.item.size }})</span>-->
         </div>
       </div>
       <div class="col-span-10">
         <div class="flex justify-between items-baseline">
           <div>
-            <ACheckbox v-model:checked="props.item.show" @change="update">نمایش</ACheckbox>
+            <ACheckbox v-if="userStore.isSuperAdmin()" v-model:checked="props.item.show" @change="update">نمایش</ACheckbox>
             <div class="mb-5 inline-flex mr-5 items-center">
               <AInput
                 v-model:value="props.item.code"
@@ -35,7 +29,7 @@
                   <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
                 </div>
               </AButton>
-              <AButton class="mr-5" ghost type="primary">
+              <AButton class="mr-5" ghost type="primary" v-if="userStore.isSuperAdmin()">
                 <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
                 <span class="align-top" @click="definePrice">
                   {{
@@ -51,7 +45,7 @@
           </div>
           <div class="flex">
             <RegisterDesignStatus :sts="props.item.status" />
-            <div class="inline mr-3 cursor-pointer">
+            <div class="inline mr-3 cursor-pointer" v-if="userStore.isSuperAdmin()">
               <AButton type="link" @click="deleteDesign">
                 <div v-if="props.item.status == 1" class="inline">
                   <Icon color="red" icon="ion:remove-circle-outline" size="20" />
@@ -67,6 +61,7 @@
           <div class="2xl:col-span-10 xl:col-span-9">
             <ASelect
               v-model:value="props.item.tags"
+              :disabled="!userStore.isSuperAdmin()"
               class="w-full"
               mode="multiple"
               notFoundContent="داده ای یافت نشد"
@@ -80,11 +75,11 @@
             </ASelect>
           </div>
           <div class="2xl:col-span-2 xl:col-span-3">
-            <AButton v-if="false" class="w-full" size="large" type="primary" @click="designEdit"
+            <AButton v-if="userStore.isDesigner()" class="w-full" size="large" type="primary" @click="designEdit"
               >اصلاح طرح</AButton
             >
             <AButton
-              v-if="props.item.status != 1"
+              v-if="userStore.isSuperAdmin() && props.item.status != 1"
               class="w-full"
               size="large"
               type="primary"
@@ -109,6 +104,7 @@
   import { toRaw } from 'vue'
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
+  import {userStore} from '../../model/user';
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 

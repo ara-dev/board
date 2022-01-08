@@ -1,5 +1,5 @@
 import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
-import { reactive, readonly } from 'vue'
+import { reactive, readonly , computed } from 'vue'
 import router from '../router'
 import axios from '../utils/axios'
 
@@ -35,6 +35,26 @@ export default class UserStore {
     localStorage.setItem('token', data.token)
     Object.assign(userStore._state, data)
     console.log('login data', userStore._state)
+  }
+
+  isSuperAdmin() : boolean{
+    //debugger
+    //console.log("this is super admin")
+    //return false
+    return this._state.type=="superAdmin"
+  }
+
+  /*isSuperAdmin = computed(()=>{
+    //debugger
+    return false
+  })*/
+
+  isAdmin() : boolean{
+    return this._state.type=="admin"
+  }
+
+  isDesigner():boolean{
+    return this._state.type=="designer"
   }
 
   async getUserInfo() {
