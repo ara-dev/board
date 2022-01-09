@@ -15,7 +15,12 @@
       <div class="col-span-10">
         <div class="flex justify-between items-baseline">
           <div>
-            <ACheckbox v-if="userStore.isSuperAdmin()" v-model:checked="props.item.show" @change="update">نمایش</ACheckbox>
+            <ACheckbox
+              v-if="userStore.isSuperAdmin()"
+              v-model:checked="props.item.show"
+              @change="update"
+              >نمایش</ACheckbox
+            >
             <div class="mb-5 inline-flex mr-5 items-center">
               <AInput
                 v-model:value="props.item.code"
@@ -29,7 +34,7 @@
                   <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
                 </div>
               </AButton>
-              <AButton class="mr-5" ghost type="primary" v-if="userStore.isSuperAdmin()">
+              <AButton v-if="userStore.isSuperAdmin()" class="mr-5" ghost type="primary">
                 <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
                 <span class="align-top" @click="definePrice">
                   {{
@@ -45,7 +50,7 @@
           </div>
           <div class="flex">
             <RegisterDesignStatus :sts="props.item.status" />
-            <div class="inline mr-3 cursor-pointer" v-if="userStore.isSuperAdmin()">
+            <div v-if="userStore.isSuperAdmin()" class="inline mr-3 cursor-pointer">
               <AButton type="link" @click="deleteDesign">
                 <div v-if="props.item.status == 1" class="inline">
                   <Icon color="red" icon="ion:remove-circle-outline" size="20" />
@@ -75,7 +80,12 @@
             </ASelect>
           </div>
           <div class="2xl:col-span-2 xl:col-span-3">
-            <AButton v-if="userStore.isDesigner()" class="w-full" size="large" type="primary" @click="designEdit"
+            <AButton
+              v-if="userStore.isDesigner()"
+              class="w-full"
+              size="large"
+              type="primary"
+              @click="designEdit"
               >اصلاح طرح</AButton
             >
             <AButton
@@ -104,7 +114,7 @@
   import { toRaw } from 'vue'
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
-  import {userStore} from '../../model/user';
+  import { userStore } from '../../model/user'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 

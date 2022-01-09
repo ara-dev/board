@@ -1,5 +1,5 @@
 import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
-import { reactive, readonly , computed } from 'vue'
+import { reactive, readonly } from 'vue'
 import router from '../router'
 import axios from '../utils/axios'
 
@@ -27,6 +27,10 @@ export default class UserStore {
     return readonly(this._state)
   }
 
+  isSuperAdmin(): boolean {
+    return this._state.type == 'superAdmin'
+  }
+
   async login(mobile: string, password: string) {
     const { data } = await axios.post('auth/login', {
       mobile,
@@ -37,24 +41,12 @@ export default class UserStore {
     console.log('login data', userStore._state)
   }
 
-  isSuperAdmin() : boolean{
-    //debugger
-    //console.log("this is super admin")
-    //return false
-    return this._state.type=="superAdmin"
+  isAdmin(): boolean {
+    return this._state.type == 'admin'
   }
 
-  /*isSuperAdmin = computed(()=>{
-    //debugger
-    return false
-  })*/
-
-  isAdmin() : boolean{
-    return this._state.type=="admin"
-  }
-
-  isDesigner():boolean{
-    return this._state.type=="designer"
+  isDesigner(): boolean {
+    return this._state.type == 'designer'
   }
 
   async getUserInfo() {
@@ -62,7 +54,6 @@ export default class UserStore {
     if (token) {
       const { data } = await axios.get('auth/me')
       Object.assign(userStore._state, data.data)
-      //console.log('me data', userStore._state)
     }
   }
 

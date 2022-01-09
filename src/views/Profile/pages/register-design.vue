@@ -11,7 +11,7 @@
         </div>
       </div>
       <Tabs
-        :activeTab="userStore.isSuperAdmin() ?  1 : 8"
+        :activeTab="userStore.isSuperAdmin() ? 1 : 8"
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
@@ -247,7 +247,6 @@
 <script lang="ts" setup>
   import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
-  import RegisterDesignItem from '../../../components/Register-Design/Register-Design-Item.vue'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
   import { ref, onMounted, toRaw } from 'vue'
   import { Design, designStore } from '../../../model/design'
@@ -279,8 +278,6 @@
     size: number
     originFileObj: any
   }
-
-
 
   function handleBeforeUpload(file: FileItem) {
     spinning.value = true

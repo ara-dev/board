@@ -10,6 +10,7 @@
   import { stageStore } from '../../core'
   import { ref, onMounted, watch } from 'vue'
   import { useElementSize } from '@vueuse/core'
+  import { fontsStore } from '../../model/fonts'
 
   const mainboard = ref(null)
   const { width, height } = useElementSize(mainboard)
@@ -18,8 +19,9 @@
     stageStore.resizePage(width.value, height.value)
   })
 
-  onMounted(() => {
-    //stageStore.addPage(1080, 1080, width.value, height.value, 'container')
+  onMounted(async () => {
+    await fontsStore.getFont()
+    stageStore.addPage(1080, 1080, width.value, height.value, 'container')
   })
 </script>
 

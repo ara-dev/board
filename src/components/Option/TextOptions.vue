@@ -1,10 +1,12 @@
 <template>
   <div>
     <p class="text-gray-500 mb-2 mt-3 text-xs font-semibold">فونت</p>
-    <ASelect class="w-full">
-      <a-select-option value="jack">Jack</a-select-option>
+    <!--    @change="changeFont"-->
+    <ASelect v-model:value="stageStore.textOption.fontFamily" class="w-full" @change="changeFont">
+      <a-select-option v-for="(item, index) in fontsStore.rows" :key="index" :value="item.name">
+        {{ item.fa_name }}
+      </a-select-option>
       <a-select-option value="lucy">Lucy</a-select-option>
-      <a-select-option value="Yiminghe">yiminghe</a-select-option>
     </ASelect>
     <a-divider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">سایز فونت</p>
@@ -98,7 +100,10 @@
 
 <script lang="ts" setup>
   import { stageStore } from '../../core'
+  import { fontsStore } from '../../model/fonts'
   import Sketch from '../ColorPicker/Solid/Sketch.vue'
+  import { baseURLApi } from '../../../themeConfig'
+  import { useInstallFont } from '../../utils/useInstallFont'
 
   const colors = {
     hex: '#194d33',
@@ -107,6 +112,22 @@
     hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
     rgba: { r: 25, g: 77, b: 51, a: 1 },
     a: 1,
+  }
+
+  async function changeFont(fontName: string) {
+    const font = fontsStore.rows.find((item) => item.name == fontName)
+    if (font) {
+      await useInstallFont(font.name, `${baseURLApi}${font.storage}`)
+      stageStore.applyFontFamily({
+        font_id: font._id,
+      })
+      /*const fontFace = new FontFace(font.name, `url(${baseURLApi}${font.storage})`)
+      fontFace.load().then((loaded_face) => {
+        // @ts-ignore
+        document.fonts.add(loaded_face)
+        document.body.style.fontFamily = font.name
+      })*/
+    }
   }
 </script>
 

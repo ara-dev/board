@@ -11,12 +11,11 @@ import { Vector2d } from 'konva/lib/types'
 // @ts-ignore
 import _ from 'lodash'
 import { reactive, readonly } from 'vue'
+import { baseURLApi } from '../../../themeConfig'
+import { Design } from '../../model/design'
 import { ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
-import {Design} from "../../model/design";
-import {userStore} from "../../model/user";
-import {baseURL, baseURLApi} from "../../../themeConfig";
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -44,7 +43,7 @@ interface StageOption {
   layerLock: boolean
   opacity: number
   //common Option
-  design?:Design
+  design?: Design
   selectedElements: Shape[]
   currentPage: number
   pages: Page[]
@@ -355,6 +354,14 @@ export default class StageOptionStore {
     })
   }
 
+  applyFontFamily(extraData: object = {}): void {
+    this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
+      ;(item as Text).fontFamily(this._state.textOption.fontFamily)
+      item.setAttrs(extraData)
+      console.log('gdfgfgdfg', item)
+    })
+  }
+
   applyTextAlign(): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       ;(item as Text).align(this._state.textOption.align)
@@ -556,7 +563,6 @@ export default class StageOptionStore {
   }
 
   async convertSvgToDesignModel(svg: string): Promise<Design> {
-
     const design: Design = {
       title: [''],
       code: '',
@@ -566,7 +572,7 @@ export default class StageOptionStore {
       type: 1,
       data: {},
       files: [],
-      options:{},
+      options: {},
       status: 1,
       price: {},
       show: true,
@@ -578,37 +584,35 @@ export default class StageOptionStore {
       pages: [],
       pageCount: 1,
     }
-    const stage :  {data:object,files:string[]}  = await ImportSvg(svg)
+    const stage: { data: object; files: string[] } = await ImportSvg(svg)
     _model.pages.push({
-      stage: stage.data ,
+      stage: stage.data,
       docWidth: _.get(stage.data, 'attrs.docWidth', 0),
       docHeight: _.get(stage.data, 'attrs.docHeight', 0),
     })
     _model.pageSize.push({
-      width:_.get(stage.data, 'attrs.docWidth', 0),
+      width: _.get(stage.data, 'attrs.docWidth', 0),
       height: _.get(stage.data, 'attrs.docHeight', 0),
     })
 
-    design.data = _model;
-    design.files=stage.files
+    design.data = _model
+    design.files = stage.files
 
-    return design;
-
-
+    return design
   }
 
   async importFromSvg(svg: string, container: HTMLDivElement | string) {
-    const _design= await this.convertSvgToDesignModel(svg)
+    const _design = await this.convertSvgToDesignModel(svg)
     this.importFromJson(_design, container)
   }
 
   importFromJson(design: Design, container: HTMLDivElement | string) {
-   this._state.pages= []
-    const _container = document.getElementById('container');
+    this._state.pages = []
+    const _container = document.getElementById('container')
     //console.log('dddddddd', _container)
     //console.log('this is model', model)
     //debugger
-    (design.data as StageModel).pages.forEach((item) => {
+    ;(design.data as StageModel).pages.forEach((item) => {
       const stage: Stage = Konva.Node.create(item.stage, _container)
       const page: Page = {
         stage,
@@ -633,7 +637,7 @@ export default class StageOptionStore {
       //debugger
       images.forEach((item) => {
         const attr = item.attrs
-        const data = attr.file_id ? baseURLApi+attr.file_storage+attr.file_name : attr.dataSrc
+        const data = attr.file_id ? baseURLApi + attr.file_storage + attr.file_name : attr.dataSrc
         const parent = item.getParent()
         //console.log('asdasdas', data)
         Konva.Image.fromURL(data, function (image: any) {
@@ -724,11 +728,6 @@ export default class StageOptionStore {
         })
       })
 
-
-
-
-
-
       //console.log('this is groups', groups)
     })
     this._state.currentPage = 1
@@ -742,48 +741,48 @@ export default class StageOptionStore {
     this.downloadURI(dataURL, 'stage.png');
   }*/
 
-  downloadURI(uri : string, name : string) {
-    let link = document.createElement('a');
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  downloadURI(uri: string, name: string) {
+    const link = document.createElement('a')
+    link.download = name
+    link.href = uri
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
     //delete link;
   }
 
-  async createImageFromSvg(file : File,width:number=256,height:number=256) : Promise<string>{
-    const container= document.createElement('div');
-    container.style.display='none';
+  async createImageFromSvg(file: File, width = 256, height = 256): Promise<string> {
+    const container = document.createElement('div')
+    container.style.display = 'none'
     document.body.appendChild(container)
     const stage = new Konva.Stage({
       container: container,
       width,
       height,
-    });
-    const layer = new Konva.Layer();
-    stage.add(layer);
+    })
+    const layer = new Konva.Layer()
+    stage.add(layer)
 
-    const promise = new Promise((resolve, reject)  => {
-      Konva.Image.fromURL(URL.createObjectURL(file), (imageNode : any) => {
+    const promise = new Promise((resolve, reject) => {
+      Konva.Image.fromURL(URL.createObjectURL(file), (imageNode: any) => {
         imageNode.setAttrs({
           width,
           height,
-        });
-        layer.add(imageNode);
+        })
+        layer.add(imageNode)
         //console.log(stage.toDataURL(),"data url")
         //stageStore.downloadURI(stage.toDataURL({quality:1}),"this is dddddd.png")
-        const dataURl=stage.toDataURL({quality:1})
+        const dataURl = stage.toDataURL({ quality: 1 })
         document.body.removeChild(container)
-        resolve(dataURl);
+        resolve(dataURl)
       })
       //reject(new Error('Failed Load File'));
     })
-    return await promise  as string
+    return (await promise) as string
   }
 
   exportToJson(): string {
-   /* const _export: Model = {
+    /* const _export: Model = {
       pages: [],
       pageSize: [],
       fonts: [],
