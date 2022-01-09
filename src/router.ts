@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {stageStore} from "./core";
 
 // Define some routes
 // Each route should map to a component.
@@ -107,7 +108,10 @@ const routeWithoutAuth: string[] = ['/login']
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   if (token) {
-    if (to.path == '/login') {
+    if (to.name == 'login') {
+      router.push({ name: 'profile' })
+    }
+    if(to.name=='board' && !stageStore.isEditMode){
       router.push({ name: 'profile' })
     }
     next()

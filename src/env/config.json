@@ -5,11 +5,11 @@
       "visibility": true,
       "children": {
         "image": {
-          "active": true,
+          "active": false,
           "visibility": true
         },
         "upload": {
-          "active": false,
+          "active": true,
           "visibility": true
         },
         "text": {

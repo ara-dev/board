@@ -1,12 +1,12 @@
 <template>
   <div :class="{ 'active-profile': isProfile }" class="profile-right-toolbar text-center">
-    <div id="close-btn">
-      <AButton id="close-btn-profile" type="text" @click="toggleMenu">
+    <div id="close-btn" v-if="stageStore.isEditMode">
+      <AButton  id="close-btn-profile" type="text" @click="toggleMenu">
         <Icon color="#ffffff" icon="ion:close-outline" size="20" />
       </AButton>
     </div>
 
-    <div id="back-aside">
+    <div id="back-aside" class="cursor-pointer">
       <Logo @click="toggleMenu" />
     </div>
     <div class="relative h-full" style="z-index: 0">
@@ -16,6 +16,7 @@
 </template>
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
+  import {stageStore} from "../core";
   import { computed } from 'vue'
   import ToolBar from './ToolBar/ToolBar.vue'
   import Logo from './Logo.vue'

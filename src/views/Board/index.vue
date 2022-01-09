@@ -42,6 +42,7 @@
               />
               <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
                 <AUpload
+                  v-if="false"
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
                   :showUploadList="false"
@@ -56,6 +57,7 @@
                   :multiple="false"
                   :showUploadList="false"
                   @change="handleChangeJson"
+                  v-if="false"
                 >
                   <AButton class="mt-5"> بارگذاری فایل json </AButton>
                 </AUpload>

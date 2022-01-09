@@ -5,11 +5,11 @@
         <ControlPLogo />
       </div>
       <div>
-        <AButton class="ml-4" ghost type="primary">ذخیره طرح</AButton>
+        <AButton class="ml-4" ghost type="primary" v-if="stageStore.isEditMode">ذخیره طرح</AButton>
         <AButton type="primary">سبد سفارش</AButton>
-        <AButton class="mr-4" type="primary" @click="userStore.logout()"
-          >خروج از حساب کاربری</AButton
-        >
+        <AButton class="mr-4" type="primary" @click="userStore.logout()">
+          خروج از حساب کاربری
+        </AButton>
       </div>
     </div>
     <ADivider />
@@ -31,6 +31,7 @@
   import { useDesign } from '../../utils/useDesign'
   import ProfileMenu from '../../components/Profile/ProfileMenu.vue'
   import { userStore } from '../../model/user'
+  import {stageStore} from "../../core";
 
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')

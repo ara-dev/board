@@ -60,6 +60,7 @@
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { userStore } from '../../model/user'
+  import {stageStore} from "../../core";
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')
   const currentMenu = ref<string[]>([])

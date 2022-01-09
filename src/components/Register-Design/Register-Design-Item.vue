@@ -80,8 +80,9 @@
             </ASelect>
           </div>
           <div class="2xl:col-span-2 xl:col-span-3">
+<!--            v-if="userStore.isDesigner()"-->
             <AButton
-              v-if="userStore.isDesigner()"
+
               class="w-full"
               size="large"
               type="primary"
@@ -154,14 +155,8 @@
   }
 
   function designEdit() {
-    //console.log(toRaw(props.item.data) )
-    //console.log(unref(props.item.data) )
-    //console.log
-    // return
-    router.push({ name: 'board' }).then(() => {
-      console.log('this is thene')
-      stageStore.importFromJson(toRaw(props.item.data) as StageModel, 'container')
-    })
+    stageStore.setDesign(props.item);
+    router.push({name:'board'})
   }
 </script>
 
