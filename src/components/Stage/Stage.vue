@@ -21,7 +21,7 @@
 
   onMounted(async () => {
     await fontsStore.getFont()
-    stageStore.addPage(1080, 1080, width.value, height.value, 'container')
+    stageStore.addPage(500, 600, width.value, height.value, 'container')
   })
 </script>
 

@@ -982,7 +982,7 @@ export default class StageOptionStore {
       //offsetY : -80 ,
     })
     //background.add
-    group.add(rect1)
+    // group.add(rect1)
 
     const rect2 = new Konva.Rect({
       x: 250,
@@ -996,7 +996,7 @@ export default class StageOptionStore {
       //offsetY: 90 / 2,
     })
 
-    group.add(rect2)
+    //group.add(rect2)
 
     const circle = new Konva.Circle({
       name: 'element_circle_dsfsdfsdf',
@@ -1009,7 +1009,7 @@ export default class StageOptionStore {
       draggable: true,
     })
 
-    group.add(circle)
+    // group.add(circle)
 
     const triangle = new Konva.RegularPolygon({
       name: 'element',
@@ -1025,7 +1025,7 @@ export default class StageOptionStore {
       // offsetY: 120 / 2,
     })
 
-    group.add(triangle)
+    // group.add(triangle)
 
     const grp = new Konva.Group({
       draggable: true,
@@ -1074,7 +1074,7 @@ export default class StageOptionStore {
             },*/
     })
 
-    group.add(path)
+    // group.add(path)
 
     this.setSnapping(page.stage, layer, group)
     this.setContextMenu(page.stage, group)
