@@ -4,7 +4,7 @@
       <div class="col-span-2">
         <AImage
           :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`"
-          class="rounded object-cover"
+          class="rounded object-cover cursor-zoom-in"
           height="90px"
           width="100%"
         />
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="grid grid-cols-12 gap-4">
-          <div class="2xl:col-span-10 xl:col-span-9">
+          <div class="2xl:col-span-9 xl:col-span-9">
             <ASelect
               v-model:value="props.item.tags"
               :disabled="!userStore.isSuperAdmin()"
@@ -79,23 +79,29 @@
               </a-select-option>
             </ASelect>
           </div>
-          <div class="2xl:col-span-2 xl:col-span-3">
-<!--            v-if="userStore.isDesigner()"-->
+          <div class="2xl:col-span-3 xl:col-span-3">
             <AButton
-
-              class="w-full"
+              v-if="userStore.isSuperAdmin() && props.item.status != 1"
+              size="large"
+              type="primary"
+              @click="changeStatus()"
+            >
+              تعیین وضعیت طرح
+            </AButton>
+            <AButton
+              v-if="userStore.isDesigner() && props.item.status != 8"
               size="large"
               type="primary"
               @click="designEdit"
               >اصلاح طرح</AButton
             >
+
             <AButton
-              v-if="userStore.isSuperAdmin() && props.item.status != 1"
-              class="w-full"
+              v-if="userStore.isDesigner() && props.item.status == 8"
               size="large"
               type="primary"
-              @click="changeStatus()"
-              >تعیین وضعیت طرح</AButton
+              @click="selectForEdit"
+              >انتخاب برای فارسی سازی</AButton
             >
           </div>
         </div>
@@ -110,12 +116,11 @@
   import { tagsStore } from '../../model/tags'
   import { Design, designStore } from '../../model/design'
   import { stageStore } from '../../core'
-  import { StageModel } from '../../core/store/stage'
   import router from '../../router'
-  import { toRaw } from 'vue'
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
   import { userStore } from '../../model/user'
+  import { toRaw, unref } from 'vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
@@ -154,9 +159,24 @@
     }
   }
 
+  async function selectForEdit() {
+    try {
+      //props.item.owners.push(userStore.state._id)
+      //props.item.status = 2
+      const design = Object.assign({}, unref(toRaw(props.item)))
+      design.status = 2
+      //return
+      await designStore.updateDesign(design)
+      await designStore.getDesign()
+      message.success('طرح انتخاب شد و در وضعیت انتظار تایید مدیر قرار گرفت')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   function designEdit() {
-    stageStore.setDesign(props.item);
-    router.push({name:'board'})
+    stageStore.setDesign(props.item)
+    router.push({ name: 'board' })
   }
 </script>
 

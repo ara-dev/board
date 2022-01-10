@@ -1,7 +1,7 @@
 import { UnwrapNestedRefs } from '@vue/reactivity'
-import { reactive, readonly, ref, Ref, toRaw, unref } from 'vue'
+import { reactive, readonly, ref, Ref, toRaw } from 'vue'
+import { StageModel } from '../core/store/stage'
 import axios from '../utils/axios'
-import {StageModel} from "../core/store/stage";
 
 export interface Design {
   _id?: string | null
@@ -12,13 +12,13 @@ export interface Design {
   creator: string
   owners: string[]
   tags: string[]
-  options : object
+  options: object
   //size: string
   //owner: string
   image?: {
-    file_id:string,
-    file_name:string
-    file_storage:string
+    file_id: string
+    file_name: string
+    file_storage: string
   }
   status: number
   data: StageModel
@@ -32,6 +32,7 @@ interface DesignState {
   page: number
   limit: number
   total: number
+  filter: Object
 }
 
 export default class DesignStore {
@@ -43,14 +44,19 @@ export default class DesignStore {
   }
 
   private _rows!: Ref<Design[]>
-  private _uploadList!: Ref<Design[]>
 
   get rows(): Design[] {
     return this._rows.value
   }
 
-  get uploadList(){
+  private _uploadList!: Ref<Design[]>
+
+  get uploadList() {
     return this._uploadList.value
+  }
+
+  set filter(filter: object) {
+    this._state.filter = filter
   }
 
   get page() {
@@ -73,26 +79,28 @@ export default class DesignStore {
     this._uploadList.value.push(design)
   }
 
-  async getDesign(page = 0, limit = 10) {
-    const { data } = await axios.get('/design')
-    this._rows.value = data.data
+  async getDesign() {
+    const { data } = await axios.post('/design/table', this._state)
+    this._rows.value = data.data.rows
+    this._state.total = data.data.total
+    this._state.page = data.data.page
+    this._state.limit = data.data.limit
   }
 
-  async deleteDesign(id:string) {
+  async deleteDesign(id: string) {
     //if (id) {
-      const { data } = await axios.delete(`/design/${id}`)
-      const index = this._rows.value.findIndex((item)=> item._id==id)
-      if(index>-1)
-      {
-        this._rows.value.splice(index, 1)
-      }
+    const { data } = await axios.delete(`/design/${id}`)
+    const index = this._rows.value.findIndex((item) => item._id == id)
+    if (index > -1) {
+      this._rows.value.splice(index, 1)
+    }
     /*else{
       this._uploadList.value.splice(index,1)
     }*/
   }
 
-  removeFromUploadList(index : number){
-    this._uploadList.value.splice(index,1)
+  removeFromUploadList(index: number) {
+    this._uploadList.value.splice(index, 1)
   }
 
   async updateDesign(design: Design) {
@@ -118,7 +126,7 @@ export default class DesignStore {
       body.status = 8
       const { data } = await axios.post('/design', body)
     }
-      this._uploadList.value=[]
+    this._uploadList.value = []
   }
 
   private _init() {
@@ -126,6 +134,7 @@ export default class DesignStore {
       page: 0,
       total: 0,
       limit: 10,
+      filter: {},
     }
   }
 }

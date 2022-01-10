@@ -19,11 +19,18 @@
         </div>
       </div>
     </div>
+    <div>
+      <span class="ml-2">نقش ها :</span>
+      <span v-for="(item, index) in userStore.state.roles" :key="index">
+        {{ userStore.getRoleStr(item) }}
+        {{ index + 1 != userStore.state.roles.length ? ' -  ' : '' }}
+      </span>
+    </div>
     <ADivider />
-<!--    style="display: grid; grid-template-rows: auto 15%"-->
-    <div class="h-full" >
-<!--     -->
-      <div class="overflow-auto"  style="max-height:calc(100vh - 270px)" >
+    <!--    style="display: grid; grid-template-rows: auto 15%"-->
+    <div class="h-full">
+      <!--     -->
+      <div class="overflow-auto" style="max-height: calc(100vh - 270px)">
         <AMenu
           v-model:selectedKeys="currentMenu"
           :class="[`${prefixCls}-menu`]"
@@ -60,7 +67,6 @@
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { userStore } from '../../model/user'
-  import {stageStore} from "../../core";
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')
   const currentMenu = ref<string[]>([])

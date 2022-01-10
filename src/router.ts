@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import {stageStore} from "./core";
+import { stageStore } from './core'
 
 // Define some routes
 // Each route should map to a component.
@@ -111,9 +111,14 @@ router.beforeEach((to, from, next) => {
     if (to.name == 'login') {
       router.push({ name: 'profile' })
     }
-    if(to.name=='board' && !stageStore.isEditMode){
+
+    if (to.name == 'board' && !stageStore.isEditMode) {
+      //console.log('this is edit mode ', stageStore.isEditMode)
+      //debugger
       router.push({ name: 'profile' })
+      //return
     }
+    //debugger
     next()
     return
   } else {

@@ -9,6 +9,7 @@ interface User {
   password: string
   mobile: string
   type: string
+  roles: string[]
   updated_at: string
   created_at: string
   avatar: string
@@ -16,10 +17,20 @@ interface User {
 }
 
 export default class UserStore {
+  private readonly _roleMap
+
   constructor() {
     this._init()
     this._state = reactive(this._state)
+    this._roleMap = new Map()
+    this._roleMap.set('superAdmin', 'مدیر کل  ')
+    this._roleMap.set('admin', 'مدیر')
+    this._roleMap.set('designer', 'طراح')
   }
+
+  /*get roleMap() {
+    return this._roleMap
+  }*/
 
   private _state!: UnwrapNestedRefs<User>
 
@@ -27,8 +38,12 @@ export default class UserStore {
     return readonly(this._state)
   }
 
+  getRoleStr(role: string) {
+    return this._roleMap.get(role)
+  }
+
   isSuperAdmin(): boolean {
-    return this._state.type == 'superAdmin'
+    return this._state.roles.includes('superAdmin')
   }
 
   async login(mobile: string, password: string) {
@@ -42,11 +57,11 @@ export default class UserStore {
   }
 
   isAdmin(): boolean {
-    return this._state.type == 'admin'
+    return this._state.roles.includes('admin')
   }
 
   isDesigner(): boolean {
-    return this._state.type == 'designer'
+    return this._state.roles.includes('designer')
   }
 
   async getUserInfo() {
@@ -69,6 +84,7 @@ export default class UserStore {
       password: '',
       mobile: '',
       type: '',
+      roles: [],
       updated_at: '',
       created_at: '',
       avatar: '',

@@ -10,7 +10,7 @@ import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
 // @ts-ignore
 import _ from 'lodash'
-import {reactive, readonly, Ref, ref, UnwrapRef} from 'vue'
+import { reactive, readonly, Ref, ref, UnwrapRef } from 'vue'
 import { baseURLApi } from '../../../themeConfig'
 import { Design } from '../../model/design'
 import { ImportSvg } from './import'
@@ -50,7 +50,6 @@ interface StageOption {
   copyElements: Shape[]
   currentColor: Color
   container: HTMLDivElement | string | null
-
 }
 
 export default class StageOptionStore {
@@ -58,8 +57,6 @@ export default class StageOptionStore {
   private lastWidthHeightMainBoard: { width: number; height: number }
   private scale: number
   private scaleFactor: number
-  //private inZoom: boolean
-  private _isEditMode : Ref<UnwrapRef<boolean>>
 
   constructor() {
     this._init()
@@ -68,8 +65,15 @@ export default class StageOptionStore {
     this.scale = 1
     //this.inZoom = false
     this.scaleFactor = 1.2
-    this._isEditMode=ref(false)
+    this._isEditMode = ref(false)
     this._state = reactive(this._state)
+  }
+
+  //private inZoom: boolean
+  private _isEditMode: Ref<UnwrapRef<boolean>>
+
+  get isEditMode(): boolean {
+    return this._isEditMode.value
   }
 
   private _state!: UnwrapNestedRefs<StageOption>
@@ -80,10 +84,6 @@ export default class StageOptionStore {
 
   get currentColor(): Color {
     return this._state.currentColor
-  }
-
-  get isEditMode() : boolean{
-    return this._isEditMode.value
   }
 
   set currentColor(color: Color) {
@@ -110,12 +110,6 @@ export default class StageOptionStore {
   /* get selectedElements(): UnwrapRef<StageOption['selectedElements']> {
     return this._state.selectedElements
   }*/
-
-  setDesign(design : Design){
-    console.log("this is set design ",design)
-    this._isEditMode.value=false
-    this._state.design=design
-  }
 
   set selectedElements(shapes: Shape[]) {
     //console.log('this is selected elements', shapes)
@@ -146,6 +140,12 @@ export default class StageOptionStore {
 
   get textOption(): TextOption {
     return this._state.textOption
+  }
+
+  setDesign(design: Design) {
+    this._isEditMode.value = true
+    this._state.pages = []
+    this._state.design = design
   }
 
   /* setContainer(container: HTMLDivElement | string): void {
@@ -619,15 +619,17 @@ export default class StageOptionStore {
     this.importFromJson(_design, container)
   }
 
-  initBoard(container: HTMLDivElement){
+  initBoard(container: HTMLDivElement) {
     //debugger
-    if(this._isEditMode.value){
-      this.getCurrentPage().stage.container(container)
-      return
+    const page = this.getCurrentPage()
+    if (page) {
+      page.stage.container(container)
     }
-    if(this._state.design){
-      this._isEditMode.value=true
-      this.importFromJson(this._state.design,container)
+
+    if (this._state.design && !page) {
+      //debugger
+      //this._isEditMode.value = true
+      this.importFromJson(this._state.design, container)
     }
   }
 
@@ -759,7 +761,6 @@ export default class StageOptionStore {
     this._state.currentPage = 1
     this.resizePage(this.lastWidthHeightMainBoard.width, this.lastWidthHeightMainBoard.height)
   }
-
 
   /*exportToImage(){
     const stage = this.exportToJson()
@@ -907,7 +908,7 @@ export default class StageOptionStore {
     uiStore.deActiveElementWhenNoneSelected()
   }
 
-  /*private initStage(page: Page) {
+  private initStage(page: Page) {
     //const state = this._state
     const layer = new Layer({
       name: 'layer',
@@ -932,22 +933,22 @@ export default class StageOptionStore {
       width: page.docWidth,
       height: page.docHeight,
       fill: '#fff',
-      /!*shadowBlur: 0,
+      /*shadowBlur: 0,
             shadowOffset: { x: 0, y: 0 },
             shadowOpacity: 1,
-            shadowColor: 'black',*!/
+            shadowColor: 'black',*/
       preventDefault: false,
       //fillLinearGradientStartPoint: { x: 0, y: 0 },
       //fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
       // gradient into transparent color, so we can see CSS styles
-      /!*fillLinearGradientColorStops: [
+      /*fillLinearGradientColorStops: [
                     0,
                     'yellow',
                     0.5,
                     'blue',
                     0.6,
                     'rgba(0, 0, 0, 0)',
-                  ],*!/
+                  ],*/
       // remove background from hit graph for better perf
       // because we don't need any events on the background
       listening: true,
@@ -956,7 +957,7 @@ export default class StageOptionStore {
     //background.zIndex(-1);
     this.setTransformer(page.stage, layer)
     //start drag and drop on stage
-    /!* const stageContainer = stage.container()
+    /* const stageContainer = stage.container()
         stageContainer.addEventListener('dragover', function (e) {
           console.log('stage container drag over', e)
           e.preventDefault() // !important
@@ -991,7 +992,7 @@ export default class StageOptionStore {
           // we can't use stage.getPointerPosition() here, because that event
           // is not registered by Konva.Stage
           // we can register it manually:
-        })*!/
+        })*/
 
     //end drag and drop on stage
 
@@ -1095,10 +1096,10 @@ export default class StageOptionStore {
       y: 0,
       data: 'M0,0h640v480H0z',
       fill: '#c15959',
-      /!* scale: {
+      /* scale: {
               x: 2,
               y: 2,
-            },*!/
+            },*/
     })
 
     // group.add(path)
@@ -1108,7 +1109,7 @@ export default class StageOptionStore {
     this.setEditableText(page.stage)
     this.hoyKey()
 
-    /!* const path2 = new Konva.Path({
+    /* const path2 = new Konva.Path({
       name: 'element',
       draggable: true,
       data: 'm330.18 215.21 1.52 2.63c.22.4.61.68 1.06.76l3.05.61c.83.14 1.39.94 1.25 1.77-.05.3-.19.57-.4.79l-2.1 2.22c-.31.33-.46.77-.4 1.22l.36 3c.09.86-.55 1.63-1.41 1.72-.28.03-.56-.02-.81-.14l-2.81-1.27a1.6 1.6 0 0 0-1.32 0l-2.81 1.27c-.78.37-1.72.04-2.09-.74-.13-.26-.18-.55-.15-.84l.36-3c.06-.45-.09-.89-.4-1.22l-2.1-2.22a1.53 1.53 0 0 1 .83-2.56l3-.59c.45-.08.84-.36 1.06-.76l1.57-2.65c.45-.76 1.42-1.01 2.18-.56.23.13.42.33.56.56z'
@@ -1118,13 +1119,13 @@ export default class StageOptionStore {
               y: 2,
             },*!/
     })
-    group.add(path2)*!/
+    group.add(path2)*/
 
     //const imageObj = new Image()
 
     //console.log(imageObj, 'dasfsfsdf')
 
-    /!*imageObj.onload = function () {
+    /*imageObj.onload = function () {
           const yoda = new Konva.Image({
             x: 50,
             y: 50,
@@ -1146,10 +1147,10 @@ export default class StageOptionStore {
             // scaleY: 0.5,
           })
           group.add(darthNode)
-        })*!/
+        })*/
 
     //end test
-  }*/
+  }
 
   // were can we snap our objects?
   private getLineGuideStops(stage: Stage, skipShape: Shape): LineGuideStops {

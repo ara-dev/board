@@ -11,7 +11,7 @@
         </div>
       </div>
       <Tabs
-        :activeTab="userStore.isSuperAdmin() ? 1 : 8"
+        :activeTab="8"
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
@@ -19,23 +19,25 @@
         @changeTab="changeTab"
       >
         <a-tab-pane
-          v-for="(item, index) in status.filter((item) => item.show).reverse()"
-          :key="index + 2"
+          v-for="item in status.filter((_item) => _item.show).reverse()"
+          :key="item.id"
           :tab="item.title"
           class="p-2"
           dir="rtl"
         >
           <div class="mt-5">
-            <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
-              <RegisterDesignItem
-                v-for="(item, index) in designStore.rows"
-                :key="index"
-                :item="item"
-                @changeStatus="showChangeStatus"
-                @definePrice="showDefinePrice"
-                @deleteDesign="deleteDesign(item._id)"
-              />
-            </div>
+            <ASpin :spinning="designLoading" tip="در حال بارگذاری طرح ها">
+              <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
+                <RegisterDesignItem
+                  v-for="(item, index) in designStore.rows"
+                  :key="index"
+                  :item="item"
+                  @changeStatus="showChangeStatus"
+                  @definePrice="showDefinePrice"
+                  @deleteDesign="deleteDesign(item._id)"
+                />
+              </div>
+            </ASpin>
           </div>
         </a-tab-pane>
         <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
@@ -86,7 +88,7 @@
           <AImage
             v-if="currentDesign.image"
             :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
-            class="rounded object-cover"
+            class="rounded object-cover cursor-zoom-in"
             height="120px"
             width="150px"
           />
@@ -198,7 +200,7 @@
           <AImage
             v-if="currentDesign.image"
             :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
-            class="rounded object-cover"
+            class="rounded object-cover cursor-zoom-in"
             height="120px"
             width="200px"
           />
@@ -267,6 +269,8 @@
   const price = ref(0)
   const additional = ref([])
   const spinning = ref<boolean>(false)
+  const designLoading = ref<boolean>(false)
+  //const activeTab = ref(8)
 
   interface FileItem {
     uid: string
@@ -315,8 +319,18 @@
     return false
   }
 
-  function changeTab(activeKey) {
-    console.log('change active key', activeKey)
+  async function changeTab(activeKey: number) {
+    try {
+      //activeTab.value = activeKey
+      designLoading.value = true
+      designStore.filter = {
+        status: activeKey,
+      }
+      await designStore.getDesign()
+    } catch (e) {
+    } finally {
+      designLoading.value = false
+    }
   }
 
   function handleChangePrice() {
@@ -328,8 +342,9 @@
     Object.assign((currentDesign.value as Design).price, { edit: sum })
   }
 
-  function changePage(page: number, pageSize: number) {
+  async function changePage(page: number, pageSize: number) {
     designStore.page = page
+    await designStore.getDesign()
   }
 
   async function deleteDesign(index: number) {
@@ -403,7 +418,7 @@
   onMounted(async () => {
     //console.log("sdsdsdsdsdsd",userStore.isSuperAdmin())
     await tagsStore.getTag()
-    await designStore.getDesign()
+    //await designStore.getDesign()
   })
 </script>
 
