@@ -13,9 +13,10 @@ import _ from 'lodash'
 import { reactive, readonly, Ref, ref, UnwrapRef } from 'vue'
 import { baseURLApi } from '../../../themeConfig'
 import { Design } from '../../model/design'
-import { ImportSvg } from './import'
+import {convertBase64ToFile, ImportSvg} from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+import {FileModel, fileStore} from "../../model/file";
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -24,7 +25,7 @@ interface ModelPage {
 
 export interface StageModel {
   pages: ModelPage[]
-  fonts: number[]
+  fonts: string[]
   //price: number
   pageSize: { width: number; height: number }[]
   pageCount: number
@@ -808,6 +809,46 @@ export default class StageOptionStore {
     })
     return (await promise) as string
   }
+
+  async exportToDesign() : Promise<Design>{
+    const _export: StageModel = {
+      pages: [],
+      fonts: [],
+      pageSize: [],
+      pageCount: 0
+    }
+    _export.pageCount = this._state.pages.length
+    this._state.pages.forEach((item) => {
+      _export.pages.push({
+        docWidth: item.docWidth,
+        docHeight: item.docHeight,
+        stage: item.stage.toObject(),
+      })
+      _export.pageSize.push({ width: item.docWidth, height: item.docHeight })
+    })
+
+    if(this._state.pages.length>0){
+      const _firstPage=this._state.pages[0]
+      //this.setShapesToTransformer([])
+      const _tempStage : Stage= _firstPage.stage.clone();
+      _tempStage.scale({
+        x: 1,
+        y: 1
+      });
+     const image : string = _tempStage.toDataURL({ quality: 1 })
+      const _file = convertBase64ToFile(image)
+      const { data } = await fileStore.upload(_file)
+      const fileModel: FileModel[] = data.data
+      this._state.design.image = {
+        file_id: fileModel[0]._id as string,
+        file_name: fileModel[0].name as string,
+        file_storage: fileModel[0].storage as string,
+      }
+    }
+    this._state.design.data=_export
+    return this._state.design as Design
+  }
+
 
   exportToJson(): string {
     /* const _export: Model = {

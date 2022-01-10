@@ -6,9 +6,7 @@
           <Icon :icon="pageInfo?.icon" size="23" />
           <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
         </div>
-        <div>
-          <AButton v-if="userStore.isSuperAdmin()" @click="uploadDesign">بارگذاری طرح</AButton>
-        </div>
+
       </div>
       <Tabs
         :activeTab="8"
@@ -26,7 +24,7 @@
           dir="rtl"
         >
           <div class="mt-5">
-            <ASpin :spinning="designLoading" tip="در حال بارگذاری طرح ها">
+            <ASpin :spinning="designLoading" tip="در حال دریافت طرح ها">
               <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
                 <RegisterDesignItem
                   v-for="(item, index) in designStore.rows"
@@ -43,9 +41,10 @@
         <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
           <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
             <div class="mt-5">
-              <div class="overflow-scroll" style="max-height: calc(100vh - 510px)">
+              <div class="overflow-scroll" style="max-height: calc(100vh - 550px)">
+
                 <RegisterDesignItem
-                  v-for="(item, index) in designStore.uploadList"
+                  v-for="(item, index) in designStore.uploadList.slice(designStore.state.page * designStore.state.limit,designStore.state.limit)"
                   :key="index"
                   :item="item"
                   @changeStatus="showChangeStatus"
@@ -69,6 +68,9 @@
                   کردید گزینه بارگذاری طرح را انتخاب کنید
                 </p>
               </AUploadDragger>
+              <div class="text-center mt-3">
+                <AButton :disabled="designStore.uploadList.length==0" v-if="userStore.isSuperAdmin()" @click="uploadDesign">بارگذاری طرح</AButton>
+              </div>
             </div>
           </ASpin>
         </a-tab-pane>
@@ -320,6 +322,7 @@
   }
 
   async function changeTab(activeKey: number) {
+    console.log("this is activ key",activeKey)
     try {
       //activeTab.value = activeKey
       designLoading.value = true
@@ -367,6 +370,7 @@
 
   async function uploadDesign() {
     try {
+      spinning.value=true
       await designStore.uploadDesign()
       await designStore.getDesign()
       message.success('اطلاعات با موفقیت بارگذاری شد')
@@ -374,6 +378,7 @@
       message.error('شناسه فایل تکراری است ')
       console.log(e)
     } finally {
+      spinning.value=false
     }
   }
 
@@ -397,12 +402,15 @@
 
   async function changeStatus() {
     try {
+      designLoading.value=true
       await designStore.updateDesign(currentDesign.value as Design)
       showModalStatus.value = false
+      await designStore.getDesign()
       message.success('اطلاعات با موفقیت ویرایش شد')
     } catch (e) {
       console.log(e)
     } finally {
+      designLoading.value=false
     }
   }
 

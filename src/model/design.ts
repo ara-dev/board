@@ -77,6 +77,8 @@ export default class DesignStore {
     //this._rows.value.push(design)
     console.log(design)
     this._uploadList.value.push(design)
+    //this.page=
+    this._state.total=this._uploadList.value.length
   }
 
   async getDesign() {

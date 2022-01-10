@@ -89,7 +89,7 @@
               تعیین وضعیت طرح
             </AButton>
             <AButton
-              v-if="userStore.isDesigner() && props.item.status != 8"
+              v-if="showEditDesignButton"
               size="large"
               type="primary"
               @click="designEdit"
@@ -120,13 +120,17 @@
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
   import { userStore } from '../../model/user'
-  import { toRaw, unref } from 'vue'
+  import { toRaw, unref , computed } from 'vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
   interface Props {
     item: Design
   }
+
+  const showEditDesignButton=computed(()=>{
+    return  userStore.isDesigner() && [3,4,5].includes(props.item.status)
+  })
 
   const props = withDefaults(defineProps<Props>(), {})
 
@@ -161,11 +165,9 @@
 
   async function selectForEdit() {
     try {
-      //props.item.owners.push(userStore.state._id)
-      //props.item.status = 2
       const design = Object.assign({}, unref(toRaw(props.item)))
       design.status = 2
-      //return
+      design.owners.push(userStore.state._id)
       await designStore.updateDesign(design)
       await designStore.getDesign()
       message.success('طرح انتخاب شد و در وضعیت انتظار تایید مدیر قرار گرفت')

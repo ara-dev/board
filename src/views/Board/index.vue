@@ -130,6 +130,7 @@
 <script lang="ts" setup>
   import TextOptions from '../../components/Option/TextOptions.vue'
   import { uiStore, stageStore } from '../../core'
+  import { designStore } from "../../model/design";
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
   import { useDesign } from '../../utils/useDesign'
@@ -137,6 +138,7 @@
   import ShapeStyle from '../../components/Style/ShapeStyle.vue'
   import TextStyle from '../../components/Style/TextStyle.vue'
   import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
+  import {message} from "ant-design-vue";
 
   const { prefixCls } = useDesign('board')
 
@@ -144,27 +146,22 @@
     return false
   }
 
-  function save() {
-    const data = stageStore.exportToJson()
+  async function save() {
+    try{
+      const design= await stageStore.exportToDesign()
+      //console.log("sadasdsadasd",des)
+      await designStore.updateDesign(design)
+      message.success('تغییرات با موفقیت ذخیره شد')
+    }catch (e) {
+      console.log(e)
+    }finally {
+
+    }
+
+    //const data = stageStore.exportToJson()
     //console.log(data)
-
-    // Get the data from each element on the form.
-    /*const name = document.getElementById('txtName');
-    const age = document.getElementById('txtAge');
-    const email = document.getElementById('txtEmail');
-    const country = document.getElementById('selCountry');
-    const msg = document.getElementById('msg');*/
-
-    // This variable stores all the data.
-    /* let data =
-        '\r Name: ' + name.value + ' \r\n ' +
-        'Age: ' +age.value + ' \r\n ' +
-        'Email: ' + email.value + ' \r\n ' +
-        'Country: ' + country.value + ' \r\n ' +
-        'Message: ' + msg.value;*/
-
     // Convert the text to BLOB.
-    const textToBLOB = new Blob([data], { type: 'text/plain' })
+   /* const textToBLOB = new Blob([data], { type: 'text/plain' })
     const sFileName = 'formData.json' // The file to save the data.
     let newLink = document.createElement('a')
     newLink.download = sFileName
@@ -175,7 +172,7 @@
       newLink.style.display = 'none'
       document.body.appendChild(newLink)
     }
-    newLink.click()
+    newLink.click()*/
   }
 
   function handleChangeSvg({ file, fileList }) {
