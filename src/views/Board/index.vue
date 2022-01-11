@@ -53,11 +53,11 @@
                 </AUpload>
 
                 <AUpload
+                  v-if="false"
                   :beforeUpload="handleBeforeUpload"
                   :multiple="false"
                   :showUploadList="false"
                   @change="handleChangeJson"
-                  v-if="false"
                 >
                   <AButton class="mt-5"> بارگذاری فایل json </AButton>
                 </AUpload>
@@ -68,7 +68,7 @@
           </Transition>
         </div>
         <div class="price">
-<!--          قیمت کل : 25000-->
+          <!--          قیمت کل : 25000-->
         </div>
       </div>
       <!--      <div class="h-screen relative h-screen board-main">
@@ -130,7 +130,7 @@
 <script lang="ts" setup>
   import TextOptions from '../../components/Option/TextOptions.vue'
   import { uiStore, stageStore } from '../../core'
-  import { designStore } from "../../model/design";
+  import { designStore } from '../../model/design'
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
   import { useDesign } from '../../utils/useDesign'
@@ -138,7 +138,7 @@
   import ShapeStyle from '../../components/Style/ShapeStyle.vue'
   import TextStyle from '../../components/Style/TextStyle.vue'
   import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
-  import {message} from "ant-design-vue";
+  import { message } from 'ant-design-vue'
 
   const { prefixCls } = useDesign('board')
 
@@ -147,21 +147,20 @@
   }
 
   async function save() {
-    try{
-      const design= await stageStore.exportToDesign()
+    try {
+      const design = await stageStore.exportToDesign()
       //console.log("sadasdsadasd",des)
       await designStore.updateDesign(design)
       message.success('تغییرات با موفقیت ذخیره شد')
-    }catch (e) {
+    } catch (e) {
       console.log(e)
-    }finally {
-
+    } finally {
     }
 
     //const data = stageStore.exportToJson()
     //console.log(data)
     // Convert the text to BLOB.
-   /* const textToBLOB = new Blob([data], { type: 'text/plain' })
+    /* const textToBLOB = new Blob([data], { type: 'text/plain' })
     const sFileName = 'formData.json' // The file to save the data.
     let newLink = document.createElement('a')
     newLink.download = sFileName

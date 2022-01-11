@@ -82,6 +82,7 @@
           <div class="2xl:col-span-3 xl:col-span-3">
             <AButton
               v-if="userStore.isSuperAdmin() && props.item.status != 1"
+              class="mb-3"
               size="large"
               type="primary"
               @click="changeStatus()"
@@ -90,19 +91,22 @@
             </AButton>
             <AButton
               v-if="showEditDesignButton"
+              class="mb-3"
               size="large"
               type="primary"
               @click="designEdit"
-              >اصلاح طرح</AButton
             >
+              اصلاح طرح
+            </AButton>
 
             <AButton
-              v-if="userStore.isDesigner() && props.item.status == 8"
+              v-if="(userStore.isDesigner() || userStore.isSuperAdmin()) && props.item.status == 8"
               size="large"
               type="primary"
               @click="selectForEdit"
-              >انتخاب برای فارسی سازی</AButton
             >
+              انتخاب برای فارسی سازی
+            </AButton>
           </div>
         </div>
       </div>
@@ -120,7 +124,7 @@
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
   import { userStore } from '../../model/user'
-  import { toRaw, unref , computed } from 'vue'
+  import { toRaw, unref, computed } from 'vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
 
@@ -128,8 +132,10 @@
     item: Design
   }
 
-  const showEditDesignButton=computed(()=>{
-    return  userStore.isDesigner() && [3,4,5].includes(props.item.status)
+  const showEditDesignButton = computed(() => {
+    return (
+      userStore.isSuperAdmin() || (userStore.isDesigner() && [3, 4, 5].includes(props.item.status))
+    )
   })
 
   const props = withDefaults(defineProps<Props>(), {})

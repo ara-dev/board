@@ -3,7 +3,6 @@ import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 // @ts-ignore
 import { optimize } from 'svgo/lib/svgo'
-import { baseURL } from '../../../themeConfig'
 import { FileModel, fileStore } from '../../model/file'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import './xml'
@@ -53,9 +52,9 @@ let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
 let data = null
-const files: string[]=[];
+const files: string[] = []
 
-export async function ImportSvg(svg: string): Promise<{ data:object,files:string[] }> {
+export async function ImportSvg(svg: string): Promise<{ data: object; files: string[] }> {
   data = JSON.parse(xmlToJson(svgo(svg)))
   let temp: any = {}
 
@@ -69,8 +68,8 @@ export async function ImportSvg(svg: string): Promise<{ data:object,files:string
     if (gItem) temp = Object.assign(temp, gItem)
   }
   //console.log(temp, 'this is temp')
- // console.log(JSON.stringify(temp), 'this is temp json')
-  return {data:temp,files}
+  // console.log(JSON.stringify(temp), 'this is temp json')
+  return { data: temp, files }
   //return JSON.stringify(temp)
 }
 
@@ -423,14 +422,14 @@ async function image(image: SVGXMLElement): Promise<KonvaFormat> {
     if (href.startsWith('data')) {
       const file = convertBase64ToFile(href)
       const { data } = await fileStore.upload(file)
-      console.log("this is upload file",data.data)
+      // console.log("this is upload file",data.data)
       const fileModel: FileModel[] = data.data
       files.push(fileModel[0]._id as string)
       Object.assign(commonAttr.attrs, {
         //href: baseURL + fileModel[0].storage + fileModel[0].name,
-        file_id:fileModel[0]._id,
-        file_name:fileModel[0].name,
-        file_storage:fileModel[0].storage
+        file_id: fileModel[0]._id,
+        file_name: fileModel[0].name,
+        file_storage: fileModel[0].storage,
       })
       //console.log('commonAttr.attrs ====> ', commonAttr.attrs)
       //console.log('data', (data as FileModel).)

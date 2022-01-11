@@ -15,13 +15,21 @@
               <a-spin :spinning="spinning">
                 <AForm ref="formLogin" :model="formState" :rules="rules">
                   <span class="mb-1 block"> نام کاربری</span>
-                  <a-form-item name="mobile">
-                    <AInput v-model:value="formState.mobile" placeholder="نام کاربری" />
-                  </a-form-item>
+                  <AFormItem name="mobile">
+                    <AInput
+                      v-model:value="formState.mobile"
+                      placeholder="نام کاربری"
+                      @keydown.enter="onSubmit"
+                    />
+                  </AFormItem>
                   <span class="mb-1 block">رمز عبور</span>
-                  <a-form-item name="password">
-                    <a-input-password v-model:value="formState.password" placeholder="رمز عبور" />
-                  </a-form-item>
+                  <AFormItem name="password">
+                    <AInputPassword
+                      v-model:value="formState.password"
+                      placeholder="رمز عبور"
+                      @keydown.enter="onSubmit"
+                    />
+                  </AFormItem>
                   <a class="block float-left" href="">رمز عبور را فراموش کردم</a>
                   <br />
                   <AButton
@@ -29,8 +37,8 @@
                     size="large"
                     type="primary"
                     @click="onSubmit"
-                    >ورود به سیستم</AButton
-                  >
+                    >ورود به سیستم
+                  </AButton>
                 </AForm>
               </a-spin>
             </div>
@@ -70,6 +78,7 @@
   const { prefixCls } = useDesign('login')
   const { prefixVar } = useDesign('')
   const spinning = ref<boolean>(false)
+  const isOnSendRequest = ref<boolean>(false)
 
   interface FormLogin {
     mobile: string
@@ -85,12 +94,17 @@
     password: [{ required: true, message: 'رمز عبور را وارد نمایید', trigger: 'change' }],
   }
 
-  const onSubmit = () => {
+  function onSubmit() {
+    if (isOnSendRequest.value) return
+    //console.log('on submit')
+    //document.body.focus()
+    //return
     formLogin.value
       .validate()
       .then(async () => {
         try {
           spinning.value = true
+          isOnSendRequest.value = true
           await userStore.login(formState.mobile, formState.password)
           await router.push({ name: 'profile' })
         } catch (e) {
@@ -100,6 +114,7 @@
           })
         } finally {
           spinning.value = false
+          isOnSendRequest.value = false
         }
       })
       .catch((error: ValidateErrorEntity<FormLogin>) => {

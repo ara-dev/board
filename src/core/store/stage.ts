@@ -13,10 +13,10 @@ import _ from 'lodash'
 import { reactive, readonly, Ref, ref, UnwrapRef } from 'vue'
 import { baseURLApi } from '../../../themeConfig'
 import { Design } from '../../model/design'
-import {convertBase64ToFile, ImportSvg} from './import'
+import { FileModel, fileStore } from '../../model/file'
+import { convertBase64ToFile, ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
-import {FileModel, fileStore} from "../../model/file";
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -810,12 +810,12 @@ export default class StageOptionStore {
     return (await promise) as string
   }
 
-  async exportToDesign() : Promise<Design>{
+  async exportToDesign(): Promise<Design> {
     const _export: StageModel = {
       pages: [],
       fonts: [],
       pageSize: [],
-      pageCount: 0
+      pageCount: 0,
     }
     _export.pageCount = this._state.pages.length
     this._state.pages.forEach((item) => {
@@ -827,15 +827,15 @@ export default class StageOptionStore {
       _export.pageSize.push({ width: item.docWidth, height: item.docHeight })
     })
 
-    if(this._state.pages.length>0){
-      const _firstPage=this._state.pages[0]
+    if (this._state.pages.length > 0) {
+      const _firstPage = this._state.pages[0]
       //this.setShapesToTransformer([])
-      const _tempStage : Stage= _firstPage.stage.clone();
+      const _tempStage: Stage = _firstPage.stage.clone()
       _tempStage.scale({
         x: 1,
-        y: 1
-      });
-     const image : string = _tempStage.toDataURL({ quality: 1 })
+        y: 1,
+      })
+      const image: string = _tempStage.toDataURL({ quality: 1 })
       const _file = convertBase64ToFile(image)
       const { data } = await fileStore.upload(_file)
       const fileModel: FileModel[] = data.data
@@ -845,10 +845,10 @@ export default class StageOptionStore {
         file_storage: fileModel[0].storage as string,
       }
     }
-    this._state.design.data=_export
+    this._state.design.status = 4
+    this._state.design.data = _export
     return this._state.design as Design
   }
-
 
   exportToJson(): string {
     /* const _export: Model = {
@@ -950,7 +950,6 @@ export default class StageOptionStore {
   }
 
   private initStage(page: Page) {
-    //const state = this._state
     const layer = new Layer({
       name: 'layer',
     })

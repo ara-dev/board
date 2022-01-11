@@ -6,10 +6,9 @@
           <Icon :icon="pageInfo?.icon" size="23" />
           <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
         </div>
-
       </div>
       <Tabs
-        :activeTab="8"
+        :activeTab="activeTab"
         :page="designStore.page"
         :pageSize="designStore.state.limit"
         :total="designStore.state.total"
@@ -42,9 +41,11 @@
           <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
             <div class="mt-5">
               <div class="overflow-scroll" style="max-height: calc(100vh - 550px)">
-
                 <RegisterDesignItem
-                  v-for="(item, index) in designStore.uploadList.slice(designStore.state.page * designStore.state.limit,designStore.state.limit)"
+                  v-for="(item, index) in designStore.uploadList.slice(
+                    designStore.state.page * designStore.state.limit,
+                    designStore.state.page * designStore.state.limit + designStore.state.limit,
+                  )"
                   :key="index"
                   :item="item"
                   @changeStatus="showChangeStatus"
@@ -69,7 +70,12 @@
                 </p>
               </AUploadDragger>
               <div class="text-center mt-3">
-                <AButton :disabled="designStore.uploadList.length==0" v-if="userStore.isSuperAdmin()" @click="uploadDesign">بارگذاری طرح</AButton>
+                <AButton
+                  v-if="userStore.isSuperAdmin()"
+                  :disabled="designStore.uploadList.length == 0"
+                  @click="uploadDesign"
+                  >بارگذاری طرح</AButton
+                >
               </div>
             </div>
           </ASpin>
@@ -252,7 +258,7 @@
   import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import { ref, onMounted, toRaw } from 'vue'
+  import { ref, onMounted, toRaw, unref } from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
@@ -272,7 +278,7 @@
   const additional = ref([])
   const spinning = ref<boolean>(false)
   const designLoading = ref<boolean>(false)
-  //const activeTab = ref(8)
+  const activeTab = ref(8)
 
   interface FileItem {
     uid: string
@@ -322,15 +328,22 @@
   }
 
   async function changeTab(activeKey: number) {
-    console.log("this is activ key",activeKey)
+    //console.log("this is activ key",activeKey)
+    //debugger
     try {
-      //activeTab.value = activeKey
+      activeTab.value = activeKey
       designLoading.value = true
-      designStore.filter = {
-        status: activeKey,
+      designStore.page = 1
+      if (activeTab.value == 1) {
+        designStore.total = designStore.uploadList.length
+      } else {
+        designStore.filter = {
+          status: activeKey,
+        }
+        await designStore.getDesign()
       }
-      await designStore.getDesign()
     } catch (e) {
+      console.log(e)
     } finally {
       designLoading.value = false
     }
@@ -346,13 +359,21 @@
   }
 
   async function changePage(page: number, pageSize: number) {
-    designStore.page = page
-    await designStore.getDesign()
+    try {
+      designLoading.value = true
+      designStore.page = page
+      if (activeTab.value != 1) {
+        await designStore.getDesign()
+      }
+    } catch (e) {
+    } finally {
+      designLoading.value = false
+    }
   }
 
-  async function deleteDesign(index: number) {
+  async function deleteDesign(id: string) {
     try {
-      await designStore.deleteDesign(index)
+      await designStore.deleteDesign(id)
       message.success('اطلاعات با موفقیت حذف شد')
     } catch (e) {
       console.log(e)
@@ -370,7 +391,7 @@
 
   async function uploadDesign() {
     try {
-      spinning.value=true
+      spinning.value = true
       await designStore.uploadDesign()
       await designStore.getDesign()
       message.success('اطلاعات با موفقیت بارگذاری شد')
@@ -378,7 +399,7 @@
       message.error('شناسه فایل تکراری است ')
       console.log(e)
     } finally {
-      spinning.value=false
+      spinning.value = false
     }
   }
 
@@ -402,7 +423,7 @@
 
   async function changeStatus() {
     try {
-      designLoading.value=true
+      designLoading.value = true
       await designStore.updateDesign(currentDesign.value as Design)
       showModalStatus.value = false
       await designStore.getDesign()
@@ -410,15 +431,17 @@
     } catch (e) {
       console.log(e)
     } finally {
-      designLoading.value=false
+      designLoading.value = false
     }
   }
 
   function showDefinePrice(item: Design) {
     if (item._id) {
-      currentDesign.value = Object.assign({}, toRaw(item))
+      console.log('item ====> ', item)
+      currentDesign.value = { ...toRaw(item) }
+      Object.assign({}, toRaw(unref(item)))
     } else {
-      currentDesign.value = item
+      //currentDesign.value = item
     }
     showModalPrice.value = true
   }

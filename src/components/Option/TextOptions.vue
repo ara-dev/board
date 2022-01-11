@@ -2,7 +2,18 @@
   <div>
     <p class="text-gray-500 mb-2 mt-3 text-xs font-semibold">فونت</p>
     <!--    @change="changeFont"-->
-    <ASelect v-model:value="stageStore.textOption.fontFamily" class="w-full" @change="changeFont">
+
+    <!--
+    option-filter-prop="children"
+   -->
+
+    <ASelect
+      v-model:value="stageStore.textOption.fontFamily"
+      :filter-option="filterOption"
+      class="w-full"
+      show-search
+      @change="changeFont"
+    >
       <a-select-option v-for="(item, index) in fontsStore.rows" :key="index" :value="item.name">
         {{ item.fa_name }}
       </a-select-option>
@@ -114,7 +125,17 @@
     a: 1,
   }
 
+  /*function filterOption(input: string, option: any) {
+    //debugger
+    return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }*/
+
+  function filterOption(input: string, option: any) {
+    return option.children[0].children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  }
+
   async function changeFont(fontName: string) {
+    //debugger
     const font = fontsStore.rows.find((item) => item.name == fontName)
     if (font) {
       await useInstallFont(font.name, `${baseURLApi}${font.storage}`)

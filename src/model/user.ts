@@ -53,7 +53,7 @@ export default class UserStore {
     })
     localStorage.setItem('token', data.token)
     Object.assign(userStore._state, data)
-    console.log('login data', userStore._state)
+    //console.log('login data', userStore._state)
   }
 
   isAdmin(): boolean {

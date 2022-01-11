@@ -67,16 +67,14 @@
   import { ref, onMounted } from 'vue'
   import { useDesign } from '../../utils/useDesign'
   const { prefixCls } = useDesign('tabs')
-  //const { prefixVar } = useDesign('')
   const showSearchBox = ref(false)
-  //const current = ref(2)
   const activeKey = ref(1)
 
   interface Props {
-    page: number
-    total: number
-    pageSize: number
-    activeTab: number
+    page?: number
+    total?: number
+    pageSize?: number
+    activeTab?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -102,7 +100,6 @@
   onMounted(() => {
     emit('changeTab', props.activeTab)
     activeKey.value = props.activeTab
-    //activeKey.value = '1'
   })
 </script>
 

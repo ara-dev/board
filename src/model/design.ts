@@ -67,6 +67,10 @@ export default class DesignStore {
     this._state.page = value - 1
   }
 
+  set total(value: number) {
+    this._state.total = value
+  }
+
   private _state!: UnwrapNestedRefs<DesignState>
 
   get state() {
@@ -75,10 +79,10 @@ export default class DesignStore {
 
   addDesign(design: Design) {
     //this._rows.value.push(design)
-    console.log(design)
+    //console.log(design)
     this._uploadList.value.push(design)
     //this.page=
-    this._state.total=this._uploadList.value.length
+    this._state.total = this._uploadList.value.length
   }
 
   async getDesign() {
@@ -90,19 +94,17 @@ export default class DesignStore {
   }
 
   async deleteDesign(id: string) {
-    //if (id) {
     const { data } = await axios.delete(`/design/${id}`)
     const index = this._rows.value.findIndex((item) => item._id == id)
     if (index > -1) {
       this._rows.value.splice(index, 1)
     }
-    /*else{
-      this._uploadList.value.splice(index,1)
-    }*/
+    this._state.total = this._rows.value.length
   }
 
   removeFromUploadList(index: number) {
     this._uploadList.value.splice(index, 1)
+    this._state.total = this._uploadList.value.length
   }
 
   async updateDesign(design: Design) {
