@@ -3,7 +3,7 @@ import { Transform } from 'konva/lib/Util'
 import _ from 'lodash'
 // @ts-ignore
 import { optimize } from 'svgo/lib/svgo'
-import { FileModel, fileStore } from '../../model/file'
+import { fileStore } from '../../model/file'
 import { useGenerateUniqueID } from '../../utils/useGenerateUniqueID'
 import './xml'
 interface KonvaFormat {
@@ -52,32 +52,29 @@ let defs: KonvaFormat[] = []
 let gradient: (LinearGradient | RadialGradient)[] = []
 let clip_path: KonvaFormat[] = []
 let data = null
-const files: string[] = []
 
-export async function ImportSvg(svg: string): Promise<{ data: object; files: string[] }> {
+export function ImportSvg(svg: string): Object {
   // console.log('this is svgo', svgo(svg))
   data = JSON.parse(xmlToJson(svgo(svg)))
   let temp: any = {}
-
-  defs = await convertDefsToKonvaFormat(data)
-  clip_path = await convertClipPathToKonvaFormat(data)
-  gradient = convertLinearGradientToKonvaFormat(data)
-  gradient = gradient.concat(convertRadialGradientToKonvaFormat(data))
-
-  for (const item of data.elements) {
-    const gItem = await generateItem(item)
+  defs = converDefsToKonvaFormat(data)
+  clip_path = converClipPathToKonvaFormat(data)
+  gradient = converLinearGradientToKonvaFormat(data)
+  gradient = gradient.concat(converRadialGradientToKonvaFormat(data))
+  data.elements.forEach((item: SVGXMLElement) => {
+    const gItem = generateItem(item)
     if (gItem) temp = Object.assign(temp, gItem)
-  }
-  //console.log(temp, 'this is temp')
-  console.log(JSON.stringify(temp), 'this is temp json')
-  return { data: temp, files }
+  })
+  console.log(temp, 'this is temp')
+  //console.log(JSON.stringify(temp), 'this is temp json')
+  return temp
   //return JSON.stringify(temp)
 }
 
-async function generateItem(item: SVGXMLElement): Promise<KonvaFormat | null> {
+function generateItem(item: SVGXMLElement): KonvaFormat | null {
   switch (item.name) {
     case 'svg':
-      return await svg(item)
+      return svg(item)
     case 'path':
       return path(item)
     case 'circle':
@@ -85,7 +82,7 @@ async function generateItem(item: SVGXMLElement): Promise<KonvaFormat | null> {
     case 'text':
       return text(item)
     case 'g':
-      return await group(item)
+      return group(item)
     case 'line':
       return line(item)
     case 'polyline':
@@ -99,7 +96,7 @@ async function generateItem(item: SVGXMLElement): Promise<KonvaFormat | null> {
     case 'use':
       return use(item)
     case 'image':
-      return await image(item)
+      return image(item)
     default:
       return null
   }
@@ -129,19 +126,19 @@ function findAllElementByName(svgxml: SVGXMLElement, name: string): SVGXMLElemen
   return shape
 }
 
-async function convertDefsToKonvaFormat(svgxml: SVGXMLElement): Promise<KonvaFormat[]> {
+function converDefsToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
   const defs = findAllElementByName(svgxml, 'defs')
   const temp: KonvaFormat[] = []
   defs.forEach((element) => {
-    element.elements?.forEach(async (el) => {
-      const gItem = await generateItem(el)
+    element.elements?.forEach((el) => {
+      const gItem = generateItem(el)
       if (gItem) temp.push(gItem)
     })
   })
   return temp
 }
 
-function convertLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradient[] {
+function converLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradient[] {
   const linerGradinat = findAllElementByName(svgxml, 'linearGradient')
   const temp: LinearGradient[] = []
   linerGradinat.forEach((element) => {
@@ -150,7 +147,7 @@ function convertLinearGradientToKonvaFormat(svgxml: SVGXMLElement): LinearGradie
   return temp
 }
 
-async function svg(svg: SVGXMLElement) {
+function svg(svg: SVGXMLElement) {
   const viewbox = _.get(svg, 'attributes.viewBox', '0 0 300 300').split(' ')
   const width = parseFloat(viewbox[2])
   const height = parseFloat(viewbox[3])
@@ -208,10 +205,10 @@ async function svg(svg: SVGXMLElement) {
   if (svg.elements) {
     item.children = []
     item.children.push(background)
-    for (const element of svg.elements) {
-      const gItem = await generateItem(element)
+    svg.elements?.forEach((element) => {
+      const gItem = generateItem(element)
       if (gItem) item.children?.push(gItem)
-    }
+    })
   }
   layer.children?.push(item)
 
@@ -270,7 +267,6 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
       }
     }
   }
-  console.log('this is shape for clip ', shape)
   return shape
 }
 
@@ -417,24 +413,13 @@ function text(text: SVGXMLElement): KonvaFormat {
   return clipPath(text, commonAttr)
 }
 
-async function image(image: SVGXMLElement): Promise<KonvaFormat> {
+function image(image: SVGXMLElement): KonvaFormat {
   const commonAttr = commonAttributes('Image', 'image', image)
   const href: string = image.attributes['xlink:href']
   if (href) {
     if (href.startsWith('data')) {
-      const file = convertBase64ToFile(href)
-      const { data } = await fileStore.upload(file)
-      // console.log("this is upload file",data.data)
-      const fileModel: FileModel[] = data.data
-      files.push(fileModel[0]._id as string)
-      Object.assign(commonAttr.attrs, {
-        //href: baseURL + fileModel[0].storage + fileModel[0].name,
-        file_id: fileModel[0]._id,
-        file_name: fileModel[0].name,
-        file_storage: fileModel[0].storage,
-      })
-      //console.log('commonAttr.attrs ====> ', commonAttr.attrs)
-      //console.log('data', (data as FileModel).)
+      const file = DataURIToBlob(href)
+      fileStore.upload(file)
       /*try {
       } catch (e) {}*/
       /*const formData = new FormData()
@@ -480,7 +465,7 @@ function polyline(polyline: SVGXMLElement): KonvaFormat {
   return clipPath(polyline, commonAttr)
 }
 
-async function group(group: SVGXMLElement): Promise<KonvaFormat> {
+function group(group: SVGXMLElement): KonvaFormat {
   const item: KonvaFormat = {
     attrs: {
       svgID: _.get(group, 'attributes.id', ''),
@@ -492,10 +477,10 @@ async function group(group: SVGXMLElement): Promise<KonvaFormat> {
   }
   if (group.elements) {
     item.children = []
-    for (const element of group.elements) {
-      const gItem = await generateItem(element)
+    group.elements.forEach((element) => {
+      const gItem = generateItem(element)
       if (gItem) item.children?.push(gItem)
-    }
+    })
   }
   return clipPath(group, item)
   //return item
@@ -541,7 +526,7 @@ function linearGradient(linear_gradient: SVGXMLElement): LinearGradient {
   return linearGradient
 }
 
-function convertRadialGradientToKonvaFormat(svgxml: SVGXMLElement): RadialGradient[] {
+function converRadialGradientToKonvaFormat(svgxml: SVGXMLElement): RadialGradient[] {
   const radial_Gradient = findAllElementByName(svgxml, 'radialGradient')
   const temp: RadialGradient[] = []
   radial_Gradient.forEach((element) => {
@@ -573,20 +558,8 @@ function radialGradient(radial_gradient: SVGXMLElement): RadialGradient {
   return radialGradient
 }
 
-async function convertClipPathToKonvaFormat(svgxml: SVGXMLElement): Promise<KonvaFormat[]> {
+function converClipPathToKonvaFormat(svgxml: SVGXMLElement): KonvaFormat[] {
   const clip = findAllElementByName(svgxml, 'clipPath')
-  const temp: KonvaFormat[] = []
-  clip.forEach((element) => {
-    element.elements?.forEach(async (el) => {
-      const item = await generateItem(el)
-      if (item) {
-        item.attrs.svgID = _.get(element, 'attributes.id', '')
-        temp.push(item)
-      }
-    })
-  })
-  return temp
-  /* const clip = findAllElementByName(svgxml, 'clipPath')
   const temp: KonvaFormat[] = []
   clip.forEach((element) => {
     element.elements?.forEach((el) => {
@@ -597,7 +570,7 @@ async function convertClipPathToKonvaFormat(svgxml: SVGXMLElement): Promise<Konv
       }
     })
   })
-  return temp*/
+  return temp
 }
 
 function use(use: SVGXMLElement): KonvaFormat {
@@ -762,16 +735,6 @@ function xmlToJson(xml = '') {
   return xml2json(xml)
 }
 
-export function convertBase64ToFile(dataURI: string): Blob {
-  const splitDataURI = dataURI.split(',')
-  const byteString =
-    splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
-  const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
-  const ia = new Uint8Array(byteString.length)
-  for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
-  return new Blob([ia], { type: mimeString })
-}
-
 /*function deltaTransformPoint(matrix, point) {
   const dx = point.x * matrix.a + point.y * matrix.c + 0
   const dy = point.x * matrix.b + point.y * matrix.d + 0
@@ -805,3 +768,14 @@ function decomposeMatrix2(matrix: string) {
     rotation: skewX, // rotation is the same as skew x
   }
 }*/
+
+function DataURIToBlob(dataURI: string): Blob {
+  //debugger
+  const splitDataURI = dataURI.split(',')
+  const byteString =
+    splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+  const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+  const ia = new Uint8Array(byteString.length)
+  for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
+  return new Blob([ia], { type: mimeString })
+}

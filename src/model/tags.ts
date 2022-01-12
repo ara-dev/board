@@ -44,8 +44,9 @@ export default class TagsStore {
     this._rows.value = data.data as Tag[]
   }
 
-  /*async getTagsByID(ids: string[]): Promise<Tag[]> {
-    const notfound: string[] = []
+  getTagsByID(ids: string[]): Tag[] {
+    return this._rows.value.filter((tag) => ids.includes(tag._id))
+    /* const notfound: string[] = []
     const result: Tag[] = []
     debugger
     ids.forEach((id) => {
@@ -59,8 +60,8 @@ export default class TagsStore {
       this._state.push(...data.data)
       result.push(...data.data)
     }
-    return result
-  }*/
+    return result*/
+  }
 
   private _init() {
     this._state = {

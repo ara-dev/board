@@ -105,16 +105,17 @@
           <div v-if="currentDesign.title && currentDesign.title.length > 0" class="text-gray-300">
             {{ currentDesign.title[0] }}
           </div>
-          <div
-            v-if="currentDesign.title && currentDesign.title.length > 0"
-            class="text-lg font-bold"
-          >
-            {{ currentDesign.title[0] }}
+          <div v-if="currentDesign.code" class="text-lg font-bold">
+            {{ currentDesign.code }}
           </div>
-          <div class="mt-3">
-            <ATag>عاشقانه</ATag>
-            <ATag>عاشقانه</ATag>
-            <ATag>عاشقانه</ATag>
+          <div v-if="currentDesign.tags" class="mt-3">
+            <ATag
+              v-for="(item, index) in tagsStore.getTagsByID(currentDesign.tags)"
+              :key="index"
+              :color="item.color"
+            >
+              {{ item.title }}
+            </ATag>
           </div>
         </div>
       </div>
@@ -218,13 +219,14 @@
             {{ currentDesign.title[0] }}
           </div>
           <div class="text-lg font-bold">{{ currentDesign.code }}</div>
-          <div class="mt-3">
-            <!--            <ATag v-for="item in tagsStore.getTagsByID(currentDesign.tags)" color="#f50">
-              {{ item.title }}</ATag
-            >-->
-            <ATag>عاشقانه</ATag>
-            <ATag>عاشقانه</ATag>
-            <ATag>عاشقانه</ATag>
+          <div v-if="currentDesign.tags" class="mt-3">
+            <ATag
+              v-for="(item, index) in tagsStore.getTagsByID(currentDesign.tags)"
+              :key="index"
+              :color="item.color"
+            >
+              {{ item.title }}
+            </ATag>
           </div>
         </div>
       </div>
@@ -258,7 +260,7 @@
   import { status } from '../../../components/Register-Design/status'
   import { usePageInfo } from '../../../utils/usePageInfo'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import { ref, onMounted, toRaw, unref } from 'vue'
+  import { ref, onMounted, toRaw } from 'vue'
   import { Design, designStore } from '../../../model/design'
   import { tagsStore } from '../../../model/tags'
   import { userStore } from '../../../model/user'
@@ -373,11 +375,13 @@
 
   async function deleteDesign(id: string) {
     try {
+      designLoading.value = true
       await designStore.deleteDesign(id)
       message.success('اطلاعات با موفقیت حذف شد')
     } catch (e) {
       console.log(e)
     } finally {
+      designLoading.value = false
     }
   }
 
@@ -436,12 +440,16 @@
   }
 
   function showDefinePrice(item: Design) {
+    //console.log('item ====> ', { ...toRaw(unref(item)) })
+    //console.log('item ====> ', JSON.parse(JSON.stringify(item)))
+    //currentDesign.value = JSON.parse(JSON.stringify(item))
+    //Object.assign(currentDesign, item)
+    //debugger
     if (item._id) {
-      console.log('item ====> ', item)
-      currentDesign.value = { ...toRaw(item) }
-      Object.assign({}, toRaw(unref(item)))
+      currentDesign.value = JSON.parse(JSON.stringify(item))
+      // Object.assign({}, toRaw(unref(item)))
     } else {
-      //currentDesign.value = item
+      currentDesign.value = item
     }
     showModalPrice.value = true
   }

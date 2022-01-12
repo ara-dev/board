@@ -22,7 +22,7 @@ const routes = [
       {
         path: '/profile',
         name: 'profile',
-        redirect: '/profile/dashboard',
+        redirect: '/profile/register-design',
         component: () => import('./views/Profile/index.vue'),
         meta: {},
         children: [

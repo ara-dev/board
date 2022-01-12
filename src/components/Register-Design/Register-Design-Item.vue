@@ -8,9 +8,9 @@
           height="90px"
           width="100%"
         />
-        <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
-          <span>{{ props.item.title[0] }}</span>
-        </div>
+        <span class="text-center block">{{ props.item.title[0] }}</span>
+        <!--        <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
+        </div>-->
       </div>
       <div class="col-span-10">
         <div class="flex justify-between items-baseline">
@@ -25,6 +25,7 @@
               <AInput
                 v-model:value="props.item.code"
                 :disabled="props.item.status != 1"
+                class="en-font"
                 placeholder="شماره شناسایی"
                 size="large"
               />
@@ -34,9 +35,15 @@
                   <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
                 </div>
               </AButton>
-              <AButton v-if="userStore.isSuperAdmin()" class="mr-5" ghost type="primary">
+              <AButton
+                v-if="userStore.isSuperAdmin()"
+                class="mr-5"
+                ghost
+                type="primary"
+                @click="definePrice"
+              >
                 <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
-                <span class="align-top" @click="definePrice">
+                <span class="align-top">
                   {{
                     props.item.price && props.item.price.edit
                       ? usePrice(props.item.price.edit)
@@ -97,6 +104,15 @@
               @click="designEdit"
             >
               اصلاح طرح
+            </AButton>
+            <AButton
+              v-if="showEditDesignButton && props.item.status != 4"
+              class="mb-3 mr-3"
+              size="large"
+              type="primary"
+              @click="editEnd"
+            >
+              اتمام کار
             </AButton>
 
             <AButton
@@ -169,6 +185,18 @@
     }
   }
 
+  async function editEnd() {
+    try {
+      const design = Object.assign({}, unref(toRaw(props.item)))
+      design.status = 4
+      await designStore.updateDesign(design)
+      await designStore.getDesign()
+      message.success('طرح در حالت کار شده قرار گرفت')
+    } catch (e) {
+    } finally {
+    }
+  }
+
   async function selectForEdit() {
     try {
       const design = Object.assign({}, unref(toRaw(props.item)))
@@ -184,6 +212,7 @@
 
   function designEdit() {
     stageStore.setDesign(props.item)
+    console.log(JSON.stringify(props.item.data), '5555555555555555555555')
     router.push({ name: 'board' })
   }
 </script>

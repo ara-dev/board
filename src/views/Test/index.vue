@@ -6,17 +6,23 @@
   <a-button type="primary" @click="openNotification">Open the notification box</a-button>
 -->
   <div dir="ltr">
-    <Tab>
+    <!--    <Tab>
       <a-tab-pane key="3" tab="Tab 3">Content of Tab Pane 3</a-tab-pane>
       <a-tab-pane key="2" force-render tab="Tab 2">Content of Tab Pane 2</a-tab-pane>
       <a-tab-pane key="1" tab="Tab 1">Content of Tab Pane 1</a-tab-pane>
-    </Tab>
+    </Tab>-->
   </div>
 </template>
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import Tab from './tab.vue'
+  //import { userStore } from '../../model/user'
+
+  //const temp = ref(false)
+
+  /* function test() {
+    temp.value = !temp.value
+  }*/
 
   //import 'ant-design-vue/lib/notification/style/css'
 

@@ -577,6 +577,12 @@ export default class StageOptionStore {
   }
 
   async convertSvgToDesignModel(svg: string): Promise<Design> {
+    const _model: StageModel = {
+      fonts: [],
+      pageSize: [],
+      pages: [],
+      pageCount: 1,
+    }
     const design: Design = {
       title: [''],
       code: '',
@@ -584,7 +590,7 @@ export default class StageOptionStore {
       owners: [],
       tags: [],
       type: 1,
-      data: {},
+      data: _model,
       files: [],
       options: {},
       status: 1,
@@ -592,12 +598,6 @@ export default class StageOptionStore {
       show: true,
     }
 
-    const _model: StageModel = {
-      fonts: [],
-      pageSize: [],
-      pages: [],
-      pageCount: 1,
-    }
     const stage: { data: object; files: string[] } = await ImportSvg(svg)
     _model.pages.push({
       stage: stage.data,
@@ -609,7 +609,7 @@ export default class StageOptionStore {
       height: _.get(stage.data, 'attrs.docHeight', 0),
     })
 
-    design.data = _model
+    //design.data = _model
     design.files = stage.files
 
     return design
@@ -681,15 +681,16 @@ export default class StageOptionStore {
       const children: Group[] = stage.find((node: any) => {
         return node.name().startsWith('element_group_clip') as Group
       })
-      //console.log('this is children', children)
+      console.log('this is children group clip', children)
       children.forEach((item) => {
         const shape = item.attrs.attr_clip
 
         if (shape.className == 'circle') {
-          //console.log('this is clip path circle')
+          console.log('this is clip path circle')
         }
 
         if (shape.className == 'Rect') {
+          console.log('this is clip path rect')
           item.clipFunc(function (ctx) {
             ctx.rect(
               _.get(shape, 'attrs.x', 0),
@@ -701,6 +702,7 @@ export default class StageOptionStore {
         }
 
         if (shape.className == 'Line') {
+          console.log('this is clip line')
           item.clipFunc(function (ctx) {
             const points = _.get(shape, 'attrs.points', [])
             ctx.beginPath()
@@ -711,7 +713,7 @@ export default class StageOptionStore {
           })
         }
 
-        /* if (shape.className == 'Path') {
+        if (shape.className == 'Path') {
           item.clipFunc(function (ctx) {
             //method 1
             const path = new Konva.Path({
@@ -725,16 +727,17 @@ export default class StageOptionStore {
             //path2D.rect(70, 70, 120, 80);
             //ctx._context.clip(path2D)
           })
-        }*/
+        }
 
-        if (shape.className == 'Path') {
-          //console.log('this is shape for clip path', shape)
+        /*if (shape.className == 'Path') {
+          debugger
+          console.log('this is shape for clip path', shape)
           item.clipFunc(function (ctx) {
             //method 1
-            /* const path = new Konva.Path({
+            /!* const path = new Konva.Path({
               data: shape.attrs.data,
             })
-            path.sceneFunc().call(path, ctx, path)*/
+            path.sceneFunc().call(path, ctx, path)*!/
             //method 2
             ctx.rect(0, 0, page.docWidth, page.docHeight)
             const path2D = new Path2D(shape.attrs.data)
@@ -742,7 +745,7 @@ export default class StageOptionStore {
             // @ts-ignore
             ctx._context.clip(path2D)
           })
-        }
+        }*/
       })
       //end render clip
 
@@ -811,6 +814,7 @@ export default class StageOptionStore {
   }
 
   async exportToDesign(): Promise<Design> {
+    const design: Design = this._state.design as Design
     const _export: StageModel = {
       pages: [],
       fonts: [],
@@ -839,14 +843,14 @@ export default class StageOptionStore {
       const _file = convertBase64ToFile(image)
       const { data } = await fileStore.upload(_file)
       const fileModel: FileModel[] = data.data
-      this._state.design.image = {
+      design.image = {
         file_id: fileModel[0]._id as string,
         file_name: fileModel[0].name as string,
         file_storage: fileModel[0].storage as string,
       }
     }
-    this._state.design.status = 4
-    this._state.design.data = _export
+    //this._state.design.status = 4
+    design.data = _export
     return this._state.design as Design
   }
 

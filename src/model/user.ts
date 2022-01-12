@@ -28,10 +28,6 @@ export default class UserStore {
     this._roleMap.set('designer', 'طراح')
   }
 
-  /*get roleMap() {
-    return this._roleMap
-  }*/
-
   private _state!: UnwrapNestedRefs<User>
 
   get state(): DeepReadonly<User> {

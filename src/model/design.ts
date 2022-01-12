@@ -88,6 +88,7 @@ export default class DesignStore {
   async getDesign() {
     const { data } = await axios.post('/design/table', this._state)
     this._rows.value = data.data.rows
+    //console.log(JSON.stringify(this._rows.value[0].data))
     this._state.total = data.data.total
     this._state.page = data.data.page
     this._state.limit = data.data.limit
