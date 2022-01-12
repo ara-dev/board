@@ -713,7 +713,7 @@ export default class StageOptionStore {
           })
         }
 
-        if (shape.className == 'Path') {
+        /*if (shape.className == 'Path') {
           item.clipFunc(function (ctx) {
             //method 1
             const path = new Konva.Path({
@@ -727,17 +727,17 @@ export default class StageOptionStore {
             //path2D.rect(70, 70, 120, 80);
             //ctx._context.clip(path2D)
           })
-        }
+        }*/
 
-        /*if (shape.className == 'Path') {
+        if (shape.className == 'Path') {
           debugger
           console.log('this is shape for clip path', shape)
           item.clipFunc(function (ctx) {
             //method 1
-            /!* const path = new Konva.Path({
+            /* const path = new Konva.Path({
               data: shape.attrs.data,
             })
-            path.sceneFunc().call(path, ctx, path)*!/
+            path.sceneFunc().call(path, ctx, path)*/
             //method 2
             ctx.rect(0, 0, page.docWidth, page.docHeight)
             const path2D = new Path2D(shape.attrs.data)
@@ -745,11 +745,11 @@ export default class StageOptionStore {
             // @ts-ignore
             ctx._context.clip(path2D)
           })
-        }*/
+        }
       })
       //end render clip
 
-      const groups: Group[] = stage.find((node: any) => {
+      /*const groups: Group[] = stage.find((node: any) => {
         return node.name().startsWith('element_group')
       })
 
@@ -759,7 +759,7 @@ export default class StageOptionStore {
             child.draggable(false)
           }
         })
-      })
+      })*/
       //console.log('this is groups', groups)
     })
     this._state.currentPage = 1
