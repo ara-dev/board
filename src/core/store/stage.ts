@@ -657,7 +657,7 @@ export default class StageOptionStore {
       this.setSnapping(stage, layer, group)
       this.setContextMenu(stage, group)
       this.setEditableText(stage)
-      //this.hoyKey()
+      this.hoyKey(stage)
       //load images
       const images = stage.find((node: any) => {
         //console.log('node.name() ====> ', node.name())
@@ -681,7 +681,7 @@ export default class StageOptionStore {
       const children: Group[] = stage.find((node: any) => {
         return node.name().startsWith('element_group_clip') as Group
       })
-      console.log('this is children group clip', children)
+      //console.log('this is children group clip', children)
       children.forEach((item) => {
         const shape = item.attrs.attr_clip
 
@@ -690,7 +690,7 @@ export default class StageOptionStore {
         }
 
         if (shape.className == 'Rect') {
-          console.log('this is clip path rect')
+          // console.log('this is clip path rect')
           item.clipFunc(function (ctx) {
             ctx.rect(
               _.get(shape, 'attrs.x', 0),
@@ -730,8 +730,8 @@ export default class StageOptionStore {
         }*/
 
         if (shape.className == 'Path') {
-          debugger
-          console.log('this is shape for clip path', shape)
+          //debugger
+          // console.log('this is shape for clip path', shape)
           item.clipFunc(function (ctx) {
             //method 1
             /* const path = new Konva.Path({
@@ -1547,7 +1547,7 @@ export default class StageOptionStore {
 
     // clicks should select/deselect shapes or //click tap
     stage.on('mousedown touchstart', (e) => {
-      //console.log('this is target', e.target)
+      console.log('this is target', e.target)
       // if we are selecting with rect, do nothing
       if (selectionRectangle.visible()) {
         return
@@ -1935,9 +1935,14 @@ export default class StageOptionStore {
     })
   }
 
-  private hoyKey() {
-    const page = this.getCurrentPage()
-    const container = page.stage.container()
+  private hoyKey(stage?: Stage) {
+    let container = null
+    if (stage) {
+      container = stage.container()
+    } else {
+      const page = this.getCurrentPage()
+      container = page.stage.container()
+    }
     const delta = 4
     container.tabIndex = 1
     container.focus()

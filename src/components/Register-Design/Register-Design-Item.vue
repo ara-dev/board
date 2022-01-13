@@ -150,7 +150,8 @@
 
   const showEditDesignButton = computed(() => {
     return (
-      userStore.isSuperAdmin() || (userStore.isDesigner() && [3, 4, 5].includes(props.item.status))
+      (userStore.isSuperAdmin() && props.item.status != 1) ||
+      (userStore.isDesigner() && [3, 4, 5].includes(props.item.status))
     )
   })
 
@@ -212,7 +213,7 @@
 
   function designEdit() {
     stageStore.setDesign(props.item)
-    console.log(JSON.stringify(props.item.data), '5555555555555555555555')
+    //console.log(JSON.stringify(props.item.data), '5555555555555555555555')
     router.push({ name: 'board' })
   }
 </script>

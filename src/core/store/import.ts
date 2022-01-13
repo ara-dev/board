@@ -69,7 +69,7 @@ export async function ImportSvg(svg: string): Promise<{ data: object; files: str
     if (gItem) temp = Object.assign(temp, gItem)
   }
   //console.log(temp, 'this is temp')
-  console.log(JSON.stringify(temp), 'this is temp json')
+  //console.log(JSON.stringify(temp), 'this is temp json')
   return { data: temp, files }
   //return JSON.stringify(temp)
 }
@@ -270,7 +270,7 @@ function clipPath(element: SVGXMLElement, shape: KonvaFormat): KonvaFormat {
       }
     }
   }
-  console.log('this is shape for clip ', shape)
+  //console.log('this is shape for clip ', shape)
   return shape
 }
 
