@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="flex items-center gap-2">
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
       <template #title>حذف</template>
       <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')"
-        class="mr-2"
         @click="stageStore.applyDelete()"
       >
         <Icon icon="ion:trash-outline" size="23" />
@@ -15,7 +14,6 @@
       <template #title>کپی</template>
       <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')"
-        class="mr-2"
         @click="stageStore.applyDuplicate()"
       >
         <Icon icon="ion:copy-outline" size="23" />
@@ -28,7 +26,6 @@
         !uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
       "
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')"
-      class="mr-2"
     >
       <Icon icon="ion:contrast-outline" size="23" />
     </AButton>
@@ -96,10 +93,7 @@
 
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
       <template #title>برش</template>
-      <AButton
-        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')"
-        class="mr-2"
-      >
+      <AButton :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')">
         <Icon icon="ion:crop-outline" size="23"
       /></AButton>
     </ATooltip>
@@ -110,7 +104,6 @@
       </template>
       <AButton
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')"
-        class="mr-2"
         @click="stageStore.applyToggleLockUnlock()"
       >
         <div v-if="stageStore.layerLock">
@@ -127,7 +120,7 @@
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')"
       placement="bottomCenter"
     >
-      <AButton class="mr-2">
+      <AButton>
         <Icon icon="carbon:rotate" size="23" />
         <span class="align-top mr-1">چرخش</span>
       </AButton>
@@ -154,7 +147,7 @@
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
                   </AMenuItem>
                   <AMenuItem key="rotate_minus_180" @click="stageStore.applyRotateDegrees(180)">
-                     چرخش
+                    چرخش
                     <span> &#176; 180</span>
                     -
                   </AMenuItem>
@@ -186,7 +179,7 @@
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')"
       placement="bottomCenter"
     >
-      <AButton class="mr-2">
+      <AButton>
         <Icon icon="ion:layers-outline" size="23" />
         <span class="align-top mr-1">موقعیت</span>
       </AButton>

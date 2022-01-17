@@ -1,87 +1,79 @@
 <template>
-  <div class="h-full">
-    <div class="h-full">
-      <div class="flex mb-3 justify-between">
-        <div>
-          <Icon :icon="pageInfo?.icon" size="23" />
-          <span class="mr-2 font-bold">{{ pageInfo?.title }}</span>
-        </div>
-      </div>
-      <Tabs
-        :activeTab="activeTab"
-        :page="designStore.page"
-        :pageSize="designStore.state.limit"
-        :total="designStore.state.total"
-        @changePage="changePage"
-        @changeTab="changeTab"
+  <div class="p-2 p-4">
+    <Tabs
+      :activeTab="activeTab"
+      :page="designStore.page"
+      :pageSize="designStore.state.limit"
+      :total="designStore.state.total"
+      @changePage="changePage"
+      @changeTab="changeTab"
+    >
+      <a-tab-pane
+        v-for="item in status.filter((_item) => _item.show).reverse()"
+        :key="item.id"
+        :tab="item.title"
+        class="px-2"
+        dir="rtl"
       >
-        <a-tab-pane
-          v-for="item in status.filter((_item) => _item.show).reverse()"
-          :key="item.id"
-          :tab="item.title"
-          class="p-2"
-          dir="rtl"
-        >
-          <div class="mt-5">
-            <ASpin :spinning="designLoading" tip="در حال دریافت طرح ها">
-              <div class="overflow-scroll" style="max-height: calc(100vh - 360px)">
-                <RegisterDesignItem
-                  v-for="(item, index) in designStore.rows"
-                  :key="index"
-                  :item="item"
-                  @changeStatus="showChangeStatus"
-                  @definePrice="showDefinePrice"
-                  @deleteDesign="deleteDesign(item._id)"
-                />
-              </div>
-            </ASpin>
-          </div>
-        </a-tab-pane>
-        <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
-          <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
-            <div class="mt-5">
-              <div class="overflow-scroll" style="max-height: calc(100vh - 550px)">
-                <RegisterDesignItem
-                  v-for="(item, index) in designStore.uploadList.slice(
-                    designStore.state.page * designStore.state.limit,
-                    designStore.state.page * designStore.state.limit + designStore.state.limit,
-                  )"
-                  :key="index"
-                  :item="item"
-                  @changeStatus="showChangeStatus"
-                  @definePrice="showDefinePrice"
-                  @deleteDesign="designStore.removeFromUploadList(index)"
-                />
-              </div>
-              <AUploadDragger
-                :beforeUpload="handleBeforeUpload"
-                :multiple="true"
-                :showUploadList="false"
-                accept=".svg"
-                action=""
-                name="file"
-                @change="handleChangeSvg"
-              >
-                <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
-                <p class="ant-upload-text">افزودن طرح جدید </p>
-                <p class="ant-upload-hint">
-                  طرح خود را با پسوند svg انتخاب کنید و پس از اینکه شماره شناسایی و دسته آن را مشخص
-                  کردید گزینه بارگذاری طرح را انتخاب کنید
-                </p>
-              </AUploadDragger>
-              <div class="text-center mt-3">
-                <AButton
-                  v-if="userStore.isSuperAdmin()"
-                  :disabled="designStore.uploadList.length == 0"
-                  @click="uploadDesign"
-                  >بارگذاری طرح</AButton
-                >
-              </div>
+        <div>
+          <ASpin :spinning="designLoading" tip="در حال دریافت طرح ها">
+            <div class="overflow-scroll flex flex-col gap-2">
+              <RegisterDesignItem
+                v-for="(item, index) in designStore.rows"
+                :key="index"
+                :item="item"
+                @changeStatus="showChangeStatus"
+                @definePrice="showDefinePrice"
+                @deleteDesign="deleteDesign(item._id)"
+              />
             </div>
           </ASpin>
-        </a-tab-pane>
-      </Tabs>
-    </div>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
+        <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
+          <div class="mt-5">
+            <div class="overflow-scroll" style="max-height: calc(100vh - 550px)">
+              <RegisterDesignItem
+                v-for="(item, index) in designStore.uploadList.slice(
+                  designStore.state.page * designStore.state.limit,
+                  designStore.state.page * designStore.state.limit + designStore.state.limit,
+                )"
+                :key="index"
+                :item="item"
+                @changeStatus="showChangeStatus"
+                @definePrice="showDefinePrice"
+                @deleteDesign="designStore.removeFromUploadList(index)"
+              />
+            </div>
+            <AUploadDragger
+              :beforeUpload="handleBeforeUpload"
+              :multiple="true"
+              :showUploadList="false"
+              accept=".svg"
+              action=""
+              name="file"
+              @change="handleChangeSvg"
+            >
+              <p class="ant-upload-drag-icon"> <Icon icon="ion:images-outline" /></p>
+              <p class="ant-upload-text">افزودن طرح جدید </p>
+              <p class="ant-upload-hint">
+                طرح خود را با پسوند svg انتخاب کنید و پس از اینکه شماره شناسایی و دسته آن را مشخص
+                کردید گزینه بارگذاری طرح را انتخاب کنید
+              </p>
+            </AUploadDragger>
+            <div class="text-center mt-3">
+              <AButton
+                v-if="userStore.isSuperAdmin()"
+                :disabled="designStore.uploadList.length == 0"
+                @click="uploadDesign"
+                >بارگذاری طرح</AButton
+              >
+            </div>
+          </div>
+        </ASpin>
+      </a-tab-pane>
+    </Tabs>
     <AModal
       :visible="showModalPrice"
       cancelText="بستن"
@@ -258,7 +250,7 @@
 
 <script lang="ts" setup>
   import { status } from '../../../components/Register-Design/status'
-  import { usePageInfo } from '../../../utils/usePageInfo'
+  import { usePageInfo } from '../hook/usePageInfo'
   import { priceList, additionalList } from '../../../components/Register-Design/price'
   import { ref, onMounted, toRaw } from 'vue'
   import { Design, designStore } from '../../../model/design'

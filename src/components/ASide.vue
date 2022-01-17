@@ -25,7 +25,12 @@
   const router = useRouter()
 
   const isProfile = computed<boolean>(() => {
-    return router.currentRoute.value.name != 'board'
+    console.log('router.currentRoute.value.name ===>', router.currentRoute.value)
+    return !(
+      router.currentRoute.value &&
+      router.currentRoute.value.name &&
+      router.currentRoute.value.name.startsWith('board')
+    )
   })
 
   function toggleMenu() {

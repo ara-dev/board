@@ -1,5 +1,7 @@
 <template>
   <div>
+    <span>نوشته</span>
+    <ATextarea v-model:value="currentText" />
     <p class="text-gray-500 mb-2 mt-3 text-xs font-semibold">فونت</p>
     <!--    @change="changeFont"-->
 
@@ -115,6 +117,8 @@
   import Sketch from '../ColorPicker/Solid/Sketch.vue'
   import { baseURLApi } from '../../../themeConfig'
   import { useInstallFont } from '../../utils/useInstallFont'
+  import { computed } from 'vue'
+  import { get } from 'lodash-es'
 
   const colors = {
     hex: '#194d33',
@@ -133,6 +137,22 @@
   function filterOption(input: string, option: any) {
     return option.children[0].children.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
+
+  const currentText = computed({
+    get() {
+      const a = get(stageStore.state, 'selectedElements.0')
+      if (a instanceof Konva.Text) {
+        return a.text()
+      }
+      return
+    },
+    set(value) {
+      const a = get(stageStore._state, 'selectedElements.0')
+      if (a instanceof Konva.Text) {
+        return a.text(value)
+      }
+    },
+  })
 
   async function changeFont(fontName: string) {
     //debugger

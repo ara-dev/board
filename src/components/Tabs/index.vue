@@ -1,6 +1,6 @@
 <template>
   <!--  , 'h-full'-->
-  <ACard :class="[`${prefixCls}-main-card`]">
+  <ACard :class="[`${prefixCls}-main-card`]" class="flex flex-col">
     <div :class="[`${prefixCls}-search-icon`]">
       <AButton shape="circle" type="text" @click="showSearchBox = true">
         <template #icon>
@@ -9,7 +9,7 @@
       </AButton>
     </div>
 
-    <div>
+    <div class="flex-1">
       <div>
         <div style="direction: ltr; position: relative; overflow: hidden">
           <div
@@ -45,9 +45,12 @@
         </div>
       </div>
       <div>
-        <ADivider />
-        <div class="flex justify-between pb-4 px-3">
-          <div> تعداد رکورد یافت شده: {{ props.total }} رکورد </div>
+        <ADivider class="!my-0" />
+        <div class="flex justify-between items-center p-2">
+          <span class="text-xs">
+            تعداد رکورد یافت شده:
+            <span class="ant-tag"> {{ props.total }} رکورد</span>
+          </span>
           <div>
             <APagination
               :current="props.page"

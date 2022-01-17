@@ -14,6 +14,7 @@ import { reactive, readonly, Ref, ref, UnwrapRef } from 'vue'
 import { baseURLApi } from '../../../themeConfig'
 import { Design } from '../../model/design'
 import { FileModel, fileStore } from '../../model/file'
+import { getDesignFromId } from '../api/stage'
 import { convertBase64ToFile, ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
@@ -140,6 +141,7 @@ export default class StageOptionStore {
   }
 
   get textOption(): TextOption {
+    console.log('this._state ===>', this._state)
     return this._state.textOption
   }
 
@@ -2059,6 +2061,10 @@ export default class StageOptionStore {
       //console.log('key board', name, code)
       //alert('dsfsdfdsfsd')
     })*/
+  }
+
+  async getDataFromServer(id) {
+    return getDesignFromId(id)
   }
 }
 

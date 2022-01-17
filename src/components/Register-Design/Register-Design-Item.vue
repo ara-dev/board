@@ -1,129 +1,105 @@
 <template>
   <ACard :class="[`${prefixCls}`]">
-    <div class="grid grid-cols-12 gap-4 p-3">
-      <div class="col-span-2">
+    <div class="grid grid-cols-12 gap-2 items-start">
+      <div class="col-span-2 relative img-wrapper">
         <AImage
           :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`"
-          class="rounded object-cover cursor-zoom-in"
-          height="90px"
-          width="100%"
+          class="img-item block"
         />
-        <span class="text-center block">{{ props.item.title[0] }}</span>
+        <span class="img-name en-font">{{ props.item.title[0] }}</span>
         <!--        <div class="text-center text-gray-400 mt-1 absolute bottom-0.5 right-14">
         </div>-->
       </div>
-      <div class="col-span-10">
+      <div class="col-span-10 flex flex-col gap-2">
         <div class="flex justify-between items-baseline">
-          <div>
-            <ACheckbox
-              v-if="userStore.isSuperAdmin()"
-              v-model:checked="props.item.show"
-              @change="update"
-              >نمایش</ACheckbox
-            >
-            <div class="mb-5 inline-flex mr-5 items-center">
-              <AInput
-                v-model:value="props.item.code"
-                :disabled="props.item.status != 1"
-                class="en-font"
-                placeholder="شماره شناسایی"
-                size="large"
-              />
+          <div class="flex gap-2 w-full">
+            <AInput
+              v-model:value="props.item.code"
+              :disabled="props.item.status != 1"
+              class="en-font"
+              style="max-width: 250px"
+              placeholder="شماره شناسایی"
+            />
 
-              <AButton class="mr-5">
-                <div>
-                  <Icon :size="25" color="#A1A1AA" icon="ion:chatbubbles-outline" />
-                </div>
-              </AButton>
-              <AButton
-                v-if="userStore.isSuperAdmin()"
-                class="mr-5"
-                ghost
-                type="primary"
-                @click="definePrice"
-              >
-                <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
-                <span class="align-top">
-                  {{
-                    props.item.price && props.item.price.edit
-                      ? usePrice(props.item.price.edit)
-                      : 'ثبت دستمزد اصلاح'
-                  }}
-                </span>
-                <!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
-                <span v-else class="align-top">{{ usePrice(15000) }}</span>-->
-              </AButton>
-            </div>
-          </div>
-          <div class="flex">
-            <RegisterDesignStatus :sts="props.item.status" />
-            <div v-if="userStore.isSuperAdmin()" class="inline mr-3 cursor-pointer">
-              <AButton type="link" @click="deleteDesign">
+            <AButton
+              :class="{ 'hover-show': !(props.item.price && props.item.price.edit) }"
+              v-if="userStore.isSuperAdmin()"
+              ghost
+              type="primary"
+              @click="definePrice"
+            >
+              <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
+              <span class="align-top">
+                {{
+                  props.item.price && props.item.price.edit
+                    ? usePrice(props.item.price.edit)
+                    : 'ثبت دستمزد اصلاح'
+                }}
+              </span>
+              <!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
+              <span v-else class="align-top">{{ usePrice(15000) }}</span>-->
+            </AButton>
+            <div class="flex-1"></div>
+            <AButton type="link" class="hover-show">
+              <div>
+                <Icon :size="16" color="#A1A1AA" icon="ion:chatbox-ellipses-outline" />
+              </div>
+            </AButton>
+            <div v-if="userStore.isSuperAdmin()" class="cursor-pointer hover-show">
+              <AButton @click="deleteDesign" type="link">
                 <div v-if="props.item.status == 1" class="inline">
-                  <Icon color="red" icon="ion:remove-circle-outline" size="20" />
+                  <Icon color="red" icon="ion:remove-circle-outline" size="16" />
                 </div>
                 <div v-else class="inline">
-                  <Icon color="red" icon="ion:trash-outline" size="18" />
+                  <Icon color="red" icon="ion:trash-outline" size="16" />
                 </div>
               </AButton>
             </div>
+            <RegisterDesignStatus class="!mx-0" :sts="props.item.status" />
           </div>
         </div>
-        <div class="grid grid-cols-12 gap-4">
-          <div class="2xl:col-span-9 xl:col-span-9">
-            <ASelect
-              v-model:value="props.item.tags"
-              :disabled="!userStore.isSuperAdmin()"
-              class="w-full"
-              mode="multiple"
-              notFoundContent="داده ای یافت نشد"
-              placeholder="دسته های طرح"
-              size="large"
-              @change="update"
-            >
-              <a-select-option v-for="item in tagsStore.rows" :key="item._id">
-                {{ item.title }}
-              </a-select-option>
-            </ASelect>
-          </div>
-          <div class="2xl:col-span-3 xl:col-span-3">
-            <AButton
-              v-if="userStore.isSuperAdmin() && props.item.status != 1"
-              class="mb-3"
-              size="large"
-              type="primary"
-              @click="changeStatus()"
-            >
-              تعیین وضعیت طرح
-            </AButton>
-            <AButton
-              v-if="showEditDesignButton"
-              class="mb-3"
-              size="large"
-              type="primary"
-              @click="designEdit"
-            >
-              اصلاح طرح
-            </AButton>
-            <AButton
-              v-if="showEditDesignButton && props.item.status != 4"
-              class="mb-3 mr-3"
-              size="large"
-              type="primary"
-              @click="editEnd"
-            >
-              اتمام کار
-            </AButton>
+        <div>
+          <ASelect
+            v-model:value="props.item.tags"
+            :disabled="!userStore.isSuperAdmin()"
+            class="w-full"
+            mode="multiple"
+            notFoundContent="داده ای یافت نشد"
+            @change="update"
+          >
+            <a-select-option v-for="item in tagsStore.rows" :key="item._id">
+              <span :style="{ color: item.color }">{{ item.title }}</span>
+            </a-select-option>
+            <template #placeholder="data"> {{ data }} </template>
+          </ASelect>
+        </div>
+        <div class="w-full flex items-center gap-2 hover-show">
+          <ACheckbox
+            v-if="userStore.isSuperAdmin()"
+            v-model:checked="props.item.show"
+            @change="update"
+            >نمایش</ACheckbox
+          >
+          <AButton
+            v-if="userStore.isSuperAdmin() && props.item.status != 1"
+            @click="changeStatus()"
+          >
+            تعیین وضعیت طرح
+          </AButton>
+          <AButton v-if="showEditDesignButton" type="primary" @click="designEdit">
+            اصلاح طرح
+          </AButton>
+          <AButton v-if="showEditDesignButton && props.item.status != 4" @click="editEnd">
+            اتمام کار
+          </AButton>
 
-            <AButton
-              v-if="(userStore.isDesigner() || userStore.isSuperAdmin()) && props.item.status == 8"
-              size="large"
-              type="primary"
-              @click="selectForEdit"
-            >
-              انتخاب برای فارسی سازی
-            </AButton>
-          </div>
+          <AButton
+            v-if="(userStore.isDesigner() || userStore.isSuperAdmin()) && props.item.status == 8"
+            @click="selectForEdit"
+          >
+            انتخاب برای فارسی سازی
+          </AButton>
+          <div class="flex-1"></div>
         </div>
       </div>
     </div>
@@ -135,7 +111,6 @@
   import { usePrice } from '../../utils/usePrice'
   import { tagsStore } from '../../model/tags'
   import { Design, designStore } from '../../model/design'
-  import { stageStore } from '../../core'
   import router from '../../router'
   import { baseURLApi } from '../../../themeConfig'
   import { message } from 'ant-design-vue'
@@ -143,7 +118,7 @@
   import { toRaw, unref, computed } from 'vue'
   const { prefixCls } = useDesign('register-design-item')
   const { prefixVar } = useDesign('')
-
+  import tinycolor from 'tinycolor2'
   interface Props {
     item: Design
   }
@@ -169,6 +144,10 @@
 
   function definePrice() {
     emit('definePrice', props.item)
+  }
+
+  function getTextColor(color: string) {
+    return tinycolor(color).isDark() ? 'white' : 'black'
   }
 
   function deleteDesign() {
@@ -212,9 +191,7 @@
   }
 
   function designEdit() {
-    stageStore.setDesign(props.item)
-    //console.log(JSON.stringify(props.item.data), '5555555555555555555555')
-    router.push({ name: 'board' })
+    router.push({ name: 'boardId', params: { id: props.item._id } })
   }
 </script>
 
@@ -222,6 +199,42 @@
   @pre: ~'@{prefix}-register-design-item';
 
   .@{pre}{
-    margin-bottom: 1rem;
+
+    .hover-show{
+      opacity: 0;
+      transition: all 0.3s 0.2s ease-in-out;
+    }
+    &:hover{
+      .hover-show{
+        opacity: 1;
+      }
+    }
+    .img-item{
+      @apply rounded object-cover cursor-zoom-in;
+      aspect-ratio: 1.5;
+    }
+
+    .img-name{
+      @apply text-center block absolute bottom-2 left-2 text-xs px-1 rounded-full;
+      color: rgba(0,0,0, 0.2);
+    }
+
+    .img-wrapper{
+      &:hover {
+        .img-name {
+          color: @white;
+          background-color: @primary-color;
+
+        }
+      }
+      .ant-image{
+        display: block;
+      }
+    }
+
+    .select-option{
+      border-radius: @border-radius-base;
+      @apply px-1;
+    }
   }
 </style>

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../utils/useDesign'
+  import { useDesign } from '../../../utils/useDesign'
 
   const { prefixCls } = useDesign('design')
 

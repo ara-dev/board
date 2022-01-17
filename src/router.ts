@@ -20,6 +20,12 @@ const routes = [
         meta: { transition: 'scale' },
       },
       {
+        path: '/board/:id',
+        name: 'boardId',
+        component: () => import('./views/Board/index.vue'),
+        meta: { transition: 'scale' },
+      },
+      {
         path: '/profile',
         name: 'profile',
         redirect: '/profile/register-design',

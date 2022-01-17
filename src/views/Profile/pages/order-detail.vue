@@ -1,5 +1,5 @@
 <template>
-  <ACard :class="[`${prefixCls}`]" class="h-full">
+  <ACard :class="[`${prefixCls}`]" class="h-full p-4">
     <div class="h-full" style="display: grid; grid-template-columns: auto 400px">
       <div style="display: grid; grid-template-rows: 55px auto">
         <div class="border-b p-3">

@@ -1,6 +1,4 @@
-<template>
-  <img class="inline-block" src="../assets/img/controlp-logo.svg" />
-</template>
+<template> </template>
 
 <script lang="ts" setup></script>
 

@@ -4,6 +4,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
+        "bild": "vite build",
         "serve": "vite preview"
     },
     "dependencies": {
@@ -104,9 +105,10 @@
         "vite-plugin-svg-icons": "^1.0.4",
         "vite-plugin-theme": "^0.8.1",
         "vite-plugin-vue-setup-extend": "^0.1.0",
-        "vite-plugin-windicss": "^1.4.2",
+        "vite-plugin-windicss": "^1.6.2",
         "vue-docgen-cli": "^4.41.2",
         "vue-eslint-parser": "^7.11.0",
-        "vue-tsc": "^0.2.2"
+        "vue-tsc": "^0.2.2",
+        "windicss": "^3.4.2"
     }
 }

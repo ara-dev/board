@@ -5,6 +5,7 @@ import ViteComponents, {
   AntDesignVueResolver,
   VueUseComponentsResolver,
 } from 'vite-plugin-components'
+import WindiCSS from 'vite-plugin-windicss'
 import { initLessVars } from './build/initLessVars'
 
 export default defineConfig({
@@ -43,6 +44,7 @@ export default defineConfig({
             }*/
       ],
     }),
+    WindiCSS(),
     vue(),
   ],
   css: {

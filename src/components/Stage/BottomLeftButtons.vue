@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <a-button-group class="ml-3">
+  <div class="flex items-center gap-2">
+    <a-button-group>
       <AButton type="primary">
         <Icon icon="ion:book-outline" size="23" />
       </AButton>
@@ -12,7 +12,7 @@
       </AButton>
     </a-button-group>
 
-    <a-button-group v-if="uiStore.isVisible('ui.fullscreen_fit_button')" class="mr-3" dir="ltr">
+    <a-button-group v-if="uiStore.isVisible('ui.fullscreen_fit_button')" dir="ltr">
       <ATooltip v-if="uiStore.isVisible('ui.fullscreen_fit_button.children.fullscreen')">
         <template v-if="isFullscreen" #title> حال عادی</template>
         <template v-else #title>تمام صفحه</template>
@@ -38,7 +38,7 @@
       </AButton>
     </a-button-group>
 
-    <a-button-group v-if="uiStore.isVisible('ui.zoom_button')" class="mr-3" dir="ltr">
+    <a-button-group v-if="uiStore.isVisible('ui.zoom_button')" dir="ltr">
       <ATooltip v-if="uiStore.isVisible('ui.zoom_button.children.zoom_in')">
         <template #title>بزرگ نمایی</template>
         <AButton

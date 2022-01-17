@@ -1,129 +1,134 @@
 <template>
   <div class="h-screen">
-    <ShapeContextMenu />
-    <BackgroundContextMenu />
-    <!-- start main -->
-    <!--class="flex h-screen"-->
-    <div :class="`${prefixCls}-main`">
-      <div
-        class="h-screen border-l border-r border-gray-300 max-h-screen overflow-auto"
-        style="display: grid; grid-template-rows: auto 4vw; height: 100%"
-      >
-        <div class="px-2 pt-2 overflow-auto">
-          <Transition :css="false">
-            <div>
-              <ImageStyle
-                v-if="uiStore.isActive('ui.right_sidebar.children.image')"
-                v-motion="'cube'"
-                :enter="{ x: 0, opacity: 1 }"
-                :initial="{ x: 400, opacity: 0 }"
-                :leave="{ x: -400, opacity: 0 }"
-              />
-              <ShapeStyle
-                v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
-                v-motion="'cube'"
-                :enter="{ x: 0, opacity: 1 }"
-                :initial="{ x: 400, opacity: 0 }"
-                :leave="{ x: -400, opacity: 0 }"
-              />
-              <TextStyle
-                v-if="uiStore.isActive('ui.right_sidebar.children.text')"
-                v-motion="'cube'"
-                :enter="{ x: 0, opacity: 1 }"
-                :initial="{ x: 400, opacity: 0 }"
-                :leave="{ x: -400, opacity: 0 }"
-              />
-              <BackgroundStyle
-                v-if="uiStore.isActive('ui.right_sidebar.children.background')"
-                v-motion="'cube'"
-                :enter="{ x: 0, opacity: 1 }"
-                :initial="{ x: 400, opacity: 0 }"
-                :leave="{ x: -400, opacity: 0 }"
-              />
-              <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
-                <AUpload
-                  v-if="false"
-                  :beforeUpload="handleBeforeUpload"
-                  :multiple="false"
-                  :showUploadList="false"
-                  accept=".svg"
-                  @change="handleChangeSvg"
-                >
-                  <AButton class="mt-5"> بارگذاری فایل svg </AButton>
-                </AUpload>
+    <div v-if="preloader" class="flex items-center justify-center h-screen">
+      <ASpin :spinning="true" tip=" در حال دریافت اطلاعات " />
+    </div>
+    <div v-else>
+      <ShapeContextMenu />
+      <BackgroundContextMenu />
+      <!-- start main -->
+      <!--class="flex h-screen"-->
+      <div :class="`${prefixCls}-main`">
+        <div
+          class="h-screen border-l border-r border-gray-300 max-h-screen overflow-auto"
+          style="display: grid; grid-template-rows: auto 4vw; height: 100%"
+        >
+          <div class="px-2 pt-2 overflow-auto">
+            <Transition :css="false">
+              <div>
+                <ImageStyle
+                  v-if="uiStore.isActive('ui.right_sidebar.children.image')"
+                  v-motion="'cube'"
+                  :enter="{ x: 0, opacity: 1 }"
+                  :initial="{ x: 400, opacity: 0 }"
+                  :leave="{ x: -400, opacity: 0 }"
+                />
+                <ShapeStyle
+                  v-if="uiStore.isActive('ui.right_sidebar.children.shape')"
+                  v-motion="'cube'"
+                  :enter="{ x: 0, opacity: 1 }"
+                  :initial="{ x: 400, opacity: 0 }"
+                  :leave="{ x: -400, opacity: 0 }"
+                />
+                <TextStyle
+                  v-if="uiStore.isActive('ui.right_sidebar.children.text')"
+                  v-motion="'cube'"
+                  :enter="{ x: 0, opacity: 1 }"
+                  :initial="{ x: 400, opacity: 0 }"
+                  :leave="{ x: -400, opacity: 0 }"
+                />
+                <BackgroundStyle
+                  v-if="uiStore.isActive('ui.right_sidebar.children.background')"
+                  v-motion="'cube'"
+                  :enter="{ x: 0, opacity: 1 }"
+                  :initial="{ x: 400, opacity: 0 }"
+                  :leave="{ x: -400, opacity: 0 }"
+                />
+                <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
+                  <AUpload
+                    v-if="false"
+                    :beforeUpload="handleBeforeUpload"
+                    :multiple="false"
+                    :showUploadList="false"
+                    accept=".svg"
+                    @change="handleChangeSvg"
+                  >
+                    <AButton class="mt-5"> بارگذاری فایل svg </AButton>
+                  </AUpload>
 
-                <AUpload
-                  v-if="false"
-                  :beforeUpload="handleBeforeUpload"
-                  :multiple="false"
-                  :showUploadList="false"
-                  @change="handleChangeJson"
-                >
-                  <AButton class="mt-5"> بارگذاری فایل json </AButton>
-                </AUpload>
+                  <AUpload
+                    v-if="false"
+                    :beforeUpload="handleBeforeUpload"
+                    :multiple="false"
+                    :showUploadList="false"
+                    @change="handleChangeJson"
+                  >
+                    <AButton class="mt-5"> بارگذاری فایل json </AButton>
+                  </AUpload>
 
-                <AButton class="mt-5" @click="save"> ذخیره فایل </AButton>
+                  <AButton class="mt-5" @click="save"> ذخیره فایل </AButton>
+                </div>
               </div>
+            </Transition>
+          </div>
+          <div class="price">
+            <!--          قیمت کل : 25000-->
+          </div>
+        </div>
+        <!--      <div class="h-screen relative h-screen board-main">
+          <div class="absolute z-50 p-3 w-full" style="background: #fff">
+            <div class="flex justify-between">
+              <TopRightButtons />
+              <TopLeftButtons />
             </div>
-          </Transition>
-        </div>
-        <div class="price">
-          <!--          قیمت کل : 25000-->
-        </div>
-      </div>
-      <!--      <div class="h-screen relative h-screen board-main">
-        <div class="absolute z-50 p-3 w-full" style="background: #fff">
-          <div class="flex justify-between">
-            <TopRightButtons />
-            <TopLeftButtons />
           </div>
-        </div>
-        <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
-          <BottomLeftButtons />
-        </div>
-        <pages v-if="false" />
-
-        <div class="stages overflow-auto">
-          <Stage />
-        </div>
-      </div>-->
-
-      <div
-        class="relative board-main h-full w-full"
-        style="display: grid; grid-template-rows: 50px auto 50px"
-      >
-        <div class="z-50 p-3 w-full" style="background: #fff">
-          <div class="flex justify-between">
-            <TopRightButtons />
-            <TopLeftButtons />
-          </div>
-        </div>
-
-        <Stage />
-
-        <div class="z-50 p-3 w-full" style="position: relative">
           <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
             <BottomLeftButtons />
           </div>
+          <pages v-if="false" />
+
+          <div class="stages overflow-auto">
+            <Stage />
+          </div>
+        </div>-->
+
+        <div
+          class="relative board-main h-full w-full"
+          style="display: grid; grid-template-rows: 50px auto 50px"
+        >
+          <div class="z-50 p-3 w-full" style="background: #fff">
+            <div class="flex justify-between">
+              <TopRightButtons />
+              <TopLeftButtons />
+            </div>
+          </div>
+
+          <Stage />
+
+          <div class="z-50 p-3 w-full" style="position: relative">
+            <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
+              <BottomLeftButtons />
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="board-left-side"
+          class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300"
+        >
+          <Transition :css="false">
+            <TextOptions
+              v-if="uiStore.isVisible('ui.text_option')"
+              v-motion="'cube'"
+              :enter="{ x: 0, opacity: 1 }"
+              :initial="{ x: -400, opacity: 0 }"
+              :leave="{ x: 400, opacity: 0 }"
+            />
+          </Transition>
         </div>
       </div>
-
-      <div
-        id="board-left-side"
-        class="h-screen px-3 pt-2 pb-10 overflow-auto max-h-screen border-r border-gray-300"
-      >
-        <Transition :css="false">
-          <TextOptions
-            v-if="uiStore.isVisible('ui.text_option')"
-            v-motion="'cube'"
-            :enter="{ x: 0, opacity: 1 }"
-            :initial="{ x: -400, opacity: 0 }"
-            :leave="{ x: 400, opacity: 0 }"
-          />
-        </Transition>
-      </div>
+      <!-- end main -->
     </div>
-    <!-- end main -->
   </div>
 </template>
 
@@ -139,8 +144,30 @@
   import TextStyle from '../../components/Style/TextStyle.vue'
   import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
   import { message } from 'ant-design-vue'
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { get } from 'lodash-es'
 
   const { prefixCls } = useDesign('board')
+
+  const preloader = ref(true)
+
+  const { currentRoute } = useRouter()
+
+  const id = get(currentRoute.value, 'params.id')
+
+  async function init() {
+    if (id) {
+      const { data } = await stageStore.getDataFromServer(id)
+      stageStore.setDesign(data)
+      preloader.value = false
+      console.log('data ===>', data)
+    } else {
+      preloader.value = false
+    }
+  }
+
+  init()
 
   function handleBeforeUpload(file, fileList) {
     return false
@@ -149,7 +176,6 @@
   async function save() {
     try {
       const design = await stageStore.exportToDesign()
-      //console.log("sadasdsadasd",des)
       await designStore.updateDesign(design)
       message.success('تغییرات با موفقیت ذخیره شد')
     } catch (e) {

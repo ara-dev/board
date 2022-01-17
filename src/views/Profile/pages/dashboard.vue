@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-4 h-full">
+  <div class="grid grid-cols-4 h-full p-4">
     <div class="col-span-3 px-3">
       <span class="font-bold mb-3 block text-gray-400">آخرین طرح های من</span>
       <div class="grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-4">
@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-  import MyDesign from '../../../components/Profile/MyDesign.vue'
-  import SuggestionDesign from '../../../components/Profile/SuggestionDesign.vue'
+  import MyDesign from './../components/MyDesign.vue'
+  import SuggestionDesign from './../components/SuggestionDesign.vue'
 </script>
 
 <style lang="less"></style>

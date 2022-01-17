@@ -1,36 +1,52 @@
 <template>
   <div class="relative flex flex-col">
-    <div class="pt-5 pb-3">
-      <div class="flex justify-between items-center">
-        <div>
-          <div class="flex items-center">
-            <div>
-              <img class="rounded-lg inline-block" src="../../assets/img/temp/profile-img.png" />
-            </div>
-            <div class="pr-5">
-              <span>{{ userStore.state.name }}</span>
-              <br />
-              <span>{{ userStore.state.mobile }}</span>
+    <div class="flex flex-col gap-4 mt-4">
+      <div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="flex items-center">
+              <div>
+                <img class="rounded-lg inline-block" src="@/assets/img/temp/profile-img.png" />
+              </div>
+              <div class="pr-5">
+                <span>{{ userStore.state.name }}</span>
+                <br />
+                <span>{{ userStore.state.mobile }}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div>
-          <AButton ghost type="primary">125 امتیاز</AButton>
+      </div>
+
+      <div>
+        <div class="flex gap-2 items-center">
+          <span>نقش ها:</span>
+          <Tag
+            class="!mx-0"
+            v-for="(item, index) in userStore.state.roles"
+            :key="index"
+            color="green"
+          >
+            {{ userStore.getRoleStr(item) }}
+          </Tag>
+          <div class="flex-1"></div>
+          <div>
+            <AButton @click="userStore.logout()" type="link" danger>
+              <template #icon>
+                <Icon icon="ion:log-out-outline" class="ml-2" size="16" />
+              </template>
+              <span> خروج</span>
+            </AButton>
+          </div>
         </div>
       </div>
+
+      <ADivider class="!my-2" />
     </div>
-    <div>
-      <span class="ml-2">نقش ها :</span>
-      <span v-for="(item, index) in userStore.state.roles" :key="index">
-        {{ userStore.getRoleStr(item) }}
-        {{ index + 1 != userStore.state.roles.length ? ' -  ' : '' }}
-      </span>
-    </div>
-    <ADivider />
     <!--    style="display: grid; grid-template-rows: auto 15%"-->
-    <div class="h-full">
+    <div class="flex-1">
       <!--     -->
-      <div class="overflow-auto" style="max-height: calc(100vh - 270px)">
+      <div>
         <AMenu
           v-model:selectedKeys="currentMenu"
           :class="[`${prefixCls}-menu`]"
@@ -62,13 +78,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import Menus from './profiles-menus'
-  import { useDesign } from '../../utils/useDesign'
+  import Menus from './../services/profiles-menus'
+  import { useDesign } from '../../../utils/useDesign'
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import { userStore } from '../../model/user'
+  import { userStore } from '../../../model/user'
+  import { Tag } from 'ant-design-vue'
+
   const { prefixCls } = useDesign('profile')
-  const { prefixVar } = useDesign('')
   const currentMenu = ref<string[]>([])
 
   const router = useRouter()
@@ -94,7 +111,7 @@
   .@{pre}-menu {
     .ant-menu-item {
       color: @gray-base;
-      border-radius: @border-radius-base*2;
+      border-radius: @border-radius-base*1.8;
     }
 
     .ant-menu:not(.ant-menu-horizontal),

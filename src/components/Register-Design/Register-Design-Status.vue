@@ -39,38 +39,40 @@
     background: #fff !important;
     //color: #fff !important;
 
-    &.success-job{
-       background: @primary-color;
-    }
 
-    &.no-upload{
-      border-color: @secondary-color;
-      color: @secondary-color;
-    }
 
-    &.need-edit{
-      background: #DC2626;
-    }
+  }
 
-    &.final-accepted{
-      border-color: @primary-color;
-      color: @primary-color;
-    }
+  .success-job{
+    background: @primary-color;
+  }
 
-    &.rejected{
-      border-color: #DC2626;
-      color: #DC2626;
-    }
+  .no-upload{
+    border-color: @secondary-color !important;
+    color: @secondary-color;
+  }
 
-    &.worked{
-      border-color:#3B82F6;
-      color: #3B82F6;
-    }
+  .need-edit{
+    background: #DC2626;
+  }
 
-    &.wating-for-accept{
-      border-color: #F97316;
-      color: #F97316;
-    }
+  .final-accepted{
+    border-color: @primary-color !important;
+    color: @primary-color;
+  }
 
+  .rejected{
+    border-color: #DC2626 !important;
+    color: #DC2626;
+  }
+
+  .worked{
+    border-color:#3B82F6 !important;
+    color: #3B82F6;
+  }
+
+  .wating-for-accept{
+    border-color: #F97316 !important;
+    color: #F97316;
   }
 </style>

@@ -1,5 +1,6 @@
 import { MotionPlugin } from '@vueuse/motion'
 import 'ant-design-vue/dist/antd.less'
+import 'virtual:windi.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/css/ant-rtl.less' // override ant css for rtl and customize

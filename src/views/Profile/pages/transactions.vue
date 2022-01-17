@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full">
+  <div class="h-full p-4">
     <div class="flex mb-3">
       <Icon :icon="pageInfo.icon" size="23" />
       <span class="mr-2 font-bold">{{ pageInfo.title }}</span>
@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
   import Tabs from '../../../components/Tabs/index.vue'
-  import { usePageInfo } from '../../../utils/usePageInfo'
+  import { usePageInfo } from '@/views/Profile/hook/usePageInfo'
   const pageInfo = usePageInfo('transactions')
 </script>
 

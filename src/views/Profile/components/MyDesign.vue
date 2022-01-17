@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../utils/useDesign'
+  import { useDesign } from '../../../utils/useDesign'
   import Design from './Design.vue'
 
   const { prefixCls } = useDesign('mydesign')
