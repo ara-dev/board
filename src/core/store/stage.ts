@@ -10,14 +10,18 @@ import { Stage } from 'konva/lib/Stage'
 import { Vector2d } from 'konva/lib/types'
 // @ts-ignore
 import _ from 'lodash'
-import { reactive, readonly, Ref, ref, UnwrapRef } from 'vue'
+import { get } from 'lodash-es'
+import { reactive, readonly, Ref, ref, UnwrapRef, watch } from 'vue'
 import { baseURLApi } from '../../../themeConfig'
 import { Design } from '../../model/design'
 import { FileModel, fileStore } from '../../model/file'
+import { fontsStore } from '../../model/fonts'
+import useHistory, { StageHistory } from '../../utils/useHistory'
 import { getDesignFromId } from '../api/stage'
 import { convertBase64ToFile, ImportSvg } from './import'
 import { Color, guide, LineGuideStops, Snapping, SnappingEdges, TextOption } from './types'
 import { uiStore } from './ui'
+
 interface ModelPage {
   docWidth: number
   docHeight: number
@@ -26,7 +30,7 @@ interface ModelPage {
 
 export interface StageModel {
   pages: ModelPage[]
-  fonts: string[]
+  fonts: Set<string> | string[]
   //price: number
   pageSize: { width: number; height: number }[]
   pageCount: number
@@ -49,6 +53,7 @@ interface StageOption {
   selectedElements: Shape[]
   currentPage: number
   pages: Page[]
+  fonts: Set<string>
   copyElements: Shape[]
   currentColor: Color
   container: HTMLDivElement | string | null
@@ -59,6 +64,7 @@ export default class StageOptionStore {
   private lastWidthHeightMainBoard: { width: number; height: number }
   private scale: number
   private scaleFactor: number
+  public history: StageHistory
 
   constructor() {
     this._init()
@@ -69,6 +75,7 @@ export default class StageOptionStore {
     this.scaleFactor = 1.2
     this._isEditMode = ref(false)
     this._state = reactive(this._state)
+    this.historyInit()
   }
 
   //private inZoom: boolean
@@ -113,6 +120,14 @@ export default class StageOptionStore {
     return this._state.selectedElements
   }*/
 
+  changeState() {
+    return this._state.pages.map((i) => i.stage.toObject())
+  }
+
+  reDraw() {
+    return this._state.pages.map((i) => i.stage.draw())
+  }
+
   set selectedElements(shapes: Shape[]) {
     //console.log('this is selected elements', shapes)
     if (shapes.length == 0) {
@@ -141,7 +156,6 @@ export default class StageOptionStore {
   }
 
   get textOption(): TextOption {
-    console.log('this._state ===>', this._state)
     return this._state.textOption
   }
 
@@ -149,6 +163,12 @@ export default class StageOptionStore {
     this._isEditMode.value = true
     this._state.pages = []
     this._state.design = design
+    this._state.fonts = new Set(get(design, 'data.fonts', []))
+    this.installFonts()
+  }
+
+  async installFonts() {
+    await fontsStore.installFonts(this._state.fonts)
   }
 
   /* setContainer(container: HTMLDivElement | string): void {
@@ -271,14 +291,6 @@ export default class StageOptionStore {
   applyRotateDegrees(degrees: number): void {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       const clientRect = item.getClientRect({ skipTransform: true })
-      /*console.log("this is client rect with skip",clientRect)
-      console.log("this is client rect with skip",item.getClientRect())
-      console.log("this is width",item.width())
-      console.log("this is height",item.height())
-      console.log("this is x",item.x())
-      console.log("this is y",item.y())
-      console.log("this is absoult postion",item.getAbsolutePosition())
-      console.log("this is self rect",item.getSelfRect())*/
 
       const box = item.getClientRect()
       const x = box.x + box.width / 2
@@ -374,7 +386,10 @@ export default class StageOptionStore {
     this._state.selectedElements.forEach((item: UnwrapNestedRefs<Shape>) => {
       ;(item as Text).fontFamily(this._state.textOption.fontFamily)
       item.setAttrs(extraData)
-      console.log('gdfgfgdfg', item)
+      if (!this._state.fonts) {
+        this._state.fonts = new Set()
+      }
+      this._state.fonts.add(this._state.textOption.fontFamily)
     })
   }
 
@@ -426,7 +441,6 @@ export default class StageOptionStore {
   }
 
   applyCopy(): void {
-    //this._state.copyElements = this._state.selectedElements.slice();
     this._state.copyElements = this._state.selectedElements.map((item) => {
       return item.clone()
     })
@@ -441,12 +455,10 @@ export default class StageOptionStore {
     })
     this.addShapeToGroup(shapes)
     this.setShapesToTransformer(shapes)
-    //this._state.copyElements=[];
   }
 
   enablePaste(): boolean {
-    if (this._state.copyElements.length > 0) return true
-    return false
+    return this._state.copyElements.length > 0
   }
 
   applyDeleteAll(): void {
@@ -636,14 +648,53 @@ export default class StageOptionStore {
     }
   }
 
+  historyInit() {
+    this.history = useHistory()
+    const handleComputeHistory = () => {
+      const items = get(this.history.history.value, '0.snapshot', [])
+      if (items && items.length) {
+        items.forEach((node) => {
+          node.forEach((item) => {
+            const id = get(item, `attrs.name`)
+            const attrs = get(item, 'attrs')
+            this._state.pages.forEach((page) => {
+              const node = findNestedNode(page.stage, `${id}`)
+              if (node) {
+                node.setAttrs({
+                  ...attrs,
+                })
+              }
+            })
+          })
+        })
+      }
+    }
+    watch(this.history.eventUndoTrigger, (n) => {
+      handleComputeHistory()
+      this.history.undo()
+    })
+    watch(this.history.eventRedoTrigger, (n) => {
+      this.history.redo()
+      handleComputeHistory()
+    })
+
+    function findNestedNode(obj, id): any {
+      if (obj.attrs.name === id) {
+        return obj
+      }
+      for (const key in obj.children) {
+        const result = findNestedNode(obj.children[key], id)
+        if (result) {
+          return result
+        }
+      }
+      return null
+    }
+  }
+
   importFromJson(design: Design, container: HTMLDivElement | string) {
     //const design: UnwrapRef<StageOption["design"]> | undefined=this._state.design
     this._state.pages = []
-    //const con=document.createElement('div');
-    //const _container = document.getElementById('container')
-    //console.log('dddddddd', _container)
-    //console.log('this is model', model)
-    //debugger;
     design.data.pages.forEach((item) => {
       const stage: Stage = Konva.Node.create(item.stage, container)
       const page: Page = {
@@ -819,7 +870,7 @@ export default class StageOptionStore {
     const design: Design = this._state.design as Design
     const _export: StageModel = {
       pages: [],
-      fonts: [],
+      fonts: [...(this._state.fonts ?? [])],
       pageSize: [],
       pageCount: 0,
     }
@@ -1423,7 +1474,7 @@ export default class StageOptionStore {
     const transformer = new Transformer({
       name: 'transformer',
       nodes: [],
-      keepRatio: false,
+      // keepRatio: false,
       //enabledAnchors: ['top-left', 'top-right', 'bottom-left', 'bottom-right']
       //padding : 15,
       // flipEnabled : false,
@@ -1488,23 +1539,22 @@ export default class StageOptionStore {
     stage.on('mousedown touchstart', (e) => {
       //console.log('this is mouse down', e.target.parent)
       // do nothing if we mousedown on any shape
-      if (e.target !== stage && e.target.name() !== 'background') {
-        return
-      }
-
-      let pointerPosition: Vector2d = { x: 0, y: 0 }
-      if (stage.getPointerPosition() != null) {
-        pointerPosition = stage.getPointerPosition() as Vector2d
-      }
-
-      x1 = pointerPosition.x
-      y1 = pointerPosition.y
-      x2 = pointerPosition.x
-      y2 = pointerPosition.y
-
-      selectionRectangle.visible(true)
-      selectionRectangle.width(0)
-      selectionRectangle.height(0)
+      // if (e.target !== stage && e.target.name() !== 'background') {
+      //   return
+      // }
+      //
+      // let pointerPosition: Vector2d = { x: 0, y: 0 }
+      // if (stage.getPointerPosition() != null) {
+      //   pointerPosition = stage.getPointerPosition() as Vector2d
+      // }
+      // x1 = pointerPosition.x
+      // y1 = pointerPosition.y
+      // x2 = pointerPosition.x
+      // y2 = pointerPosition.y
+      //
+      // selectionRectangle.visible(true)
+      // selectionRectangle.width(0)
+      // selectionRectangle.height(0)
     })
 
     window.addEventListener('mousemove', (e) => {
@@ -1549,8 +1599,6 @@ export default class StageOptionStore {
 
     // clicks should select/deselect shapes or //click tap
     stage.on('mousedown touchstart', (e) => {
-      console.log('this is target', e.target)
-      // if we are selecting with rect, do nothing
       if (selectionRectangle.visible()) {
         return
       }
@@ -1561,6 +1609,35 @@ export default class StageOptionStore {
         this.selectedElements = []
         return
       }
+
+      e.target.off('transformend')
+      e.target.off('transformstart')
+      e.target.off('dragstart')
+      e.target.off('dragend')
+
+      // this.history.clearTempState()
+      e.target.on('transformstart dragstart', (ee) => {
+        const obj = ee.target.toObject()
+
+        if (!obj.attrs.rotation) {
+          obj.attrs.rotation = 0
+        }
+        if (!obj.attrs.scaleX) {
+          obj.attrs.scaleX = 1
+        }
+        if (!obj.attrs.scaleY) {
+          obj.attrs.scaleY = 1
+        }
+        this.history.state.value.push({
+          ...obj,
+        })
+      })
+
+      e.target.on('transformend dragend', (ee) => {
+        setTimeout(() => {
+          this.history.clearTempState()
+        }, 100)
+      })
 
       // do nothing if clicked NOT on our rectangles
       // .hasName('element')
@@ -1584,11 +1661,13 @@ export default class StageOptionStore {
           //const parentGroup = this.getBaseGroup(e.target)
           //console.log(e.target)
           //console.log(e.target.parent?.getChildren())
+
           transformer.nodes([e.target])
           this.changeResizeRotateEnableTransformer(locked, transformer)
           this.selectedElements = [e.target as Shape]
         } else {
           // debugger
+          console.log('e.target asas===>', e.target)
           transformer.nodes([e.target])
           this.changeResizeRotateEnableTransformer(locked, transformer)
           this.selectedElements = [e.target as Shape]

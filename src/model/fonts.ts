@@ -1,6 +1,9 @@
 import { DeepReadonly, UnwrapNestedRefs } from '@vue/reactivity'
 import { reactive, readonly, Ref, ref } from 'vue'
+import { baseURLApi } from '../../themeConfig'
+import { stageStore } from '../core'
 import axios from '../utils/axios'
+import { useInstallFont } from '../utils/useInstallFont'
 
 interface Font {
   _id: string
@@ -24,6 +27,7 @@ export default class FontsStore {
   }
 
   private _rows!: Ref<Font[]>
+  queueInstall: Set<string> | string[]
 
   get rows(): Font[] {
     return this._rows.value
@@ -38,6 +42,9 @@ export default class FontsStore {
   async getFont(page = 0, limit = 20) {
     const { data } = await axios.get('font')
     this._rows.value = data.data as Font[]
+    if (this.queueInstall) {
+      this.installFonts(this.queueInstall as Set<string>)
+    }
   }
 
   private _init() {
@@ -45,6 +52,20 @@ export default class FontsStore {
       page: 0,
       total: 0,
       limit: 10,
+    }
+  }
+
+  async installFonts(fonts: Set<string>) {
+    if (!(this._rows.value && this._rows.value.length > 0)) {
+      this.queueInstall = fonts
+    } else {
+      for (const fontName of fonts) {
+        const font = this._rows.value.find((item) => item.name == fontName) as Font
+        if (font) {
+          await useInstallFont(font.name, `${baseURLApi}${font.storage}`)
+        }
+      }
+      stageStore.reDraw()
     }
   }
 }

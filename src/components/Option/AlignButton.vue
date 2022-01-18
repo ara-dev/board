@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center flex items-center">
     <!--<a-button :type="buttonType('justify')" class="mr-3 py-0 px-1" @click="changeAlign('justify')">
       <icon-align-text-both :size="20"/>
     </a-button>-->
