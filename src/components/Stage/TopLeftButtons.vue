@@ -1,30 +1,24 @@
 <template>
-  <div>
-    <a-button-group v-if="uiStore.isVisible('ui.redo_undo_button')" class="mr-3" dir="ltr">
-      <AButton
-        @click="handleRedo"
-        v-if="uiStore.isVisible('ui.redo_undo_button.children.undo')"
-        :disabled="!uiStore.isActive('ui.redo_undo_button.children.undo')"
-      >
-        <Icon icon="ion:arrow-redo-outline" size="20" />
-      </AButton>
-      <AButton
-        @click="handleUndo"
-        v-if="uiStore.isVisible('ui.redo_undo_button.children.redo')"
-        :disabled="!uiStore.isActive('ui.redo_undo_button.children.redo')"
-      >
-        <Icon icon="ion:arrow-undo-outline" size="20" />
-      </AButton>
-    </a-button-group>
-  </div>
+  <div v-if="uiStore.isVisible('ui.redo_undo_button')">
+    <IconButton
+      class="undo-button"
+      icon="tabler:arrow-forward"
+      @click="handleUndo"
+      v-if="uiStore.isVisible('ui.redo_undo_button.children.redo')"
+      :disabled="!uiStore.isActive('ui.redo_undo_button.children.redo')"
+  /></div>
 </template>
 
 <script lang="ts" setup>
   import { uiStore } from '../../core'
-  import Icon from '../Icon/Icon.vue'
   import useHistory from '../../utils/useHistory'
+  import IconButton from '../Button/IconButton.vue'
 
   const { handleRedo, handleUndo } = useHistory()
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+  .undo-button {
+    transform: rotate(180deg);
+  }
+</style>

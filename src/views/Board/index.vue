@@ -65,8 +65,7 @@
                   >
                     <AButton class="mt-5"> بارگذاری فایل json </AButton>
                   </AUpload>
-
-                  <AButton class="mt-5" @click="save"> ذخیره فایل </AButton>
+                  <LayerFileList />
                 </div>
               </div>
             </Transition>
@@ -96,17 +95,15 @@
           class="relative board-main h-full w-full"
           style="display: grid; grid-template-rows: 50px auto 50px"
         >
-          <div class="z-50 p-3 w-full" style="background: #fff">
-            <div class="flex justify-between">
-              <TopRightButtons />
-              <TopLeftButtons />
-            </div>
+          <div class="z-50 w-full bg-white flex justify-between p-2">
+            <TopRightButtons />
+            <TopLeftButtons />
           </div>
 
           <Stage />
 
           <div class="z-50 p-3 w-full" style="position: relative">
-            <div class="absolute bottom-board left-0 bottom-0 z-50 p-3" style="background: #fff">
+            <div class="absolute bottom-board left-0 bottom-0 z-50 p-2 toolbar-bottom-left">
               <BottomLeftButtons />
             </div>
           </div>
@@ -135,7 +132,6 @@
 <script lang="ts" setup>
   import TextOptions from '../../components/Option/TextOptions.vue'
   import { uiStore, stageStore } from '../../core'
-  import { designStore } from '../../model/design'
   import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
   import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
   import { useDesign } from '../../utils/useDesign'
@@ -143,10 +139,13 @@
   import ShapeStyle from '../../components/Style/ShapeStyle.vue'
   import TextStyle from '../../components/Style/TextStyle.vue'
   import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
-  import { message } from 'ant-design-vue'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { get } from 'lodash-es'
+  import TopRightButtons from '../../components/Stage/TopRightButtons.vue'
+  import TopLeftButtons from '../../components/Stage/TopLeftButtons.vue'
+  import BottomLeftButtons from '../../components/Stage/BottomLeftButtons.vue'
+  import LayerFileList from './src/components/LayerFileList.vue'
 
   const { prefixCls } = useDesign('board')
 
@@ -171,33 +170,6 @@
 
   function handleBeforeUpload(file, fileList) {
     return false
-  }
-
-  async function save() {
-    try {
-      const design = await stageStore.exportToDesign()
-      await designStore.updateDesign(design)
-      message.success('تغییرات با موفقیت ذخیره شد')
-    } catch (e) {
-      console.log(e)
-    } finally {
-    }
-
-    //const data = stageStore.exportToJson()
-    //console.log(data)
-    // Convert the text to BLOB.
-    /* const textToBLOB = new Blob([data], { type: 'text/plain' })
-    const sFileName = 'formData.json' // The file to save the data.
-    let newLink = document.createElement('a')
-    newLink.download = sFileName
-    if (window.webkitURL != null) {
-      newLink.href = window.webkitURL.createObjectURL(textToBLOB)
-    } else {
-      newLink.href = window.URL.createObjectURL(textToBLOB)
-      newLink.style.display = 'none'
-      document.body.appendChild(newLink)
-    }
-    newLink.click()*/
   }
 
   function handleChangeSvg({ file, fileList }) {
@@ -271,5 +243,11 @@
 
   .price {
     background: @cp-price-background;
+  }
+
+  .toolbar-bottom-left {
+    background-color: white;
+    border-top-right-radius: 4px;
+    box-shadow: 1px -1px 1px #cbcbcb;
   }
 </style>

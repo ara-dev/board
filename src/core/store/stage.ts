@@ -658,7 +658,7 @@ export default class StageOptionStore {
             const id = get(item, `attrs.name`)
             const attrs = get(item, 'attrs')
             this._state.pages.forEach((page) => {
-              const node = findNestedNode(page.stage, `${id}`)
+              const node = this.findNestedNode(page.stage, `${id}`)
               if (node) {
                 node.setAttrs({
                   ...attrs,
@@ -677,19 +677,19 @@ export default class StageOptionStore {
       this.history.redo()
       handleComputeHistory()
     })
+  }
 
-    function findNestedNode(obj, id): any {
-      if (obj.attrs.name === id) {
-        return obj
-      }
-      for (const key in obj.children) {
-        const result = findNestedNode(obj.children[key], id)
-        if (result) {
-          return result
-        }
-      }
-      return null
+  findNestedNode(obj, id): any {
+    if (obj.attrs.name === id) {
+      return obj
     }
+    for (const key in obj.children) {
+      const result = this.findNestedNode(obj.children[key], id)
+      if (result) {
+        return result
+      }
+    }
+    return null
   }
 
   importFromJson(design: Design, container: HTMLDivElement | string) {
@@ -1536,26 +1536,26 @@ export default class StageOptionStore {
       //this.selectedElements = selected
     }
 
-    stage.on('mousedown touchstart', (e) => {
-      //console.log('this is mouse down', e.target.parent)
-      // do nothing if we mousedown on any shape
-      // if (e.target !== stage && e.target.name() !== 'background') {
-      //   return
-      // }
-      //
-      // let pointerPosition: Vector2d = { x: 0, y: 0 }
-      // if (stage.getPointerPosition() != null) {
-      //   pointerPosition = stage.getPointerPosition() as Vector2d
-      // }
-      // x1 = pointerPosition.x
-      // y1 = pointerPosition.y
-      // x2 = pointerPosition.x
-      // y2 = pointerPosition.y
-      //
-      // selectionRectangle.visible(true)
-      // selectionRectangle.width(0)
-      // selectionRectangle.height(0)
-    })
+    // stage.on('mousedown touchstart', (e) => {
+    //   //console.log('this is mouse down', e.target.parent)
+    //   // do nothing if we mousedown on any shape
+    //   // if (e.target !== stage && e.target.name() !== 'background') {
+    //   //   return
+    //   // }
+    //   //
+    //   // let pointerPosition: Vector2d = { x: 0, y: 0 }
+    //   // if (stage.getPointerPosition() != null) {
+    //   //   pointerPosition = stage.getPointerPosition() as Vector2d
+    //   // }
+    //   // x1 = pointerPosition.x
+    //   // y1 = pointerPosition.y
+    //   // x2 = pointerPosition.x
+    //   // y2 = pointerPosition.y
+    //   //
+    //   // selectionRectangle.visible(true)
+    //   // selectionRectangle.width(0)
+    //   // selectionRectangle.height(0)
+    // })
 
     window.addEventListener('mousemove', (e) => {
       mouseMove(e)
@@ -1667,7 +1667,6 @@ export default class StageOptionStore {
           this.selectedElements = [e.target as Shape]
         } else {
           // debugger
-          console.log('e.target asas===>', e.target)
           transformer.nodes([e.target])
           this.changeResizeRotateEnableTransformer(locked, transformer)
           this.selectedElements = [e.target as Shape]
@@ -1734,6 +1733,12 @@ export default class StageOptionStore {
   private getBaseLayer(stage?: Stage): Layer {
     const _stage: Stage = stage ? stage : this.getCurrentPage().stage
     return _stage.findOne('.layer')
+  }
+
+  setActiveElement(element: Shape, stage: Stage) {
+    const transformer: Transformer = this.getTransformer(stage)
+    transformer.nodes([element])
+    this.selectedElements = [element]
   }
 
   private setSnapping(stage: Stage, layer: Layer, group: Group): void {

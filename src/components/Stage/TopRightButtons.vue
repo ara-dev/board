@@ -1,34 +1,36 @@
 <template>
   <div class="flex items-center gap-2">
+    <ATooltip>
+      <template #title>ذخیره</template>
+      <IconButton icon="tabler:device-floppy" @click="save" />
+    </ATooltip>
+
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
       <template #title>حذف</template>
-      <AButton
+      <IconButton
+        icon="tabler:trash"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')"
         @click="stageStore.applyDelete()"
-      >
-        <Icon icon="ion:trash-outline" size="23" />
-      </AButton>
+      />
     </ATooltip>
 
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
       <template #title>کپی</template>
-      <AButton
+      <IconButton
+        icon="ion:copy-outline"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')"
         @click="stageStore.applyDuplicate()"
-      >
-        <Icon icon="ion:copy-outline" size="23" />
-      </AButton>
+      />
     </ATooltip>
 
-    <AButton
+    <IconButton
+      icon="ion:contrast-outline"
       v-if="
         uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
         !uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
       "
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')"
-    >
-      <Icon icon="ion:contrast-outline" size="23" />
-    </AButton>
+    />
 
     <APopover
       v-if="
@@ -86,33 +88,26 @@
           </div>
         </div>
       </template>
-      <AButton class="mr-2">
-        <Icon icon="ion:contrast-outline" size="23" />
-      </AButton>
+      <IconButton icon="ion:contrast-outline" />
     </APopover>
 
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
       <template #title>برش</template>
-      <AButton :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')">
-        <Icon icon="ion:crop-outline" size="23"
-      /></AButton>
+      <IconButton
+        icon="ion:crop-outline"
+        :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')"
+      />
     </ATooltip>
 
     <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
       <template #title>
         {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
       </template>
-      <AButton
+      <IconButton
+        :icon="getLockIcon"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')"
         @click="stageStore.applyToggleLockUnlock()"
-      >
-        <div v-if="stageStore.layerLock">
-          <Icon icon="ion:lock-closed-outline" size="23" />
-        </div>
-        <div v-else>
-          <Icon icon="ion:lock-open-outline" size="23" />
-        </div>
-      </AButton>
+      />
     </ATooltip>
 
     <ADropdown
@@ -120,10 +115,7 @@
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')"
       placement="bottomCenter"
     >
-      <AButton>
-        <Icon icon="carbon:rotate" size="23" />
-        <span class="align-top mr-1">چرخش</span>
-      </AButton>
+      <IconButton icon="carbon:rotate" title="چرخش" />
       <template #overlay>
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
@@ -179,10 +171,8 @@
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')"
       placement="bottomCenter"
     >
-      <AButton>
-        <Icon icon="ion:layers-outline" size="23" />
-        <span class="align-top mr-1">موقعیت</span>
-      </AButton>
+      <IconButton icon="ion:layers-outline" title="موقعیت" />
+
       <template #overlay>
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
@@ -250,6 +240,28 @@
 <script lang="ts" setup>
   import { uiStore, stageStore } from '../../core'
   import Icon from '../Icon/Icon.vue'
+  import IconButton from '../Button/IconButton.vue'
+  import { computed } from 'vue'
+  import { designStore } from '../../model/design'
+  import { message } from 'ant-design-vue'
+
+  const getLockIcon = computed(() => {
+    if (stageStore.layerLock) {
+      return 'ion:lock-open-outline'
+    }
+    return 'ion:lock-closed-outline'
+  })
+
+  async function save() {
+    try {
+      const design = await stageStore.exportToDesign()
+      await designStore.updateDesign(design)
+      message.success('تغییرات با موفقیت ذخیره شد')
+    } catch (e) {
+      console.log(e)
+    } finally {
+    }
+  }
 </script>
 
 <style lang="less"></style>

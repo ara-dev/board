@@ -6,9 +6,9 @@ export interface Toolbar {
 
 const tools: Toolbar[] = [
   {
-    title: 'فایل',
+    title: 'لایه ها',
     id: 'ui.right_sidebar.children.upload',
-    icon: 'ion:cloud-upload-outline',
+    icon: 'tabler:layers-intersect',
   },
   {
     title: 'تصاویر',
