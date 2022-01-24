@@ -10,17 +10,17 @@
       <div class="w-full">
         <div class="inline-flex items-center">
           <div :class="['inline', `${prefixCls}-btn-edit`]">
-            <AButton type="primary">
+            <Button type="primary">
               <template #icon> <Icon :size="20" icon="ion:create-outline" /></template>
-            </AButton>
+            </Button>
           </div>
-          <div class="inline-flex flex-col mr-3">
+          <div class="inline-flex flex-col ml-3">
             <span class="font-bold mb-1"> عنوان طرح</span>
             <span class="text-xs font-thin text-gray-400">90 دقیقه پیش</span>
           </div>
         </div>
         <div class="inline float-left">
-          <AAvatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+          <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
         </div>
       </div>
     </template>
@@ -28,8 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../../utils/useDesign'
+  import { useDesign } from '@b/utils/useDesign'
   import Design from './Design.vue'
+  import { Avatar, Button } from 'ant-design-vue'
 
   const { prefixCls } = useDesign('mydesign')
 </script>

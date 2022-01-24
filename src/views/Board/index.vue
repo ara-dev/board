@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen">
     <div v-if="preloader" class="flex items-center justify-center h-screen">
-      <ASpin :spinning="true" tip=" در حال دریافت اطلاعات " />
+      <Spin :spinning="true" tip=" در حال دریافت اطلاعات " />
     </div>
     <div v-else>
       <ShapeContextMenu />
@@ -45,7 +45,7 @@
                   :leave="{ x: -400, opacity: 0 }"
                 />
                 <div v-if="uiStore.isActive('ui.right_sidebar.children.upload')">
-                  <AUpload
+                  <Upload
                     v-if="false"
                     :beforeUpload="handleBeforeUpload"
                     :multiple="false"
@@ -53,18 +53,18 @@
                     accept=".svg"
                     @change="handleChangeSvg"
                   >
-                    <AButton class="mt-5"> بارگذاری فایل svg </AButton>
-                  </AUpload>
+                    <Button class="mt-5"> بارگذاری فایل svg </Button>
+                  </Upload>
 
-                  <AUpload
+                  <Upload
                     v-if="false"
                     :beforeUpload="handleBeforeUpload"
                     :multiple="false"
                     :showUploadList="false"
                     @change="handleChangeJson"
                   >
-                    <AButton class="mt-5"> بارگذاری فایل json </AButton>
-                  </AUpload>
+                    <Button class="mt-5"> بارگذاری فایل json </Button>
+                  </Upload>
                   <LayerFileList />
                 </div>
               </div>
@@ -100,7 +100,7 @@
             <TopLeftButtons />
           </div>
 
-          <Stage />
+          <StageComponent />
 
           <div class="z-50 p-3 w-full" style="position: relative">
             <div class="absolute bottom-board left-0 bottom-0 z-50 p-2 toolbar-bottom-left">
@@ -130,22 +130,24 @@
 </template>
 
 <script lang="ts" setup>
-  import TextOptions from '../../components/Option/TextOptions.vue'
-  import { uiStore, stageStore } from '../../core'
-  import ShapeContextMenu from '../../components/Stage/ShapeContextMenu.vue'
-  import BackgroundContextMenu from '../../components/Stage/BackgroundContextMenu.vue'
-  import { useDesign } from '../../utils/useDesign'
-  import ImageStyle from '../../components/Style/ImageStyle.vue'
-  import ShapeStyle from '../../components/Style/ShapeStyle.vue'
-  import TextStyle from '../../components/Style/TextStyle.vue'
-  import BackgroundStyle from '../../components/Style/BackgroundStyle.vue'
+  import TextOptions from '@b/components/Option/TextOptions.vue'
+  import { uiStore, stageStore } from '@b/core'
+  import ShapeContextMenu from '@b/views/Board/src/components/context/ShapeContextMenu.vue'
+  import BackgroundContextMenu from '@b/views/Board/src/components/context/BackgroundContextMenu.vue'
+  import { useDesign } from '@b/utils/useDesign'
+  import ImageStyle from '@b/components/Style/ImageStyle.vue'
+  import ShapeStyle from '@b/components/Style/ShapeStyle.vue'
+  import TextStyle from '@b/components/Style/TextStyle.vue'
+  import BackgroundStyle from '@b/components/Style/BackgroundStyle.vue'
+  import { Button, Spin, Upload } from 'ant-design-vue/es'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { get } from 'lodash-es'
-  import TopRightButtons from '../../components/Stage/TopRightButtons.vue'
-  import TopLeftButtons from '../../components/Stage/TopLeftButtons.vue'
-  import BottomLeftButtons from '../../components/Stage/BottomLeftButtons.vue'
-  import LayerFileList from './src/components/LayerFileList.vue'
+  import TopRightButtons from '@b/views/Board/src/components/tools/TopRightButtons.vue'
+  import TopLeftButtons from '@b/views/Board/src/components/tools/TopLeftButtons.vue'
+  import BottomLeftButtons from '@b/views/Board/src/components/tools/BottomLeftButtons.vue'
+  import LayerFileList from './src/components/stages/LayerFileList.vue'
+  import StageComponent from '@b/views/Board/src/components/stages/StageComponent.vue'
 
   const { prefixCls } = useDesign('board')
 
@@ -160,7 +162,6 @@
       const { data } = await stageStore.getDataFromServer(id)
       stageStore.setDesign(data)
       preloader.value = false
-      console.log('data ===>', data)
     } else {
       preloader.value = false
     }
@@ -210,8 +211,6 @@
     const fileReader = new FileReader()
     fileReader.addEventListener('load', (event) => {
       const data = event.target?.result
-      //console.log()
-      //debugger
       stageStore.importFromJson(JSON.parse(data), 'container')
     })
     fileReader.readAsText(file)

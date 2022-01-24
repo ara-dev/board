@@ -2,13 +2,6 @@
   <div class="h-screen flex flex-col">
     <div class="grid grid-cols-12 flex-1 items-stretch h-full">
       <div class="col-span-2 px-3 border-l border-gray-100 overflow-auto">
-        <div class="flex items-center justify-between">
-          <div>
-            <AButton class="ml-4" ghost type="primary" v-if="stageStore.isEditMode"
-              >ذخیره طرح
-            </AButton>
-          </div>
-        </div>
         <ProfileMenu />
       </div>
       <div class="col-span-10 relative overflow-auto">
@@ -25,7 +18,6 @@
 <script lang="ts" setup>
   import { useDesign } from '../../utils/useDesign'
   import ProfileMenu from './components/ProfileMenu.vue'
-  import { stageStore } from '@/core'
 
   const { prefixCls } = useDesign('profile')
   const { prefixVar } = useDesign('')

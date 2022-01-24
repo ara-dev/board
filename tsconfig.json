@@ -10,13 +10,21 @@
     "esModuleInterop": true,
     "lib": [
       "esnext",
-      "dom",
-    ]
+      "dom"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@b/*": ["src/*"],
+      "/#/*": ["types/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
-  ]
+    "src/**/*.vue",
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "tests/server/**/*.ts", "dist", "**/*.js"],
+
 }

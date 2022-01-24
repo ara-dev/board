@@ -1,5 +1,5 @@
 <template>
-  <a-upload
+  <Upload
     v-model:file-list="fileList"
     :before-upload="beforeUpload"
     :show-upload-list="false"
@@ -15,13 +15,15 @@
       <Icon icon="fluent:align-center-vertical-32-regular" size="23" />
       <div class="ant-upload-text">پس زمینه را بارگذاری نمایید</div>
     </div>
-  </a-upload>
+  </Upload>
 </template>
 
 <script lang="ts" setup>
   import { LoadingOutlined } from '@ant-design/icons-vue'
+  import { Upload } from 'ant-design-vue/es'
   import { message } from 'ant-design-vue'
   import { ref } from 'vue'
+  import Icon from '@b/components/Icon/Icon.vue'
   interface FileItem {
     uid: string
     name?: string

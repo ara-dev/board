@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { uiStore } from '../../core'
-  import useHistory from '../../utils/useHistory'
-  import IconButton from '../Button/IconButton.vue'
+  import { uiStore } from '../../../../../core'
+  import useHistory from '../../../../../utils/useHistory'
+  import IconButton from '../../../../../components/Button/IconButton.vue'
 
   const { handleRedo, handleUndo } = useHistory()
 </script>

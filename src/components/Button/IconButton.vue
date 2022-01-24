@@ -1,6 +1,6 @@
 <template>
   <Button class="icon-button" :class="{ title: title }">
-    <Icon :icon="icon" :size="size" />
+    <Icon :icon="icon" :size="size" :color="color" />
     <span v-if="title">{{ title }}</span>
   </Button>
 </template>
@@ -8,14 +8,17 @@
 <script lang="ts" setup>
   import { Button } from 'ant-design-vue'
   import Icon from '../Icon/Icon.vue'
+  import { primaryColor } from '../../../themeConfig'
+  // import { primaryColor } from '../../../themeConfig'
 
   const props = withDefaults(
     defineProps<{
       icon: string
       title?: string
       size?: number | string
+      color?: string
     }>(),
-    { size: 16 },
+    { size: 16, color: primaryColor },
   )
 </script>
 
@@ -29,7 +32,7 @@
     border-color: transparent;
     box-shadow: none;
     &:hover {
-      border-color: @primary-color;
+      border-color: v-bind(color);
     }
     color: #727272;
     transition-duration: 0.1s !important;

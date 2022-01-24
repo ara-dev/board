@@ -1,0 +1,7 @@
+export { default as Events } from './Events.vue'
+export { default as GirdViewDesign } from './GirdViewDesign.vue'
+export { default as ListViewDesign } from './ListViewDesign.vue'
+export { default as ModalPrice } from './ModalPrice.vue'
+export { default as RegisterDesignStatus } from './RegisterDesignStatus.vue'
+export { default as RegisterDesignTicket } from './RegisterDesignTicket.vue'
+export { default as TableViewDesign } from './TableViewDesign.vue'

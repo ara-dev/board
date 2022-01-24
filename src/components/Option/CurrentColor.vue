@@ -1,5 +1,5 @@
 <template>
-  <AInput
+  <Input
     v-model:value="stageStore.currentColor.hex"
     placeholder="Basic usage"
     style="width: 30%; display: inline"
@@ -11,6 +11,7 @@
 
 <script lang="ts" setup>
   import { stageStore } from '../../core'
+  import { Input } from 'ant-design-vue'
 </script>
 
 <style scoped></style>

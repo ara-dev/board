@@ -1,27 +1,27 @@
 <template>
   <div class="flex items-center gap-2">
-    <ATooltip>
+    <Tooltip>
       <template #title>ذخیره</template>
       <IconButton icon="tabler:device-floppy" @click="save" />
-    </ATooltip>
+    </Tooltip>
 
-    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
+    <Tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.delete_button')">
       <template #title>حذف</template>
       <IconButton
         icon="tabler:trash"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.delete_button')"
         @click="stageStore.applyDelete()"
       />
-    </ATooltip>
+    </Tooltip>
 
-    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
+    <Tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.copy_button')">
       <template #title>کپی</template>
       <IconButton
         icon="ion:copy-outline"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.copy_button')"
         @click="stageStore.applyDuplicate()"
       />
-    </ATooltip>
+    </Tooltip>
 
     <IconButton
       icon="ion:contrast-outline"
@@ -32,7 +32,7 @@
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')"
     />
 
-    <APopover
+    <Popover
       v-if="
         uiStore.isVisible('ui.stage_top_right_menu.children.opacity_button') &&
         uiStore.isActive('ui.stage_top_right_menu.children.opacity_button')
@@ -49,7 +49,7 @@
               "
               class="col-span-2"
             >
-              <a-input-number
+              <InputNumber
                 v-model:value="stageStore.opacity"
                 :disabled="
                   !uiStore.isActive(
@@ -77,7 +77,7 @@
                   : 'col-span-6',
               ]"
             >
-              <ASlider
+              <Slider
                 v-model:value="stageStore.opacity"
                 :max="100"
                 :min="0"
@@ -89,17 +89,17 @@
         </div>
       </template>
       <IconButton icon="ion:contrast-outline" />
-    </APopover>
+    </Popover>
 
-    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
+    <Tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.crop_button')">
       <template #title>برش</template>
       <IconButton
         icon="ion:crop-outline"
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.crop_button')"
       />
-    </ATooltip>
+    </Tooltip>
 
-    <ATooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
+    <Tooltip v-if="uiStore.isVisible('ui.stage_top_right_menu.children.lock_button')">
       <template #title>
         {{ stageStore.layerLock ? 'بازگشویی قفل لایه' : 'قفل کردن لایه' }}
       </template>
@@ -108,9 +108,9 @@
         :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.lock_button')"
         @click="stageStore.applyToggleLockUnlock()"
       />
-    </ATooltip>
+    </Tooltip>
 
-    <ADropdown
+    <Dropdown
       v-if="uiStore.isVisible('ui.stage_top_right_menu.children.flip_rotate_button')"
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.flip_rotate_button')"
       placement="bottomCenter"
@@ -120,53 +120,53 @@
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
             <div>
-              <AMenu :selectable="false">
-                <AMenuItemGroup key="position_group">
+              <Menu :selectable="false">
+                <MenuItemGroup key="position_group">
                   <template #title>چرخش</template>
-                  <AMenuItem key="rotate_90" @click="stageStore.applyRotateDegrees(-90)">
+                  <MenuItem key="rotate_90" @click="stageStore.applyRotateDegrees(-90)">
                     چرخش
                     <span> &#176; 90</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
-                  </AMenuItem>
-                  <AMenuItem key="rotate_minus_90" @click="stageStore.applyRotateDegrees(90)">
+                  </MenuItem>
+                  <MenuItem key="rotate_minus_90" @click="stageStore.applyRotateDegrees(90)">
                     چرخش
                     <span> &#176; 90</span>
                     -
-                  </AMenuItem>
-                  <AMenuItem key="rotate_180" @click="stageStore.applyRotateDegrees(-180)">
+                  </MenuItem>
+                  <MenuItem key="rotate_180" @click="stageStore.applyRotateDegrees(-180)">
                     چرخش
                     <span> &#176; 180</span>
                     <!--<sup style="font-size: 20px">&deg;</sup>-->
-                  </AMenuItem>
-                  <AMenuItem key="rotate_minus_180" @click="stageStore.applyRotateDegrees(180)">
+                  </MenuItem>
+                  <MenuItem key="rotate_minus_180" @click="stageStore.applyRotateDegrees(180)">
                     چرخش
                     <span> &#176; 180</span>
                     -
-                  </AMenuItem>
-                </AMenuItemGroup>
-              </AMenu>
+                  </MenuItem>
+                </MenuItemGroup>
+              </Menu>
             </div>
             <div>
-              <AMenu :selectable="false">
-                <a-menu-item-group key="align_group">
+              <Menu :selectable="false">
+                <MenuItemGroup key="align_group">
                   <template #title>معکوس</template>
-                  <a-menu-item key="flip_horizontal" @click="stageStore.applyFlipVertical()">
+                  <MenuItem key="flip_horizontal" @click="stageStore.applyFlipVertical()">
                     <Icon icon="fluent:flip-horizontal-20-regular" size="23" />
                     افقی
-                  </a-menu-item>
-                  <a-menu-item key="flip_vertical" @click="stageStore.applyFlipHorizontal()">
+                  </MenuItem>
+                  <MenuItem key="flip_vertical" @click="stageStore.applyFlipHorizontal()">
                     <Icon icon="fluent:flip-vertical-20-regular" size="23" />
                     عمودی
-                  </a-menu-item>
-                </a-menu-item-group>
-              </AMenu>
+                  </MenuItem>
+                </MenuItemGroup>
+              </Menu>
             </div>
           </div>
         </div>
       </template>
-    </ADropdown>
+    </Dropdown>
 
-    <ADropdown
+    <Dropdown
       v-if="uiStore.isVisible('ui.stage_top_right_menu.children.position_button')"
       :disabled="!uiStore.isActive('ui.stage_top_right_menu.children.position_button')"
       placement="bottomCenter"
@@ -177,73 +177,83 @@
         <div style="background: white; border: 1px solid #eee">
           <div class="grid grid-cols-2">
             <div>
-              <AMenu :selectable="false">
-                <AMenuItemGroup key="position_group">
+              <Menu :selectable="false">
+                <MenuItemGroup key="position_group">
                   <template #title>لایه بندی</template>
-                  <AMenuItem key="position_to_forward" @click="stageStore.applyZIndexTop()">
+                  <MenuItem key="position_to_forward" @click="stageStore.applyZIndexTop()">
                     <Icon icon="fluent:position-forward-20-filled" size="23" />
                     بیار رو
-                  </AMenuItem>
-                  <AMenuItem key="position_up" @click="stageStore.applyZIndexUp()">
+                  </MenuItem>
+                  <MenuItem key="position_up" @click="stageStore.applyZIndexUp()">
                     <Icon icon="fluent:position-to-front-20-filled" size="23" />
                     رویی
-                  </AMenuItem>
-                  <AMenuItem key="position_down" @click="stageStore.applyZIndexDown()">
+                  </MenuItem>
+                  <MenuItem key="position_down" @click="stageStore.applyZIndexDown()">
                     <Icon icon="fluent:position-to-back-20-filled" size="23" />
                     زیرین
-                  </AMenuItem>
-                  <AMenuItem key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
+                  </MenuItem>
+                  <MenuItem key="position_to_bottom" @click="stageStore.applyZIndexBottom()">
                     <Icon icon="fluent:position-backward-20-filled" size="23" />
                     برو زیر
-                  </AMenuItem>
-                </AMenuItemGroup>
-              </AMenu>
+                  </MenuItem>
+                </MenuItemGroup>
+              </Menu>
             </div>
             <div>
-              <AMenu :selectable="false">
-                <AMenuItemGroup key="align_group">
+              <Menu :selectable="false">
+                <MenuItemGroup key="align_group">
                   <template #title>موقعیت قرارگیری</template>
-                  <AMenuItem key="align_left" @click="stageStore.applyAlignLeft()">
+                  <MenuItem key="align_left" @click="stageStore.applyAlignLeft()">
                     <Icon icon="fluent:align-left-20-regular" size="23" />
                     تراز چپ
-                  </AMenuItem>
-                  <AMenuItem key="align_center">
+                  </MenuItem>
+                  <MenuItem key="align_center">
                     <Icon icon="fluent:align-center-horizontal-20-regular" size="23" />
                     تراز وسط
-                  </AMenuItem>
-                  <AMenuItem key="align_right" @click="stageStore.applyAlignRight()">
+                  </MenuItem>
+                  <MenuItem key="align_right" @click="stageStore.applyAlignRight()">
                     <Icon icon="fluent:align-right-16-regular" size="23" />
                     تراز راست
-                  </AMenuItem>
-                  <AMenuItem key="align_top">
+                  </MenuItem>
+                  <MenuItem key="align_top">
                     <Icon icon="fluent:align-top-20-regular" size="23" />
                     تراز بالا
-                  </AMenuItem>
-                  <AMenuItem key="align_middel">
+                  </MenuItem>
+                  <MenuItem key="align_middel">
                     <Icon icon="fluent:align-center-vertical-32-regular" size="23" />
                     تراز میانی
-                  </AMenuItem>
-                  <AMenuItem key="align_bottom">
+                  </MenuItem>
+                  <MenuItem key="align_bottom">
                     <Icon icon="fluent:align-bottom-20-regular" size="23" />
                     تراز پایین
-                  </AMenuItem>
-                </AMenuItemGroup>
-              </AMenu>
+                  </MenuItem>
+                </MenuItemGroup>
+              </Menu>
             </div>
           </div>
         </div>
       </template>
-    </ADropdown>
+    </Dropdown>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { uiStore, stageStore } from '../../core'
-  import Icon from '../Icon/Icon.vue'
-  import IconButton from '../Button/IconButton.vue'
+  import { uiStore, stageStore } from '@b/core'
+  import Icon from '../../../../../components/Icon/Icon.vue'
+  import IconButton from '../../../../../components/Button/IconButton.vue'
   import { computed } from 'vue'
-  import { designStore } from '../../model/design'
+  import useDesignStore from '@b/model/design'
   import { message } from 'ant-design-vue'
+  import {
+    MenuItem,
+    Menu,
+    MenuItemGroup,
+    Dropdown,
+    Tooltip,
+    InputNumber,
+    Popover,
+    Slider,
+  } from 'ant-design-vue/es'
 
   const getLockIcon = computed(() => {
     if (stageStore.layerLock) {
@@ -255,6 +265,7 @@
   async function save() {
     try {
       const design = await stageStore.exportToDesign()
+      const designStore = useDesignStore()
       await designStore.updateDesign(design)
       message.success('تغییرات با موفقیت ذخیره شد')
     } catch (e) {

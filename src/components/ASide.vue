@@ -1,9 +1,9 @@
 <template>
   <div :class="{ 'active-profile': isProfile }" class="profile-right-toolbar text-center">
     <div v-if="stageStore.isEditMode" id="close-btn">
-      <AButton id="close-btn-profile" type="text" @click="toggleMenu">
+      <Button id="close-btn-profile" type="text" @click="toggleMenu">
         <Icon color="#ffffff" icon="ion:close-outline" size="20" />
-      </AButton>
+      </Button>
     </div>
 
     <div id="back-aside">
@@ -21,6 +21,7 @@
   import ToolBar from './ToolBar/ToolBar.vue'
   import Logo from './Logo.vue'
   import Icon from './Icon/Icon.vue'
+  import { Button } from 'ant-design-vue'
 
   const router = useRouter()
 
@@ -44,7 +45,7 @@
 <style lang="less">
   .profile-right-toolbar {
     position: fixed;
-    right: 0;
+    left: 0;
     width: @cp-side-width;
     top: 0;
     bottom: 0;

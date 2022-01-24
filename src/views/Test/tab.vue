@@ -1,5 +1,5 @@
 <template>
-  <a-tabs v-model:activeKey="activeKey">
+  <Tabs v-model:activeKey="activeKey">
     <slot></slot>
     <template #renderTabBar="{ DefaultTabBar, ...props }">
       <component
@@ -8,12 +8,12 @@
         v-bind="props"
       />
     </template>
-  </a-tabs>
+  </Tabs>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-
+  import { Tabs } from 'ant-design-vue/es'
   const activeKey = ref('1')
 </script>
 

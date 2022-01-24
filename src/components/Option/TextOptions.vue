@@ -1,7 +1,7 @@
 <template>
   <div>
     <span>نوشته</span>
-    <ATextarea v-model:value="currentText" />
+    <Textarea v-model:value="currentText" />
     <p class="text-gray-500 mb-2 mt-3 text-xs font-semibold">فونت</p>
     <!--    @change="changeFont"-->
 
@@ -9,34 +9,34 @@
     option-filter-prop="children"
    -->
 
-    <ASelect
+    <Select
       v-model:value="stageStore.textOption.fontFamily"
       :filter-option="filterOption"
       class="w-full"
       show-search
       @change="changeFont"
     >
-      <a-select-option v-for="(item, index) in fontsStore.rows" :key="index" :value="item.name">
+      <SelectOption v-for="(item, index) in fontsStore.rows" :key="index" :value="item.name">
         {{ item.fa_name }}
-      </a-select-option>
-      <a-select-option value="lucy">Lucy</a-select-option>
-    </ASelect>
-    <a-divider />
+      </SelectOption>
+      <SelectOption value="lucy">Lucy</SelectOption>
+    </Select>
+    <Divider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">سایز فونت</p>
     <div class="text-center">
-      <a-input-number
+      <InputNumber
         v-model:value="stageStore.textOption.fontSize"
         :min="0"
         @change="stageStore.applyFontSize()"
       />
     </div>
 
-    <ADivider />
+    <Divider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">ترازبندی</p>
 
     <AlignButton />
 
-    <ADivider />
+    <Divider />
     <p class="text-gray-500 mb-2 text-xs font-semibold">رنگ</p>
 
     <!--    <swatches :value="stageStore.currentColor.hex" @change="(val)=> stageStore.currentColor=val" />
@@ -45,7 +45,7 @@
     <!--    v-model:value="stageStore.currentColor"-->
 
     <!--    <div class="mx-auto">-->
-    <APopover arrow-point-at-center>
+    <Popover arrow-point-at-center>
       <template #content>
         <sketch
           :value="stageStore.currentColor.hex"
@@ -66,7 +66,7 @@
           </template >
         </a-input>-->
 
-      <AInput
+      <Input
         v-model:value="stageStore.currentColor.hex"
         placeholder="Basic usage"
         style="width: 30%; display: inline"
@@ -80,7 +80,7 @@
 
       <!--        <a-input prefix="￥" suffix="RMB" />-->
 
-      <!--        <a-button class="mr-2">
+      <!--        <a-button class="ml-2">
           &lt;!&ndash;<icon-sun/>&ndash;&gt;
 &lt;!&ndash;          <div ></div>&ndash;&gt;
           <span :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`" ></span>
@@ -106,19 +106,29 @@
             <div :style="`width:30px;height:32px;background:${stageStore.currentColor.hex}`"></div>
           </template>
         </a-input-search>-->
-    </APopover>
+    </Popover>
     <!--    </div>-->
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { stageStore } from '../../core'
-  import { fontsStore } from '../../model/fonts'
-  import Sketch from '../ColorPicker/Solid/Sketch.vue'
+  import { stageStore } from '@b/core'
+  import { fontsStore } from '@b/model/fonts'
+  import Sketch from '@b/components/ColorPicker/Solid/Sketch.vue'
   import { baseURLApi } from '../../../themeConfig'
-  import { useInstallFont } from '../../utils/useInstallFont'
+  import { useInstallFont } from '@b/utils/useInstallFont'
   import { computed } from 'vue'
   import { get } from 'lodash-es'
+  import {
+    Textarea,
+    Select,
+    Divider,
+    Popover,
+    Input,
+    SelectOption,
+    InputNumber,
+  } from 'ant-design-vue/es'
+  import AlignButton from '@b/components/Option/AlignButton.vue'
 
   const colors = {
     hex: '#194d33',

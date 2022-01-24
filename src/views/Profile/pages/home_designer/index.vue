@@ -8,7 +8,14 @@
       @changePage="changePage"
       @changeTab="changeTab"
     >
-      <a-tab-pane
+      <template #extra-action>
+        <RadioGroup v-model:value="viewMode" size="small">
+          <RadioButton value="table">جدول</RadioButton>
+          <RadioButton value="default">لیست</RadioButton>
+          <RadioButton value="grid">گرید</RadioButton>
+        </RadioGroup>
+      </template>
+      <TabPane
         v-for="item in status.filter((_item) => _item.show).reverse()"
         :key="item.id"
         :tab="item.title"
@@ -16,9 +23,14 @@
         dir="rtl"
       >
         <div>
-          <ASpin :spinning="designLoading" tip="در حال دریافت طرح ها">
-            <div class="overflow-scroll flex flex-col gap-2">
-              <RegisterDesignItem
+          <Spin :spinning="designLoading" tip="در حال دریافت طرح ها">
+            <Empty
+              class="p-5"
+              description="هیچ طرحی ای یافت نشد"
+              v-if="!designStore.rows || designStore.rows.length == 0"
+            />
+            <div class="flex flex-col gap-2" v-if="viewMode == 'default'">
+              <ListViewDesign
                 v-for="(item, index) in designStore.rows"
                 :key="index"
                 :item="item"
@@ -27,14 +39,20 @@
                 @deleteDesign="deleteDesign(item._id)"
               />
             </div>
-          </ASpin>
+            <div v-else-if="viewMode == 'grid'" class="grid grid-cols-6 gap-2">
+              <GirdViewDesign :item="item" v-for="(item, index) in designStore.rows" :key="index" />
+            </div>
+            <div v-else-if="viewMode == 'table'">
+              <TableViewDesign />
+            </div>
+          </Spin>
         </div>
-      </a-tab-pane>
-      <a-tab-pane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
-        <ASpin :spinning="spinning" tip="در حال بارگذاری طرح...">
+      </TabPane>
+      <TabPane v-if="userStore.isSuperAdmin()" :key="1" class="p-2" dir="rtl" tab="بارگذاری">
+        <Spin :spinning="spinning" tip="در حال بارگذاری طرح...">
           <div class="mt-5">
             <div class="overflow-scroll" style="max-height: calc(100vh - 550px)">
-              <RegisterDesignItem
+              <ListViewDesign
                 v-for="(item, index) in designStore.uploadList.slice(
                   designStore.state.page * designStore.state.limit,
                   designStore.state.page * designStore.state.limit + designStore.state.limit,
@@ -46,7 +64,7 @@
                 @deleteDesign="designStore.removeFromUploadList(index)"
               />
             </div>
-            <AUploadDragger
+            <UploadDragger
               :beforeUpload="handleBeforeUpload"
               :multiple="true"
               :showUploadList="false"
@@ -61,20 +79,20 @@
                 طرح خود را با پسوند svg انتخاب کنید و پس از اینکه شماره شناسایی و دسته آن را مشخص
                 کردید گزینه بارگذاری طرح را انتخاب کنید
               </p>
-            </AUploadDragger>
+            </UploadDragger>
             <div class="text-center mt-3">
-              <AButton
+              <Button
                 v-if="userStore.isSuperAdmin()"
                 :disabled="designStore.uploadList.length == 0"
                 @click="uploadDesign"
-                >بارگذاری طرح</AButton
+                >بارگذاری طرح</Button
               >
             </div>
           </div>
-        </ASpin>
-      </a-tab-pane>
+        </Spin>
+      </TabPane>
     </Tabs>
-    <AModal
+    <Modal
       :visible="showModalPrice"
       cancelText="بستن"
       okText="ثبت دستمزد"
@@ -85,7 +103,7 @@
     >
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <AImage
+          <Image
             v-if="currentDesign.image"
             :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
             class="rounded object-cover cursor-zoom-in"
@@ -101,27 +119,27 @@
             {{ currentDesign.code }}
           </div>
           <div v-if="currentDesign.tags" class="mt-3">
-            <ATag
+            <Tag
               v-for="(item, index) in tagsStore.getTagsByID(currentDesign.tags)"
               :key="index"
               :color="item.color"
             >
               {{ item.title }}
-            </ATag>
+            </Tag>
           </div>
         </div>
       </div>
       <div class="grid grid-cols-3 gap-4">
         <div>
           <span class="block my-3">عنوان طرح</span>
-          <AInput
+          <Input
             v-if="currentDesign.title && currentDesign.title.length > 0"
             v-model:value="currentDesign.title[0]"
           />
         </div>
         <div>
           <span class="block my-3">قیمت طرح</span>
-          <AInput
+          <Input
             v-if="currentDesign.price"
             v-model:value="currentDesign.price.design"
             placeholder="6000"
@@ -129,7 +147,7 @@
         </div>
         <div>
           <span class="block my-3">هزینه چاپ</span>
-          <AInput
+          <Input
             v-if="currentDesign.price"
             v-model:value="currentDesign.price.print"
             placeholder="25000"
@@ -138,15 +156,15 @@
       </div>
       <div>
         <span class="block my-3">قیمت پایه</span>
-        <a-radio-group
+        <RadioGroup
           v-for="(item, index) in priceList"
           :key="index"
           v-model:value="price"
           :class="[`${prefixCls}-price`]"
           @change="handleChangePrice"
         >
-          <a-radio-button :value="item">{{ usePrice(item) }}</a-radio-button>
-        </a-radio-group>
+          <RadioButton :value="item">{{ usePrice(item) }}</RadioButton>
+        </RadioGroup>
       </div>
       <div>
         <span class="block my-3">افزودنی ها</span>
@@ -157,7 +175,7 @@
         >
           <a-radio-button :value="">{{ item.title }}</a-radio-button>
         </a-radio-group>-->
-        <a-checkbox-group
+        <CheckboxGroup
           v-model:value="additional"
           :options="
             additionalList.map((item) => {
@@ -175,19 +193,19 @@
           <a-radio-button value="a">15،000 تومان</a-radio-button>
         </a-radio-group>-->
       </div>
-      <ADivider />
+      <Divider />
       <div class="flex flex-col">
         <div class="w-3/6 mb-5">
-          <AInput
+          <Input
             v-if="currentDesign.price"
             v-model:value="currentDesign.price.edit"
             placeholder="مبلغ دلخواه"
           />
         </div>
-        <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
+        <Textarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
-    </AModal>
-    <AModal
+    </Modal>
+    <Modal
       :visible="showModalStatus"
       cancelText="بستن"
       okText="ثبت وضعیت"
@@ -198,7 +216,7 @@
     >
       <div v-if="currentDesign != null" class="grid grid-cols-12 gap-4">
         <div class="col-span-3">
-          <AImage
+          <Image
             v-if="currentDesign.image"
             :src="`${baseURLApi}${currentDesign.image.file_storage}${currentDesign.image.file_name}`"
             class="rounded object-cover cursor-zoom-in"
@@ -212,20 +230,20 @@
           </div>
           <div class="text-lg font-bold">{{ currentDesign.code }}</div>
           <div v-if="currentDesign.tags" class="mt-3">
-            <ATag
+            <Tag
               v-for="(item, index) in tagsStore.getTagsByID(currentDesign.tags)"
               :key="index"
               :color="item.color"
             >
               {{ item.title }}
-            </ATag>
+            </Tag>
           </div>
         </div>
       </div>
       <div class="mt-5">
-        <a-radio-group v-model:value="currentDesign.status" class="w-full">
+        <RadioGroup v-model:value="currentDesign.status" class="w-full">
           <div class="grid grid-cols-4 gap-2">
-            <ACard
+            <Card
               v-for="(item, index) in status.filter((item) => item.show)"
               :key="index"
               :class="[
@@ -235,34 +253,62 @@
               class="cursor-pointer"
               style="margin-bottom: 20px"
             >
-              <ARadio :value="item.id" class="w-full">{{ item.title }}</ARadio>
-            </ACard>
+              <Radio :value="item.id" class="w-full">{{ item.title }}</Radio>
+            </Card>
           </div>
-        </a-radio-group>
+        </RadioGroup>
       </div>
-      <ADivider />
+      <Divider />
       <div>
-        <ATextarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
+        <Textarea :auto-size="{ minRows: 3, maxRows: 5 }" class="mt-5" placeholder="تیکت" />
       </div>
-    </AModal>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { status } from '../../../components/Register-Design/status'
-  import { usePageInfo } from '../hook/usePageInfo'
-  import { priceList, additionalList } from '../../../components/Register-Design/price'
-  import { ref, onMounted, toRaw } from 'vue'
-  import { Design, designStore } from '../../../model/design'
-  import { tagsStore } from '../../../model/tags'
-  import { userStore } from '../../../model/user'
-  import { stageStore } from '../../../core'
-  import { useDesign } from '../../../utils/useDesign'
-  import { usePrice } from '../../../utils/usePrice'
+  import { status } from '@b/views/Profile/pages/home_designer/src/types/status'
+  import { usePageInfo } from '../../hook/usePageInfo'
+  import { priceList, additionalList } from '@b/views/Profile/pages/home_designer/src/types/price'
+  import { ref, onMounted, toRaw, watch } from 'vue'
+  import useDesignStore, { Design } from '@b/model/design'
+  import { tagsStore } from '@b/model/tags'
+  import { userStore } from '@b/model/user'
+  import { stageStore } from '@b/core'
+  import { useDesign } from '@b/utils/useDesign'
+  import { usePrice } from '@b/utils/usePrice'
   import { message } from 'ant-design-vue'
-  import { convertBase64ToFile } from '../../../core/store/import'
-  import { FileModel, fileStore } from '../../../model/file'
-  import { baseURLApi } from '../../../../themeConfig'
+  import { convertBase64ToFile } from '@b/core/store/import'
+  import { FileModel, fileStore } from '@b/model/file'
+  import { baseURLApi } from '../../../../../themeConfig'
+  import TabPane from 'ant-design-vue/es/vc-tabs/src/TabPane'
+
+  import {
+    RadioButton,
+    RadioGroup,
+    Button,
+    Spin,
+    UploadDragger,
+    Empty,
+    Modal,
+    Image,
+    Tag,
+    Input,
+    Divider,
+    Textarea,
+    CheckboxGroup,
+    Card,
+    Radio,
+  } from 'ant-design-vue/es'
+
+  import Tabs from '@b/components/Tabs'
+  import {
+    TableViewDesign,
+    ListViewDesign,
+    GirdViewDesign,
+  } from '@b/views/Profile/pages/home_designer/src/components'
+  import Icon from '@b/components/Icon/Icon.vue'
+
   const pageInfo = usePageInfo('register-design')
   const { prefixCls } = useDesign('register-design')
   const showModalStatus = ref(false)
@@ -273,6 +319,7 @@
   const spinning = ref<boolean>(false)
   const designLoading = ref<boolean>(false)
   const activeTab = ref(8)
+  const designStore = useDesignStore()
 
   interface FileItem {
     uid: string
@@ -284,6 +331,17 @@
     size: number
     originFileObj: any
   }
+
+  const viewMode = ref('default')
+
+  watch(viewMode, (n) => {
+    if (n != 'default') {
+      designStore.limit = 42
+    } else {
+      designStore.limit = 10
+    }
+    designStore.getDesign()
+  })
 
   function handleBeforeUpload(file: FileItem) {
     spinning.value = true
@@ -472,5 +530,12 @@
 
   .border-green{
     border-color: @primary-color;
+  }
+
+  .ant-modal-footer{
+    &>div{
+      display: flex;
+      align-items: center;
+    }
   }
 </style>

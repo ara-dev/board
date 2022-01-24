@@ -1,13 +1,13 @@
 <template>
   <div style="direction: ltr">
-    <ATabs v-model:activeKey="active">
-      <a-tab-pane :key="4" tab="تصویر">
+    <Tabs v-model:activeKey="active">
+      <TabPane :key="4" tab="تصویر">
         <multi-upload />
-      </a-tab-pane>
+      </TabPane>
 
-      <a-tab-pane :key="3" tab="بافت">Content of Tab Pane 3</a-tab-pane>
-      <a-tab-pane :key="2" force-render tab="شیب رنگ">Content of Tab Pane 2</a-tab-pane>
-      <a-tab-pane :key="1" tab="رنگ">Content of Tab Pane 1</a-tab-pane>
+      <TabPane :key="3" tab="بافت">Content of Tab Pane 3</TabPane>
+      <TabPane :key="2" force-render tab="شیب رنگ">Content of Tab Pane 2</TabPane>
+      <TabPane :key="1" tab="رنگ">Content of Tab Pane 1</TabPane>
 
       <template #renderTabBar="{ DefaultTabBar, ...props }">
         <component
@@ -16,13 +16,14 @@
           v-bind="props"
         />
       </template>
-    </ATabs>
+    </Tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue'
   import MultiUpload from '../Upload/MultiUpload.vue'
+  import { Tabs, TabPane } from 'ant-design-vue/es'
   const active = ref(1)
 </script>
 

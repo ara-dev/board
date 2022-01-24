@@ -1,13 +1,13 @@
 <template>
-  <ATag :class="[`${prefixVar}-tag`, currentStatus.className]">{{ currentStatus.title }}</ATag>
+  <Tag :class="[`${prefixCls}-tag`, currentStatus.className]">{{ currentStatus.title }}</Tag>
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../utils/useDesign'
-  import { status, StatusItem } from './status'
+  import { useDesign } from '@b/utils/useDesign'
+  import { status, StatusItem } from '../types/status'
   import { computed } from 'vue'
+  import { Tag } from 'ant-design-vue'
   const { prefixCls } = useDesign('register-design-status')
-  const { prefixVar } = useDesign('')
 
   interface Props {
     sts: number

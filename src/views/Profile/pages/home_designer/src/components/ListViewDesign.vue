@@ -1,8 +1,8 @@
 <template>
-  <ACard :class="[`${prefixCls}`]">
+  <Card :class="[`${prefixCls}`]">
     <div class="grid grid-cols-12 gap-2 items-start">
       <div class="col-span-2 relative img-wrapper">
-        <AImage
+        <Image
           :src="`${baseURLApi}${props.item.image.file_storage}${props.item.image.file_name}`"
           class="img-item block"
         />
@@ -12,8 +12,8 @@
       </div>
       <div class="col-span-10 flex flex-col gap-2">
         <div class="flex justify-between items-baseline">
-          <div class="flex gap-2 w-full">
-            <AInput
+          <div class="flex gap-2 w-full items-center">
+            <Input
               v-model:value="props.item.code"
               :disabled="props.item.status != 1"
               class="en-font"
@@ -21,14 +21,14 @@
               placeholder="شماره شناسایی"
             />
 
-            <AButton
+            <Button
               :class="{ 'hover-show': !(props.item.price && props.item.price.edit) }"
               v-if="userStore.isSuperAdmin()"
               ghost
               type="primary"
               @click="definePrice"
             >
-              <template #icon><Icon class="ml-3" icon="ion:card-outline" size="25" /></template>
+              <template #icon><Icon class="mr-3" icon="ion:card-outline" size="25" /></template>
               <span class="align-top">
                 {{
                   props.item.price && props.item.price.edit
@@ -38,28 +38,28 @@
               </span>
               <!--                <span v-if="true" class="align-top" @click="definePrice">ثبت دستمزد اصلاح</span>
               <span v-else class="align-top">{{ usePrice(15000) }}</span>-->
-            </AButton>
+            </Button>
             <div class="flex-1"></div>
-            <AButton type="link" class="hover-show">
+            <Button type="link" class="hover-show">
               <div>
                 <Icon :size="16" color="#A1A1AA" icon="ion:chatbox-ellipses-outline" />
               </div>
-            </AButton>
+            </Button>
             <div v-if="userStore.isSuperAdmin()" class="cursor-pointer hover-show">
-              <AButton @click="deleteDesign" type="link">
+              <Button @click="deleteDesign" type="link">
                 <div v-if="props.item.status == 1" class="inline">
                   <Icon color="red" icon="ion:remove-circle-outline" size="16" />
                 </div>
                 <div v-else class="inline">
                   <Icon color="red" icon="ion:trash-outline" size="16" />
                 </div>
-              </AButton>
+              </Button>
             </div>
             <RegisterDesignStatus class="!mx-0" :sts="props.item.status" />
           </div>
         </div>
         <div>
-          <ASelect
+          <Select
             v-model:value="props.item.tags"
             :disabled="!userStore.isSuperAdmin()"
             class="w-full"
@@ -67,62 +67,61 @@
             notFoundContent="داده ای یافت نشد"
             @change="update"
           >
-            <a-select-option v-for="item in tagsStore.rows" :key="item._id">
+            <SelectOption v-for="item in tagsStore.rows" :key="item._id">
               <span :style="{ color: item.color }">{{ item.title }}</span>
-            </a-select-option>
+            </SelectOption>
             <template #placeholder="data"> {{ data }} </template>
-          </ASelect>
+          </Select>
         </div>
         <div class="w-full flex items-center gap-2 hover-show">
-          <ACheckbox
+          <Checkbox
             v-if="userStore.isSuperAdmin()"
             v-model:checked="props.item.show"
             @change="update"
-            >نمایش</ACheckbox
+            >نمایش</Checkbox
           >
-          <AButton
-            v-if="userStore.isSuperAdmin() && props.item.status != 1"
-            @click="changeStatus()"
-          >
+          <Button v-if="userStore.isSuperAdmin() && props.item.status != 1" @click="changeStatus()">
             تعیین وضعیت طرح
-          </AButton>
-          <AButton v-if="showEditDesignButton" type="primary" @click="designEdit">
+          </Button>
+          <Button v-if="showEditDesignButton" type="primary" @click="designEdit">
             اصلاح طرح
-          </AButton>
-          <AButton v-if="showEditDesignButton && props.item.status != 4" @click="editEnd">
+          </Button>
+          <Button v-if="showEditDesignButton && props.item.status != 4" @click="editEnd">
             اتمام کار
-          </AButton>
+          </Button>
 
-          <AButton
+          <Button
             v-if="(userStore.isDesigner() || userStore.isSuperAdmin()) && props.item.status == 8"
             @click="selectForEdit"
           >
             انتخاب برای فارسی سازی
-          </AButton>
+          </Button>
           <div class="flex-1"></div>
         </div>
       </div>
     </div>
-  </ACard>
+  </Card>
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../utils/useDesign'
-  import { usePrice } from '../../utils/usePrice'
-  import { tagsStore } from '../../model/tags'
-  import { Design, designStore } from '../../model/design'
-  import router from '../../router'
-  import { baseURLApi } from '../../../themeConfig'
+  import { useDesign } from '@b/utils/useDesign'
+  import { usePrice } from '@b/utils/usePrice'
+  import { tagsStore } from '@b/model/tags'
+  import useDesignStore, { Design } from '@b/model/design'
+  import router from '@b/router'
+  import { baseURLApi } from '../../../../../../../themeConfig'
   import { message } from 'ant-design-vue'
-  import { userStore } from '../../model/user'
+  import { userStore } from '@b/model/user'
   import { toRaw, unref, computed } from 'vue'
-  const { prefixCls } = useDesign('register-design-item')
-  const { prefixVar } = useDesign('')
+  import { Select, Button, Card, Checkbox, Image, Input, SelectOption } from 'ant-design-vue/es'
+
   import tinycolor from 'tinycolor2'
+  import Icon from '@b/components/Icon/Icon.vue'
+  import RegisterDesignStatus from '@b/views/Profile/pages/home_designer/src/components/RegisterDesignStatus.vue'
   interface Props {
     item: Design
   }
-
+  const { prefixCls } = useDesign('design-item')
   const showEditDesignButton = computed(() => {
     return (
       (userStore.isSuperAdmin() && props.item.status != 1) ||
@@ -130,6 +129,7 @@
     )
   })
 
+  const designStore = useDesignStore()
   const props = withDefaults(defineProps<Props>(), {})
 
   const emit = defineEmits<{
@@ -196,7 +196,7 @@
 </script>
 
 <style lang="less">
-  @pre: ~'@{prefix}-register-design-item';
+  @pre: ~'@{prefix}-design-item';
 
   .@{pre}{
 
@@ -224,7 +224,6 @@
         .img-name {
           color: @white;
           background-color: @primary-color;
-
         }
       }
       .ant-image{

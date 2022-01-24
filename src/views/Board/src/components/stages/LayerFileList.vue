@@ -11,7 +11,7 @@
       <span @click.stop="toggleExpand(item)">
         <Icon :icon="getExpandIcon(item.name)" />
       </span>
-      <span class="ant-tag mr-0">
+      <span class="ant-tag ml-0">
         <Icon :icon="getIcon(item.name)" />
         {{ getText(item.name) }}</span
       >
@@ -27,9 +27,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { stageStore } from '../../../../core/store/stage'
+  import { stageStore } from '@b/core'
   import { computed, ref, toRaw } from 'vue'
   import { get, isArray, isBoolean, set } from 'lodash-es'
+  import Icon from '@b/components/Icon/Icon.vue'
 
   const expandKeys = ref<Set<string>>(new Set())
   const filterModel = ref<string[]>([])
@@ -84,8 +85,6 @@
   }
 
   function getExpandIcon(name: string) {
-    console.log('name ===>', name)
-    console.log('expandKeys.value ===>', expandKeys.value)
     return expandKeys.value.has(name) ? 'tabler:caret-left' : 'tabler:caret-down'
   }
 

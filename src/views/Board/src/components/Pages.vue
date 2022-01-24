@@ -1,25 +1,18 @@
 <template>
-  <!--  <div id="drag_page" class="z-50" style="position: absolute; top: 250px">
-    <a-card style="width: 300px">
-      <p>Card content</p>
-      <p>Card content</p>
-      <p>Card content</p>
-    </a-card>
-  </div>-->
-
   <div id="mydiv" ref="mydiv">
-    <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
     <div id="mydivheader">Click here to move</div>
-    <ACard style="width: 300px">
+    <Card style="width: 300px">
       <p>Card content</p>
       <p>Card content</p>
       <p>Card content</p>
-    </ACard>
+    </Card>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
+  import { Card } from 'ant-design-vue'
+
   let elmnt
 
   onMounted(() => {

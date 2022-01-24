@@ -1,11 +1,11 @@
 <template>
   <div class="h-screen relative w-full">
+    <ASide />
     <RouterView id="main-container" v-slot="{ Component, route }">
       <Transition :name="route.meta.transitionName || 'scale'">
         <component :is="Component" />
       </Transition>
     </RouterView>
-    <ASide />
   </div>
 </template>
 
@@ -30,6 +30,6 @@
   }
 
   #main-container {
-    padding-right: @cp-side-width;
+    padding-left: @cp-side-width;
   }
 </style>

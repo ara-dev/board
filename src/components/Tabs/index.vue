@@ -1,14 +1,6 @@
 <template>
   <!--  , 'h-full'-->
-  <ACard :class="[`${prefixCls}-main-card`]" class="flex flex-col">
-    <div :class="[`${prefixCls}-search-icon`]">
-      <AButton shape="circle" type="text" @click="showSearchBox = true">
-        <template #icon>
-          <Icon icon="ion:search-outline" size="23" />
-        </template>
-      </AButton>
-    </div>
-
+  <Card :class="[`${prefixCls}-main-card`]" class="flex flex-col">
     <div class="flex-1">
       <div>
         <div style="direction: ltr; position: relative; overflow: hidden">
@@ -18,15 +10,15 @@
               showSearchBox ? '' : `${prefixCls}-search-box-hide`,
             ]"
           >
-            <AInput class="text-right" placeholder="جستجو" size="large">
+            <Input class="text-right" placeholder="جستجو" size="large">
               <template #prefix>
-                <AButton shape="circle" type="text" @click="showSearchBox = false">
+                <Button shape="circle" type="text" @click="showSearchBox = false">
                   <Icon icon="ion:close-outline" size="20" />
-                </AButton>
+                </Button>
               </template>
-            </AInput>
+            </Input>
           </div>
-          <ATabs
+          <Tabs
             v-model:activeKey="activeKey"
             :animated="false"
             :class="[`${prefixCls}`]"
@@ -41,18 +33,18 @@
                 v-bind="props"
               />
             </template>
-          </ATabs>
+          </Tabs>
         </div>
       </div>
       <div>
-        <ADivider class="!my-0" />
+        <Divider class="!my-0" />
         <div class="flex justify-between items-center p-2">
           <span class="text-xs">
             تعداد رکورد یافت شده:
             <span class="ant-tag"> {{ props.total }} رکورد</span>
           </span>
           <div>
-            <APagination
+            <Pagination
               :current="props.page"
               :pageSize="props.pageSize"
               :total="props.total"
@@ -63,12 +55,20 @@
         </div>
       </div>
     </div>
-  </ACard>
+    <div :class="[`${prefixCls}-search-icon`]" class="flex items-center gap-2">
+      <slot name="extra-action"></slot>
+      <IconButton icon="ion:search-outline" @click="showSearchBox = true" />
+    </div>
+  </Card>
 </template>
 
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
-  import { useDesign } from '../../utils/useDesign'
+  import { useDesign } from '@b/utils/useDesign'
+  import IconButton from '../Button/IconButton.vue'
+  import { Button, Input, Divider, Pagination, Tabs, Card } from 'ant-design-vue/es'
+  import Icon from '@b/components/Icon/Icon.vue'
+
   const { prefixCls } = useDesign('tabs')
   const showSearchBox = ref(false)
   const activeKey = ref(1)
@@ -125,9 +125,15 @@
 
     &-search-icon{
       position: absolute;
-      left: 15px;
+      right: 8px;
       top: 8px;
       z-index: 1;
+    }
+
+    .ant-tabs-tab{
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
     }
 
     &-search-box{
@@ -152,7 +158,7 @@
       transform: rotate(180deg);
     }
     .ant-pagination-next{
-      margin-right:8px;
+      margin-left:8px;
     }
   }
 

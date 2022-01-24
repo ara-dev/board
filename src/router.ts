@@ -70,7 +70,7 @@ const routes = [
           },
           {
             path: 'register-design',
-            component: () => import('./views/Profile/pages/register-design.vue'),
+            component: () => import('./views/Profile/pages/home_designer/index.vue'),
           },
         ],
       },

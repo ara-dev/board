@@ -6,9 +6,9 @@
           <div>
             <div class="flex items-center">
               <div>
-                <img class="rounded-lg inline-block" src="@/assets/img/temp/profile-img.png" />
+                <img class="rounded-lg inline-block" src="@b/assets/img/temp/profile-img.png" />
               </div>
-              <div class="pr-5">
+              <div class="pl-5">
                 <span>{{ userStore.state.name }}</span>
                 <br />
                 <span>{{ userStore.state.mobile }}</span>
@@ -31,36 +31,36 @@
           </Tag>
           <div class="flex-1"></div>
           <div>
-            <AButton @click="userStore.logout()" type="link" danger>
+            <Button @click="userStore.logout()" type="link" danger class="p-0">
               <template #icon>
                 <Icon icon="ion:log-out-outline" class="ml-2" size="16" />
               </template>
               <span> خروج</span>
-            </AButton>
+            </Button>
           </div>
         </div>
       </div>
 
-      <ADivider class="!my-2" />
+      <Divider class="!my-2" />
     </div>
     <!--    style="display: grid; grid-template-rows: auto 15%"-->
     <div class="flex-1">
       <!--     -->
       <div>
-        <AMenu
+        <Menu
           v-model:selectedKeys="currentMenu"
           :class="[`${prefixCls}-menu`]"
           class="flex-1"
           style="border: none"
           @select="selectMenu"
         >
-          <AMenuItem v-for="item in Menus" :key="item.path">
+          <MenuItem v-for="item in Menus" :key="item.path">
             <div class="flex items-center">
-              <Icon :icon="item.icon" class="ml-4" size="25" />
+              <Icon :icon="item.icon" class="mr-2" size="25" />
               <span>{{ item.title }}</span>
             </div>
-          </AMenuItem>
-        </AMenu>
+          </MenuItem>
+        </Menu>
       </div>
       <!--      <div>
         <AButton
@@ -79,11 +79,13 @@
 </template>
 <script lang="ts" setup>
   import Menus from './../services/profiles-menus'
-  import { useDesign } from '../../../utils/useDesign'
+  import { useDesign } from '@b/utils/useDesign'
   import { ref, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import { userStore } from '../../../model/user'
-  import { Tag } from 'ant-design-vue'
+  import { userStore } from '@b/model/user'
+
+  import Icon from '@b/components/Icon/Icon.vue'
+  import { MenuItem, Menu, Button, Divider, Tag } from 'ant-design-vue/es'
 
   const { prefixCls } = useDesign('profile')
   const currentMenu = ref<string[]>([])

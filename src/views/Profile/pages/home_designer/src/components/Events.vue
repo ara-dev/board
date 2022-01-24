@@ -1,11 +1,11 @@
 <template>
   <div>
-    <ASteps :class="['right-step', `${prefixCls}-step`]" :current="2" direction="vertical">
+    <Steps :class="['right-step', `${prefixCls}-step`]" :current="2" direction="vertical">
       <template #progressDot="{ index, status }">
         <div :class="[`${prefixCls}-progress-dot`]"></div>
       </template>
 
-      <AStep v-for="i in 4" :key="i">
+      <Step v-for="i in 4" :key="i">
         <template #title>
           <span :class="['text-xs block ', `${prefixVar}-text-color-primary`]"
             >1400/12 15 شنبه 10:15</span
@@ -19,13 +19,14 @@
             عزیزان طرح مورد نظر در سایت بارگذاری شد
           </div>
         </template>
-      </AStep>
-    </ASteps>
+      </Step>
+    </Steps>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { useDesign } from '../../utils/useDesign'
+  import { useDesign } from '@b/utils/useDesign'
+  import { Steps, Step } from 'ant-design-vue'
   const { prefixCls } = useDesign('register-design-events')
   const { prefixVar } = useDesign('')
 </script>

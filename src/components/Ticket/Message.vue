@@ -6,7 +6,7 @@
         'w-10/12 p-2 leading-7',
         `${prefixCls}-text`,
         { message: props.type == 'message', reply: props.type == 'reply' },
-        props.type == 'message' ? 'mr-2' : 'ml-2',
+        props.type == 'message' ? 'ml-2' : 'mr-2',
       ]"
     >
       <p class="text-justify">

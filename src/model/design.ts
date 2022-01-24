@@ -2,6 +2,7 @@ import { UnwrapNestedRefs } from '@vue/reactivity'
 import { reactive, readonly, ref, Ref, toRaw } from 'vue'
 import { StageModel } from '../core/store/stage'
 import axios from '../utils/axios'
+import retryTimes = jest.retryTimes
 
 export interface Design {
   _id?: string | null
@@ -35,7 +36,7 @@ interface DesignState {
   filter: Object
 }
 
-export default class DesignStore {
+export class DesignStore {
   constructor() {
     this._init()
     this._state = reactive(this._state)
@@ -67,6 +68,10 @@ export default class DesignStore {
     this._state.page = value - 1
   }
 
+  set limit(value: number) {
+    this._state.limit = value
+  }
+
   set total(value: number) {
     this._state.total = value
   }
@@ -86,6 +91,7 @@ export default class DesignStore {
   }
 
   async getDesign() {
+    console.log('this._state ===>', this._state)
     const { data } = await axios.post('/design/table', this._state)
     this._rows.value = data.data.rows
     //console.log(JSON.stringify(this._rows.value[0].data))
@@ -144,4 +150,8 @@ export default class DesignStore {
   }
 }
 
-export const designStore = new DesignStore()
+const designStore = new DesignStore()
+
+export default function useDesignStore(): DesignStore {
+  return designStore
+}
